@@ -8,100 +8,113 @@ using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 #endif
 
-[CreateAssetMenu (fileName = "UltraPlacementItemSpriteObject", menuName = "KillMobil/UltraNoise/Sprites")]
-public class UltraPlacementItemSpriteObject : UltraPlacementItemBase {
+namespace NoiseUltra
+{
+    [CreateAssetMenu(fileName = "UltraPlacementItemSpriteObject", menuName = "KillMobil/UltraNoise/Sprites")]
+    public class UltraPlacementItemSpriteObject : UltraPlacementItemBase
+    {
 
-    [Header ("GameObjects Placement Type Settings ")]
-    public Sprite[] items;
-    public GameObject spritePrefab;
-    public PlacementObjectType placementObjectType = PlacementObjectType.Linear;
-    int linearID;
+        [Header("GameObjects Placement Type Settings ")]
+        public Sprite[] items;
 
-    public Sprite GetSpriteObject (float v) {
-        int objectID = GetObjectID (v);
-        Sprite newPoolObject = items[objectID];
-        return newPoolObject;
-    }
+        public GameObject spritePrefab;
+        public PlacementObjectType placementObjectType = PlacementObjectType.Linear;
+        int linearID;
 
-    public override void PlaceObject (Vector3 pos, float v, Transform parent) {
-        Vector3 placemntPos = GetPos (pos, v);
-        Vector3 placemntScale = GetScale (pos, v);
-        Vector3 placemntRot = GetRot (pos, v);
-        Sprite sourceSprite = GetSpriteObject (v);
-        GameObject newObject;
+        public Sprite GetSpriteObject(float v)
+        {
+            int objectID = GetObjectID(v);
+            Sprite newPoolObject = items[objectID];
+            return newPoolObject;
+        }
+
+        public override void PlaceObject(Vector3 pos, float v, Transform parent)
+        {
+            Vector3 placemntPos = GetPos(pos, v);
+            Vector3 placemntScale = GetScale(pos, v);
+            Vector3 placemntRot = GetRot(pos, v);
+            Sprite sourceSprite = GetSpriteObject(v);
+            GameObject newObject;
 
 #if UNITY_EDITOR
-        newObject = PrefabUtility.InstantiatePrefab (spritePrefab, parent) as GameObject;
+            newObject = PrefabUtility.InstantiatePrefab(spritePrefab, parent) as GameObject;
 #else
         newObject = Instantiate (spritePrefab) as GameObject;
         newObject.transform.parent = parent;
 #endif
 
 
-        SpriteRenderer sR = newObject.GetComponentInChildren<SpriteRenderer>();
-        sR.sprite = sourceSprite;
-        
-        newObject.SetActive (true);
-        newObject.name = ObjectNamePrefix (pos);
+            SpriteRenderer sR = newObject.GetComponentInChildren<SpriteRenderer>();
+            sR.sprite = sourceSprite;
 
-        newObject.transform.position = placemntPos;
-        newObject.transform.localScale = placemntScale;
-        newObject.transform.rotation = Quaternion.Euler (placemntRot);
-    }
+            newObject.SetActive(true);
+            newObject.name = ObjectNamePrefix(pos);
 
-    public override void CleanObjects (Transform parent) {
-        Debug.Log(string.Format("CleanObjects () - parent {0}", parent));
-        
-        Transform[] transforms = parent.GetComponentsInChildren<Transform> ();
+            newObject.transform.position = placemntPos;
+            newObject.transform.localScale = placemntScale;
+            newObject.transform.rotation = Quaternion.Euler(placemntRot);
+        }
 
-        List<Transform> reformList = new List<Transform>();
-        for (int i = 0; i < transforms.Length; i++)
-            if (transforms[i].parent == parent) 
-                reformList.Add(transforms[i]);
-        
+        public override void CleanObjects(Transform parent)
+        {
+            Debug.Log(string.Format("CleanObjects () - parent {0}", parent));
 
-        for (int i = 0; i < reformList.Count; i++) {
-            #if UNITY_EDITOR
-                DestroyImmediate (reformList[i].gameObject);
-            #else
+            Transform[] transforms = parent.GetComponentsInChildren<Transform>();
+
+            List<Transform> reformList = new List<Transform>();
+            for (int i = 0; i < transforms.Length; i++)
+                if (transforms[i].parent == parent)
+                    reformList.Add(transforms[i]);
+
+
+            for (int i = 0; i < reformList.Count; i++)
+            {
+#if UNITY_EDITOR
+                DestroyImmediate(reformList[i].gameObject);
+#else
                 DestroyObject (reformList[i].gameObject);
-            #endif
-        }
-    }
-
-    string ObjectNamePrefix (Vector3 pos) {
-        string prefix = this.name + "_" + pos.x.ToString () + "_" + pos.y.ToString () + "_" + pos.z.ToString ();
-        return prefix;
-    }
-
-    int GetObjectID (float v) {
-        v = Mathf.Clamp01 (v);
-        int returnID = 0;
-        switch (placementObjectType) {
-            case PlacementObjectType.Linear:
-                returnID = linearID;
-                linearID++;
-                if (linearID >= items.Length)
-                    linearID = 0;
-                break;
-            default:
-            case PlacementObjectType.Random:
-                returnID = Random.Range (0, items.Length - 1);
-                break;
-
-            case PlacementObjectType.Value:
-                returnID = Mathf.FloorToInt ((float) (items.Length - 1) * v);
-                //Debug.Log(string.Format("returnID {0}", returnID));
-                break;
+#endif
+            }
         }
 
-        return returnID;
-    }
+        string ObjectNamePrefix(Vector3 pos)
+        {
+            string prefix = this.name + "_" + pos.x.ToString() + "_" + pos.y.ToString() + "_" + pos.z.ToString();
+            return prefix;
+        }
 
-    public enum PlacementObjectType {
-        Linear,
-        Value,
-        Random
-    }
+        int GetObjectID(float v)
+        {
+            v = Mathf.Clamp01(v);
+            int returnID = 0;
+            switch (placementObjectType)
+            {
+                case PlacementObjectType.Linear:
+                    returnID = linearID;
+                    linearID++;
+                    if (linearID >= items.Length)
+                        linearID = 0;
+                    break;
+                default:
+                case PlacementObjectType.Random:
+                    returnID = Random.Range(0, items.Length - 1);
+                    break;
 
+                case PlacementObjectType.Value:
+                    returnID = Mathf.FloorToInt((float) (items.Length - 1) * v);
+                    //Debug.Log(string.Format("returnID {0}", returnID));
+                    break;
+            }
+
+            return returnID;
+        }
+
+        public enum PlacementObjectType
+        {
+            Linear,
+            Value,
+            Random
+        }
+
+    }
 }

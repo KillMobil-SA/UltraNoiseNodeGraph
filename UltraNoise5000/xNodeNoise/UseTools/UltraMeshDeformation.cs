@@ -30,7 +30,7 @@ namespace NoiseUltra
                 worldMeshPoints [i] = transform.localToWorldMatrix.MultiplyPoint3x4 (meshPoints [i]);
                 noisePlacement.ChechPos(worldMeshPoints[i]);
                 worldMeshPoints[i] = noisePlacement.PotisionCalculator(worldMeshPoints[i], 1);
-                worldMeshPoints[i].y += 
+                worldMeshPoints[i].y = 
                     (noiseBase.Sample2D(worldMeshPoints[i].x,  worldMeshPoints[i].z) - heightFloatMinus) * heightMultiplayer;
                 meshPoints[i] = transform.worldToLocalMatrix.MultiplyPoint3x4(worldMeshPoints[i]);
             }

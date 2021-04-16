@@ -83,7 +83,7 @@ namespace NoiseUltra
         }
 
 
-        public Vector3 GetPosVector(int x, int y, int z)
+        public Vector3 GetPosVector(float x, float y, float z) 
         {
             float xPos = x - xAmount / 2;
             float yPos = y - yAmount / 2;

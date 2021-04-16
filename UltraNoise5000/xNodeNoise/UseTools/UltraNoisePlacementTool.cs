@@ -24,7 +24,9 @@ namespace NoiseUltra {
         }
 
         [Button]
-        public void GenerateObjects () {
+        public void GenerateObjects ()
+        {
+            ClearObjects();
             PerformGeneration (false);
             showDebugInfo = false;
         }
@@ -42,7 +44,7 @@ namespace NoiseUltra {
             
             if (plamentHandler == null || !showDebugInfo) return;
             PerformGeneration (true);
-            DebugVal =  myPlacementBounds.GetPosVector (Mathf.RoundToInt(transform.position.x), 1, Mathf.RoundToInt(transform.position.z));
+            DebugVal  =  myPlacementBounds.GetPosVector (transform.position.x, 1, transform.position.z);
             
         }
 
