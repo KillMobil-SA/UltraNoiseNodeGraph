@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class NoiseHeightPos {
 
-    public NoiseNodeGraph heightNoise;
+    public NoiseNodeBase heightNoise;
     public float heightAmount;
     public bool HeightCheck (Vector3 pos) {
         return true;

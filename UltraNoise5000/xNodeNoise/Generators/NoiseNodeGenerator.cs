@@ -28,7 +28,6 @@ namespace NoiseUltra.Generators {
 
 		public override void NoiseInit () {
 			CreateNoise ();
-			base.NoiseInit();
 		}
 
 		public void CreateNoise () {
