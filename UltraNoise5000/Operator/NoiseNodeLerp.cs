@@ -21,19 +21,19 @@ namespace NoiseUltra.Operation
 			if (noiseAInput == null || noiseBInput == null) return -1;
 			float v = Mathf.Lerp(noiseAInput.Sample1D(x), noiseBInput.Sample1D(x), perc);
 
-			return DebugValues (v);
+			return IdentifyBounds (v);
 		}
 
 		public override float Sample2D (float x , float y) {
 			if (noiseAInput == null || noiseBInput == null) return -1;
 			float v = Mathf.Lerp(noiseAInput.Sample2D(x , y), noiseBInput.Sample2D(x, y), perc);
-			return DebugValues (v);
+			return IdentifyBounds (v);
 		}
 
 		public override float Sample3D (float x , float y , float z) {
 			if (noiseAInput == null || noiseBInput == null) return -1;
 			float v = Mathf.Lerp(noiseAInput.Sample3D(x , y , z), noiseBInput.Sample3D(x , y , z), perc);
-			return DebugValues (v);
+			return IdentifyBounds (v);
 		}
 		
 		

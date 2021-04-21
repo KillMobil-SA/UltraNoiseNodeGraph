@@ -14,14 +14,14 @@ namespace NoiseUltra.Generators {
 
 		public override float Sample1D (float x) {
 			
-			return DebugValues (noiseNodeBase.Sample1D(x));
+			return IdentifyBounds (noiseNodeBase.Sample1D(x));
 		}
 
 		public override float Sample2D (float x, float y) {
-			return DebugValues (noiseNodeBase.Sample2D(x,y));
+			return IdentifyBounds (noiseNodeBase.Sample2D(x,y));
 		}
 		public override float Sample3D (float x, float y, float z) {
-			return DebugValues (noiseNodeBase.Sample3D(x,y,z));
+			return IdentifyBounds (noiseNodeBase.Sample3D(x,y,z));
 		}
 
 		[Output] public NoiseNodeBase noiseOutPut;

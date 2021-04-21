@@ -20,7 +20,7 @@ namespace NoiseUltra.Modifiers
 			
 			float v = ModifyValue (noiseAInput.Sample1D (x));
 			
-			return DebugValues (v);
+			return IdentifyBounds (v);
 		}
 
 		public override float Sample2D (float x , float y) {
@@ -28,7 +28,7 @@ namespace NoiseUltra.Modifiers
 			
 			float v =  ModifyValue (noiseAInput.Sample2D (x , y));
 	
-			return DebugValues (v);
+			return IdentifyBounds (v);
 		}
 
 		public override float Sample3D (float x , float y , float z) {
@@ -36,7 +36,7 @@ namespace NoiseUltra.Modifiers
 			
 			float v =  ModifyValue (noiseAInput.Sample3D (x , y , z));
 			
-			return DebugValues (v);
+			return IdentifyBounds (v);
 		}
 
 		public virtual float ModifyValue(float v)

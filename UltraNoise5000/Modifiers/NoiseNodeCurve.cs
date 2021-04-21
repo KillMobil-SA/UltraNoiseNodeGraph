@@ -24,7 +24,7 @@ namespace NoiseUltra.Modifiers
 		[Button]
 		public override void UpdateValues () {
 			Debug.Log(string.Format("NoiseNodeCurve - UpdateValues ()"));
-			ResetDebugValues ();
+			ResetBounds ();
 			ResetConnectionReferences();
 			UpdatePreview ();
 		}
