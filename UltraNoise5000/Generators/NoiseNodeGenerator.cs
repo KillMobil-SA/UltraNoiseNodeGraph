@@ -7,8 +7,9 @@ using UnityEngine;
 using XNode;
 
 namespace NoiseUltra.Generators {
-	public class NoiseNodeGenerator : NoiseNodeBase {
-
+	public class NoiseNodeGenerator : NoiseNodeBase
+	{
+		public int seed;
 		//-------------Noise
 		INoise noise;
 		FractalNoise fractal;

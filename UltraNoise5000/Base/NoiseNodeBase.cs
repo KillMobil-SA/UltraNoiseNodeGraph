@@ -7,7 +7,6 @@ using XNode;
 namespace NoiseUltra {
 	[NodeWidth (286)]
 	public class NoiseNodeBase : Node {
-		public int seed;
 		[ReadOnly]
 		public Vector2 minMaxNoiseValue = new Vector2 (float.NegativeInfinity, float.PositiveInfinity);
 
@@ -52,7 +51,7 @@ namespace NoiseUltra {
 		
 		public virtual void NoiseInit()
 		{
-			//UpdateValues();
+		
 		}
 
 		public virtual float Sample1D (float x) {
