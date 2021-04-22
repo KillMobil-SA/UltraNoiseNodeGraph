@@ -49,7 +49,7 @@ namespace NoiseUltra.Modifiers
 		
 		public override void OnCreateConnection(NodePort from, NodePort to) {
 			ResetConnectionReferences();
-			UpdateValues();
+			Update();
 			UpdatePreview ();
 			
 		}

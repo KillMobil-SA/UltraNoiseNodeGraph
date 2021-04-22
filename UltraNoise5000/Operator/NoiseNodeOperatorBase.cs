@@ -21,7 +21,7 @@ namespace NoiseUltra.Operation
 		public override void OnCreateConnection(NodePort from, NodePort to) {
 			_noiseAInput = null;
 			_noiseBInput = null;
-			UpdateValues();
+			Update();
 		}
 		
 		

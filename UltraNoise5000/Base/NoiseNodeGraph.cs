@@ -16,7 +16,7 @@ namespace NoiseUltra {
 			{
 				if (n is NoiseNodeBase) {
 					NoiseNodeBase nnb = n as NoiseNodeBase;
-					nnb.UpdateValues(); 
+					nnb.Update(); 
 				}
 			}
 		}

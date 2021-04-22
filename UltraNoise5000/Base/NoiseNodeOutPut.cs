@@ -41,7 +41,7 @@ namespace NoiseUltra {
         public override void OnCreateConnection (NodePort from, NodePort to) {
             _noiseAInput = null;
             _noiseBInput = null;
-            UpdateValues ();
+            Update ();
             UpdatePreview ();
         }
 

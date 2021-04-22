@@ -1,115 +1,101 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using JetBrains.Annotations;
+﻿using System;
 using ProceduralNoiseProject;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using XNode;
+using Random = UnityEngine.Random;
 
-namespace NoiseUltra.Generators {
+namespace NoiseUltra.Generators
+{
+	[Serializable]
+	public class NoiseProprieties
+	{
+		[SerializeField] public float frequency = 1f;
+		public NOISE_TYPE noiseType = NOISE_TYPE.PERLIN;
+		public int seed;
+		public int octaves = 4;
+		public float amplitude = 1f;
+		public float lacunarity = 2.0f;
+		public Vector3 offset;
+
+		public void RandomizeSeed() => seed = Random.Range(0, 999999);
+		public float FrequencyOver100 => frequency / 100f; //Not sure why
+	}
+	
 	public class NoiseNodeGenerator : NoiseNodeBase
 	{
-		public int seed;
-		//-------------Noise
-		INoise noise;
-		FractalNoise fractal;
-		[Title ("Noise Generator Settings")]
-		[OnValueChanged ("UpdateNoiseType")] //[EnumToggleButtons]
-		public NOISE_TYPE noiseType = NOISE_TYPE.PERLIN;
-		[OnValueChanged ("UpdateValues")]
-		public int octaves = 4;
-		[OnValueChanged ("UpdateValues")]
-		public float frequency = 1.0f;
-		[OnValueChanged ("UpdateValues")]
-		public Vector3 offset;
-		[OnValueChanged ("UpdateValues")]
-		public float amplitude = 1.0f;
-		[OnValueChanged ("UpdateValues")]
-		public float lacunarity = 2.0f;
-
-		protected override void Init () {
-			CreateNoise ();
+		[SerializeField] 
+		private NoiseProprieties proprieties = new NoiseProprieties();
+		private FractalNoise _fractal;
+		
+		[Output] 
+		public NoiseNodeBase noiseOutPut;
+		
+		protected override void Init()
+		{
+			InitializeFractal();
 		}
 
-		public void CreateNoise () {
-			noise = GetNoise (seed, noiseType);
-			myFractalNoise = new FractalNoise (noise, octaves, frequency / 100f);
-			myFractalNoise.Offset = offset;
-		}
-
-		[Button]
-		public void UpdateNoiseType () {
-			noise = null;
-			myFractalNoise = null;
-			seed = Random.Range(0 , 999999);
-			CreateNoise ();
-			UpdateValues ();
+		private void InitializeFractal()
+		{
+			proprieties.RandomizeSeed();
+			var seed = proprieties.seed;
+			var noiseType = proprieties.noiseType;
+			var frequency = proprieties.frequency;
+			var octaves = proprieties.octaves;
+			var offset = proprieties.offset;
+			var noise = NoiseFactory.CreateBaseNoise(seed, frequency, noiseType);
+			
+			_fractal = NoiseFactory.CreateFractal(noise, octaves, proprieties.FrequencyOver100); 
+			_fractal.Offset = offset;
 		}
 
 		[Button]
-		public override void UpdateValues () {
-
-			ResetBounds ();
-			myFractalNoise.Octaves = octaves;
-			myFractalNoise.Frequency = frequency / 100f;
-			myFractalNoise.Offset = offset;
-			myFractalNoise.Amplitude = amplitude;
-			myFractalNoise.Lacunarity = lacunarity;
-			myFractalNoise.UpdateTable ();
-			UpdatePreview ();
+		public void New()
+		{
+			InitializeFractal();
+			Update();
+		}
+		
+		[Button]
+		public override void Update()
+		{
+			ResetBounds();
+			UpdateFractal();
+			UpdatePreview();
 		}
 
-		public override float Sample1D (float x) {
-			float v = myFractalNoise.Sample1D (x);
-			return IdentifyBounds (v);
+		private void UpdateFractal()
+		{
+			_fractal.Octaves = proprieties.octaves;
+			_fractal.Frequency = proprieties.FrequencyOver100;
+			_fractal.Offset = proprieties.offset;
+			_fractal.Amplitude = proprieties.amplitude;
+			_fractal.Lacunarity = proprieties.lacunarity;
+			_fractal.UpdateTable();
 		}
 
-		public override float Sample2D (float x, float y) {
-			float v = myFractalNoise.Sample2D (x, y);
-			return IdentifyBounds (v);
+		public override float Sample1D(float x)
+		{
+			float v = _fractal.Sample1D(x);
+			return IdentifyBounds(v);
 		}
 
-		public override float Sample3D (float x, float y, float z) {
-			float v = myFractalNoise.Sample3D (x, y, z);
-			return IdentifyBounds (v);
+		public override float Sample2D(float x, float y)
+		{
+			float v = _fractal.Sample2D(x, y);
+			return IdentifyBounds(v);
 		}
 
-		private FractalNoise _myFractalNoise;
-		private FractalNoise myFractalNoise {
-			get {
-				if (_myFractalNoise == null) {
-					CreateNoise ();
-				}
-				return _myFractalNoise;
-			}
-			set => _myFractalNoise = value;
-		}
-		private INoise GetNoise (int seed, NOISE_TYPE noiseType) {
-			switch (noiseType) {
-				case NOISE_TYPE.PERLIN:
-					return new PerlinNoise (seed, 20);
-
-				case NOISE_TYPE.VALUE:
-					return new ValueNoise (seed, 20);
-
-				case NOISE_TYPE.SIMPLEX:
-					return new SimplexNoise (seed, 20);
-
-				case NOISE_TYPE.VORONOI:
-					return new VoronoiNoise (seed, 20);
-
-				case NOISE_TYPE.WORLEY:
-					return new WorleyNoise (seed, 20, 1.0f);
-
-				default:
-					return new PerlinNoise (seed, 20);
-			}
+		public override float Sample3D(float x, float y, float z)
+		{
+			float v = _fractal.Sample3D(x, y, z);
+			return IdentifyBounds(v);
 		}
 
-		[Output] public NoiseNodeBase noiseOutPut;
-		public override object GetValue (NodePort port) {
+		public override object GetValue(NodePort port)
+		{
 			return this;
 		}
-
 	}
 }

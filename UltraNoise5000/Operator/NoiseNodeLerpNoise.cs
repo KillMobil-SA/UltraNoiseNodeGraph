@@ -42,7 +42,7 @@ namespace NoiseUltra.Operation
 		public override void OnCreateConnection(NodePort from, NodePort to) {
 			base.OnCreateConnection(from , to);
 			_noiseLerpInput = null;
-			UpdateValues();
+			Update();
 		}
 
 

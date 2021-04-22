@@ -14,7 +14,7 @@ namespace NoiseUltra
 		private Bound bounds;
 
 		[Button]
-		public virtual void UpdateValues()
+		public virtual void Update()
 		{
 			ResetBounds();
 			UpdatePreview();
@@ -24,8 +24,7 @@ namespace NoiseUltra
 		{
 			previewImage.Update(Sample2D);
 		}
-
-
+		
 		protected override void Init()
 		{
 			previewImage = new PreviewImage();
@@ -34,7 +33,7 @@ namespace NoiseUltra
 		
 		public override void OnCreateConnection(NodePort from, NodePort to)
 		{
-			UpdateValues();
+			Update();
 		}
 
 
@@ -61,8 +60,8 @@ namespace NoiseUltra
 		protected float IdentifyBounds(float sample)
 		{
 			sample = Mathf.Clamp01(sample);
-			bounds.max = Mathf.Min(bounds.max, sample);
-			bounds.min = Mathf.Max(bounds.min, sample);
+			bounds.max = Mathf.Max(bounds.max, sample);
+			bounds.min = Mathf.Min(bounds.min, sample);
 			return sample;
 		}
 	}

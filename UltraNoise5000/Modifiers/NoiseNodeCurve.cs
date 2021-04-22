@@ -22,7 +22,7 @@ namespace NoiseUltra.Modifiers
 		
 
 		[Button]
-		public override void UpdateValues () {
+		public override void Update () {
 			Debug.Log(string.Format("NoiseNodeCurve - UpdateValues ()"));
 			ResetBounds ();
 			ResetConnectionReferences();
