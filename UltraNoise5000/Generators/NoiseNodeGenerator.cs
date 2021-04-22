@@ -1,27 +1,10 @@
-﻿using System;
-using ProceduralNoiseProject;
+﻿using ProceduralNoiseProject;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using XNode;
-using Random = UnityEngine.Random;
 
 namespace NoiseUltra.Generators
 {
-	[Serializable]
-	public class NoiseProprieties
-	{
-		[SerializeField] public float frequency = 1f;
-		public NOISE_TYPE noiseType = NOISE_TYPE.PERLIN;
-		public int seed;
-		public int octaves = 4;
-		public float amplitude = 1f;
-		public float lacunarity = 2.0f;
-		public Vector3 offset;
-
-		public void RandomizeSeed() => seed = Random.Range(0, 999999);
-		public float FrequencyOver100 => frequency / 100f; //Not sure why
-	}
-	
 	public class NoiseNodeGenerator : NoiseNodeBase
 	{
 		[SerializeField] 
