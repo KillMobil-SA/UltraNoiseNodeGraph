@@ -16,7 +16,7 @@ namespace NoiseUltra.Generators {
 
         public override float Sample1D (float x) {
             float v = 1;
-            return IdentifyBounds (v);
+            return v;
         }
 
         public override float Sample2D (float x, float y)
@@ -25,7 +25,7 @@ namespace NoiseUltra.Generators {
             float distance = Vector2.Distance (centerZ, new Vector2 (x, y));
 
             if (distance < radius)
-                return 1 - IdentifyBounds (distance / radius);
+                return 1 - distance / radius;
             else
                 return 0;
 
@@ -34,7 +34,7 @@ namespace NoiseUltra.Generators {
             float distance = Vector3.Distance (center, new Vector3 (x, y, z));
 
             if (distance < radius)
-                return 1 - IdentifyBounds (distance / radius);
+                return 1 - distance / radius;
             else
                 return 0;
         }

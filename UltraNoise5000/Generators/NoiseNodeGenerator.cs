@@ -43,7 +43,6 @@ namespace NoiseUltra.Generators
 		[Button]
 		public override void Update()
 		{
-			ResetBounds();
 			UpdateFractal();
 			UpdatePreview();
 		}
@@ -61,19 +60,19 @@ namespace NoiseUltra.Generators
 		public override float Sample1D(float x)
 		{
 			float v = _fractal.Sample1D(x);
-			return IdentifyBounds(v);
+			return v;
 		}
 
 		public override float Sample2D(float x, float y)
 		{
 			float v = _fractal.Sample2D(x, y);
-			return IdentifyBounds(v);
+			return v;
 		}
 
 		public override float Sample3D(float x, float y, float z)
 		{
 			float v = _fractal.Sample3D(x, y, z);
-			return IdentifyBounds(v);
+			return v;
 		}
 
 		public override object GetValue(NodePort port)

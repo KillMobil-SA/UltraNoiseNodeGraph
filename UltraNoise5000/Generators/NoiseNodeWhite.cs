@@ -12,16 +12,16 @@ namespace NoiseUltra.Generators {
 
 		public override float Sample1D (float x) {
 			float v = 1;
-			return IdentifyBounds (v);
+			return v;
 		}
 
 		public override float Sample2D (float x, float y) {
 			float v = 1;
-			return IdentifyBounds (v);
+			return v;
 		}
 		public override float Sample3D (float x, float y, float z) {
 			float v = 1;
-			return IdentifyBounds (v);
+			return v;
 		}
 
 		[Output] public NoiseNodeBase noiseOutPut;
