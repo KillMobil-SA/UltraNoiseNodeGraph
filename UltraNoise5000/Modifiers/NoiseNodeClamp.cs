@@ -12,9 +12,9 @@ namespace NoiseUltra.Modifiers
 	public class NoiseNodeClamp : NoiseNodeModifierBase
 	{
 		
-		[OnValueChanged("UpdateValues")]
+		[OnValueChanged("Update")]
 		public Vector2 limit = new Vector2(0, 1);
-		[OnValueChanged("UpdateValues")]
+		[OnValueChanged("Update")]
 		public bool smoothClampValue;
 	
 		public override float ModifyValue(float v) {

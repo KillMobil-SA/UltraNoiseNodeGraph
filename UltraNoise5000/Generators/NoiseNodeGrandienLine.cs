@@ -9,10 +9,10 @@ using XNode;
 namespace NoiseUltra.Generators {
     public class NoiseNodeGrandienLine : NoiseNodeBase
     {
-        [OnValueChanged("UpdateValues")] public GrandientLineType lineType;
-        [OnValueChanged ("UpdateValues")]
+        [OnValueChanged("Update")] public GrandientLineType lineType;
+        [OnValueChanged ("Update")]
         public float start;
-        [OnValueChanged ("UpdateValues")]
+        [OnValueChanged ("Update")]
         public float end;
 
 

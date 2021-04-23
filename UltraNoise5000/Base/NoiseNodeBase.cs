@@ -7,8 +7,28 @@ namespace NoiseUltra
 	[NodeWidth(NodeProprieties.NodeWidth)]
 	public class NoiseNodeBase : Node
 	{
-		[SerializeField] 
+		
+			
+		[Button , HideIf("hasPreview" ) , ]
+		protected void EnablePreview()
+		{
+			hasPreview = true;
+			previewImage = new PreviewImage();
+			Update();
+		}
+
+		[Button , ShowIf("hasPreview")]
+		protected void DisaablePreview()
+		{
+			hasPreview = false;
+			previewImage.DeleteTexture();
+			previewImage = null;
+		}
+		
+		[SerializeField , ShowIf("hasPreview")] 
 		private PreviewImage previewImage;
+		private bool hasPreview = false;
+		
 		
 		[Button]
 		public virtual void Update()
@@ -18,8 +38,15 @@ namespace NoiseUltra
 
 		protected void UpdatePreview()
 		{
-			previewImage.Update(Sample2D);
+			if(hasPreview)
+				previewImage.Update(Sample2D);
+			//else
+				UpdateOutPut();
+			
+
 		}
+		
+	
 		
 		protected override void Init()
 		{
@@ -45,5 +72,31 @@ namespace NoiseUltra
 		{
 			return -1;
 		}
+		
+		
+		public void UpdateOutPut()
+		{
+			
+			NodePort noiseOutPutPort = GetOutputPort("noiseOutPut");
+			if (!noiseOutPutPort.IsConnected) {
+				return;
+			}
+
+			int connectionsCount = noiseOutPutPort.ConnectionCount;
+			for (int i = 0; i < connectionsCount; i++)
+			{
+				NodePort connectedPort = noiseOutPutPort.GetConnection(i);
+				NoiseNodeBase node = connectedPort.node as NoiseNodeBase;
+				node.Update();
+			}
+		}
+
+		
+		[Output] public NoiseNodeBase noiseOutPut;
+		public override object GetValue(NodePort port)
+		{
+			return this; 
+		}
+
 	}
 }

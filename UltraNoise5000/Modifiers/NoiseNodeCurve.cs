@@ -12,7 +12,7 @@ namespace NoiseUltra.Modifiers
 	public class NoiseNodeCurve : NoiseNodeModifierBase
 	{
 		
-		[OnValueChanged("UpdateValues")]
+		[OnValueChanged("Update")]
 		public AnimationCurve resultCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
 		
@@ -21,13 +21,14 @@ namespace NoiseUltra.Modifiers
 		}
 		
 
+		/*
 		[Button]
 		public override void Update () {
 			Debug.Log(string.Format("NoiseNodeCurve - UpdateValues ()"));
 			ResetConnectionReferences();
 			UpdatePreview ();
 		}
-		
+		*/
 
 	}
 }

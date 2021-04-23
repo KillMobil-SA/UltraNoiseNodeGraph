@@ -24,10 +24,6 @@ namespace NoiseUltra.Generators {
 			return noiseNodeBase.Sample3D(x,y,z);
 		}
 
-		[Output] public NoiseNodeBase noiseOutPut;
-		public override object GetValue (NodePort port) {
-			return this;
-		}
 
 	}
 }

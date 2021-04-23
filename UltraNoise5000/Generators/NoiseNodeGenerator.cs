@@ -11,8 +11,6 @@ namespace NoiseUltra.Generators
 		private NoiseProprieties proprieties = new NoiseProprieties();
 		private FractalNoise _fractal;
 		
-		[Output] 
-		public NoiseNodeBase noiseOutPut;
 		
 		protected override void Init()
 		{
@@ -24,7 +22,7 @@ namespace NoiseUltra.Generators
 			proprieties.RandomizeSeed();
 			var seed = proprieties.seed;
 			var noiseType = proprieties.noiseType;
-			var frequency = proprieties.frequency;
+			var frequency = proprieties.FrequencyOver100;
 			var octaves = proprieties.octaves;
 			var offset = proprieties.offset;
 			var noise = NoiseFactory.CreateBaseNoise(seed, frequency, noiseType);
@@ -45,7 +43,7 @@ namespace NoiseUltra.Generators
 		{
 			UpdateFractal();
 			UpdatePreview();
-		}
+		}  
 
 		private void UpdateFractal()
 		{

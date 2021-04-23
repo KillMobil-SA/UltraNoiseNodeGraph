@@ -8,9 +8,9 @@ using XNode;
 
 namespace NoiseUltra.Generators {
     public class NoiseNodeCircleShape : NoiseNodeBase {
-        [OnValueChanged ("UpdateValues")]
+        [OnValueChanged ("Update")]
         public Vector3 center;
-        [OnValueChanged ("UpdateValues")]
+        [OnValueChanged ("Update")]
         public float radius;
 
 
@@ -39,10 +39,6 @@ namespace NoiseUltra.Generators {
                 return 0;
         }
 
-        [Output] public NoiseNodeBase noiseOutPut;
-        public override object GetValue (NodePort port) {
-            return this;
-        }
-
+  
     }
 }

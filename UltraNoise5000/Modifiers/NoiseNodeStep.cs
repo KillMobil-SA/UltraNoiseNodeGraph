@@ -12,7 +12,7 @@ namespace NoiseUltra.Modifiers
 	public class NoiseNodeStep : NoiseNodeModifierBase
 	{
 		
-		[OnValueChanged("UpdateValues")]
+		[OnValueChanged("Update")]
 		[Range (0, 10 )]
 		public int steps = 0;
 	

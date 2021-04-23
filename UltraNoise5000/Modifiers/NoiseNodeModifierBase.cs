@@ -62,11 +62,7 @@ namespace NoiseUltra.Modifiers
 
 		
 		
-		[Output] public NoiseNodeBase noiseResult;
-		public override object GetValue(NodePort port)
-		{
-			return this; 
-		}
+	
 		
 		private NoiseNodeBase _noiseAInput;
 		private NoiseNodeBase noiseAInput

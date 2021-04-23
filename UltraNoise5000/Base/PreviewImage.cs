@@ -64,7 +64,7 @@ namespace NoiseUltra
             return sample;
         }
 
-        private void DeleteTexture()
+        public void DeleteTexture()
         {
             //Need to profile to be sure about this, but I think
             //the tex remains hanging in memory if we dont kill it
