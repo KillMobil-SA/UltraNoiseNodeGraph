@@ -14,6 +14,9 @@ namespace NoiseUltra
         private const int Height = ImageSize;
         private float MaxPixel { get; }
 
+        [SerializeField, ReadOnly] 
+        private Bound bounds = new Bound();
+        
         [SerializeField, Range(0, MaxZoom)] 
         private float zoom = 200; //need to solve the auto update
 
@@ -23,6 +26,7 @@ namespace NoiseUltra
         public PreviewImage()
         {
             MaxPixel = ImageSize - 1;
+            bounds.ResetBounds();
         }
 
         public void Update(Func<float, float, float> sampleFunction)
@@ -32,7 +36,8 @@ namespace NoiseUltra
 
             DeleteTexture(); // the trick of the tricks
             CreateTexture();
-
+            bounds.ResetBounds();
+            
             for (var x = 0; x < Width; x++)
             {
                 for (var y = 0; y < Height; y++)
@@ -41,13 +46,22 @@ namespace NoiseUltra
                     var pixelY = y / MaxPixel;
                     var px = zoom * pixelX;
                     var py = zoom * pixelY;
-                    var color = sampleFunction(px, py);
-                    var pixelColor = new Color(color, color, color, 1);
+                    var sample = sampleFunction(px, py);
+                    var pixelColor = new Color(sample, sample, sample, 1);
+                    IdentifyBounds(sample);
                     sourceTexture.SetPixel(x, y, pixelColor);
                 }
             }
 
             sourceTexture.Apply();
+        }
+        
+        private float IdentifyBounds(float sample)
+        {
+            sample = Mathf.Clamp01(sample);
+            bounds.max = Mathf.Max(bounds.max, sample);
+            bounds.min = Mathf.Min(bounds.min, sample);
+            return sample;
         }
 
         private void DeleteTexture()

@@ -19,7 +19,7 @@ namespace NoiseUltra {
 
             float v = noiseAInput.Sample1D (x);
 
-            return IdentifyBounds (v);
+            return v;
         }
 
         public override float Sample2D (float x, float y) {
@@ -27,15 +27,16 @@ namespace NoiseUltra {
 
             float v = (noiseAInput.Sample2D (x, y));
 
-            return IdentifyBounds (v);
+            return v;
         }
 
-        public override float Sample3D (float x, float y, float z) {
+        public override float Sample3D(float x, float y, float z)
+        {
             if (noiseAInput == null) return -1;
 
-            float v = (noiseAInput.Sample3D (x, y, z));
+            float v = (noiseAInput.Sample3D(x, y, z));
 
-            return IdentifyBounds (v);
+            return v;
         }
 
         public override void OnCreateConnection (NodePort from, NodePort to) {
