@@ -5,13 +5,13 @@ using ProceduralNoiseProject;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using XNode;
-
+using NoiseUltra.Nodes;
 
 namespace NoiseUltra
 {
     public class UltraMeshDeformation : MonoBehaviour
     {
-        public NoiseNodeBase noiseBase;
+        public NodeBase @base;
         public UltraPlacementPositionSettings noisePlacement;
         public float heightMultiplayer;
         public float heightFloatMinus = 0.5f;
@@ -31,7 +31,7 @@ namespace NoiseUltra
                 noisePlacement.ChechPos(worldMeshPoints[i]);
                 worldMeshPoints[i] = noisePlacement.PotisionCalculator(worldMeshPoints[i], 1);
                 worldMeshPoints[i].y = 
-                    (noiseBase.Sample2D(worldMeshPoints[i].x,  worldMeshPoints[i].z) - heightFloatMinus) * heightMultiplayer;
+                    (@base.Sample2D(worldMeshPoints[i].x,  worldMeshPoints[i].z) - heightFloatMinus) * heightMultiplayer;
                 meshPoints[i] = transform.worldToLocalMatrix.MultiplyPoint3x4(worldMeshPoints[i]);
             }
 

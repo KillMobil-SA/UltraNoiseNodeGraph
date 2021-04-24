@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
-
+using NoiseUltra.Nodes;
 #if UNITY_EDITOR
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
@@ -14,7 +14,7 @@ namespace NoiseUltra {
 
         public bool useWorldPos;
         
-        public NoiseNodeBase noiseNodeGraph;
+        public NodeBase nodeGraph;
 
         private int res;
         private float[,] heights;
@@ -73,7 +73,7 @@ private Coroutine terraCoroutine;
                      }
 
                  
-                     heights[y, x] = noiseNodeGraph.Sample2D(xPos, yPos);
+                     heights[y, x] = nodeGraph.Sample2D(xPos, yPos);
                      currentStep++;
                      
                      internalPlacementCounter++;

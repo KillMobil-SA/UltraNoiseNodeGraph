@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
-
+using NoiseUltra.Nodes;
 
 namespace NoiseUltra
 {
@@ -12,7 +12,7 @@ namespace NoiseUltra
         public bool useNoiseRandomizationBase = false;
         [ShowIf("useNoiseRandomizationBase", true)]
         public bool useExternalNoiseSource = false; 
-        [ShowIf("useExternalNoiseSource", true)] public NoiseNodeBase externalNoiseSource;
+        [ShowIf("useExternalNoiseSource", true)] public NodeBase externalSource;
         public Vector3 randomRotation;
 
 
@@ -45,7 +45,7 @@ namespace NoiseUltra
             float v;
             if (useExternalNoiseSource)
 
-                v = externalNoiseSource.Sample3D(pos.x, pos.y, pos.z);
+                v = externalSource.Sample3D(pos.x, pos.y, pos.z);
             else
                 v = thresHold;
                 

@@ -10,6 +10,7 @@ using Sirenix.OdinInspector;
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 #endif
+using NoiseUltra.Nodes;
 
 namespace NoiseUltra
 {
@@ -158,7 +159,7 @@ namespace NoiseUltra
             [ShowIf("isAnglePaint" , true) ]
             public AnimationCurve clifCurve = AnimationCurve.Linear(0 , 0 , 1 , 1);
             
-            public NoiseNodeBase noiseNodeGraph;
+            public NodeBase nodeGraph;
             public int splatID;
 
 
@@ -180,8 +181,8 @@ namespace NoiseUltra
 
                 
 
-                if (noiseNodeGraph != null)
-                    v = noiseNodeGraph.Sample2D(xPos, yPos);
+                if (nodeGraph != null)
+                    v = nodeGraph.Sample2D(xPos, yPos);
                 else
                     v = 1;
                 

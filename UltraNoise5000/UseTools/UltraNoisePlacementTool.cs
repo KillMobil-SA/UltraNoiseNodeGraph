@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
+using NoiseUltra.Nodes;
 namespace NoiseUltra {
     public class UltraNoisePlacementTool : SerializedMonoBehaviour {
 
         [Title ("Noise Settings")]
         public int seed;
-        public NoiseNodeBase noiseNodeGraph;
+        public NodeBase nodeGraph;
         [Title("Placement Settings")] 
         public bool useWorldPos = true;
         public float spacing;
@@ -91,9 +91,9 @@ namespace NoiseUltra {
             if (!useWorldPos)
                 pos -= transform.position;
             if (myPlacementBounds.heightIs2D)
-                return noiseNodeGraph.Sample2D ((float) pos.x, (float) pos.z);
+                return nodeGraph.Sample2D ((float) pos.x, (float) pos.z);
             else
-                 return noiseNodeGraph.Sample3D ((float) pos.x, (float) pos.y, (float) pos.z);
+                 return nodeGraph.Sample3D ((float) pos.x, (float) pos.y, (float) pos.z);
             //
         }
 
