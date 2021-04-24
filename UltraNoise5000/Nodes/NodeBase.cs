@@ -72,9 +72,9 @@ namespace NoiseUltra.Nodes
 			return GetPort(nameof(node));
 		}
 		
-		protected NodeBase GetNode(NodeBase node)
+		protected NodeBase GetInputNode(string nodeName, NodeBase fallback)
 		{
-			return GetInputValue(nameof(node), node);
+			return GetInputValue(nodeName, fallback);
 		}
 	}
 }

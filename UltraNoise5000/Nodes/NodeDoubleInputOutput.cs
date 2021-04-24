@@ -25,12 +25,12 @@ namespace NoiseUltra.Nodes
 
         private NodeBase GetInputA()
         {
-            return GetNode(inputA);
+            return GetInputNode(nameof(inputA), inputA);
         }
 
         private NodeBase GetInputB()
         {
-            return GetNode(inputB);
+            return GetInputNode(nameof(inputB), inputB);
         }
         
         public override float Sample1D(float x)
