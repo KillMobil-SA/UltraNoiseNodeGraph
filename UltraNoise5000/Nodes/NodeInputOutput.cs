@@ -11,22 +11,33 @@ namespace NoiseUltra.Nodes
         [SerializeField, Input] 
         private NodeBase input;
 
+        private bool IsValid => GetInput() != null;
+
         public override float Sample1D(float x)
         {
+            if (!IsValid)
+                return -1;
+            
             return GetInput().Sample1D(x);
         }
 
         public override float Sample2D(float x, float y)
         {
+            if (!IsValid)
+                return -1;
+
             return GetInput().Sample2D(x, y);
         }
 
         public override float Sample3D(float x, float y, float z)
         {
+            if (!IsValid)
+                return -1;
+
             return GetInput().Sample3D(x, y, z);
         }
 
-        protected NodeBase GetInput()
+        private NodeBase GetInput()
         {
             return GetInputValue(nameof(input), input);
         }

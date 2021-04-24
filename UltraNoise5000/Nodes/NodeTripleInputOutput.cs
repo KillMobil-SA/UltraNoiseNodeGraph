@@ -28,6 +28,10 @@ namespace NoiseUltra.Nodes
         [SerializeField, Input] 
         private NodeBase inputC;
 
+        private bool IsValid => GetInputA() != null &&
+                                GetInputB() != null &&
+                                GetInputC() != null;
+
         private NodeBase GetInputA()
         {
             return GetInputNode(nameof(inputA), inputA);
@@ -45,6 +49,9 @@ namespace NoiseUltra.Nodes
         
         public override float Sample1D(float x)
         {
+            if (!IsValid)
+                return -1;
+
             var sampleA = GetInputA().Sample1D(x);
             var sampleB = GetInputB().Sample1D(x);
             var sampleC = GetInputC().Sample1D(x);
@@ -53,6 +60,9 @@ namespace NoiseUltra.Nodes
 
         public override float Sample2D(float x, float y)
         {
+            if (!IsValid)
+                return -1;
+
             var sampleA = GetInputA().Sample2D(x, y);
             var sampleB = GetInputB().Sample2D(x, y);
             var sampleC = GetInputC().Sample2D(x, y);
@@ -61,6 +71,9 @@ namespace NoiseUltra.Nodes
         
         public override float Sample3D(float x, float y, float z)
         {
+            if (!IsValid)
+                return -1;
+
             var sampleA = GetInputA().Sample3D(x, y, z);
             var sampleB = GetInputB().Sample3D(x, y, z);
             var sampleC = GetInputC().Sample3D(x, y, z);
