@@ -10,9 +10,6 @@ namespace NoiseUltra.Nodes
 	[NodeWidth(NodeProprieties.NodeWidth)]
 	public abstract class NodeBase : Node
 	{
-		[SerializeField, Output] 
-		private NodeBase output;
-
 		[SerializeField, ShowIf(nameof(_isPreviewEnabled))]
 		private PreviewImage previewImage;
 		
@@ -22,7 +19,9 @@ namespace NoiseUltra.Nodes
 		{
 			previewImage = new PreviewImage();
 			if(_isPreviewEnabled)
-				EnablePreview();
+			{
+				previewImage = new PreviewImage();
+			}
 		}
 		
 		[Button, HideIf(nameof(_isPreviewEnabled))]
