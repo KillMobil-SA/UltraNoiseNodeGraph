@@ -9,7 +9,7 @@ using XNode;
 
 namespace NoiseUltra.Generators.Static
 {
-    public class Line : NodeOutput
+    public class Gradient : NodeOutput
     {
         private enum GrandientLineType
         {

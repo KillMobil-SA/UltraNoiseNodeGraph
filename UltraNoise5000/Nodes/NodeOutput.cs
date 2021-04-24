@@ -36,6 +36,6 @@ namespace NoiseUltra.Nodes
 			}
 		}
 		
-		protected override void OnUpdate() => UpdateOutPut();
+		protected override void OnBeforeUpdate() => UpdateOutPut();
 	}
 }

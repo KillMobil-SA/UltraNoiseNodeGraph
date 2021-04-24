@@ -9,11 +9,11 @@ namespace NoiseUltra.Operations
 		private const float MaxSpeed = 1; //I think we can have values greater than 1 here, no?
 		
 		[SerializeField, Range(MinSpeed, MaxSpeed)]
-		private float speed;
+		private float factor;
 
 		protected override float ExecuteOperation(float strengthenedA, float strengthenedB)
 		{
-			return Mathf.Lerp(strengthenedA, strengthenedB, speed);
+			return Mathf.Lerp(strengthenedA, strengthenedB, factor);
 		}
 	}
 }

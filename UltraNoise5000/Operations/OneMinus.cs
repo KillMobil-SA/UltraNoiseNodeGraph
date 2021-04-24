@@ -2,7 +2,7 @@
 
 namespace NoiseUltra.Operations
 {
-	public class Reverse : NodeModifier
+	public class OneMinus : NodeModifier
 	{
 		protected override float ApplyModifier(float sample)
 		{

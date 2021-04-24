@@ -10,49 +10,29 @@ namespace NoiseUltra.Generators
 	{
 		[SerializeField] 
 		private Attributes attributes = new Attributes();
-		private FractalNoise _fractal;
-		
-		protected override void Init()
-		{
-			InitializeFractal();
-		}
 
-		private void InitializeFractal()
+		private FractalNoise _fractal;
+
+		[Button]
+		private void New()
 		{
 			attributes.RandomizeSeed();
+			Update();
+		}
+
+		protected override void OnBeforeUpdate()
+		{
 			var seed = attributes.seed;
 			var noiseType = attributes.noiseType;
 			var frequency = attributes.FrequencyOver100;
 			var octaves = attributes.octaves;
 			var offset = attributes.offset;
 			var noise = NoiseFactory.CreateBaseNoise(seed, frequency, noiseType);
-			
 			_fractal = NoiseFactory.CreateFractal(noise, octaves, attributes.FrequencyOver100); 
 			_fractal.Offset = offset;
-		}
-
-		[Button]
-		public void New()
-		{
-			InitializeFractal();
-			Update();
-		}
-		
-		[Button]
-		public override void Update()
-		{
-			base.Update();
-			UpdateFractal();
-		}  
-
-		private void UpdateFractal()
-		{
-			_fractal.Octaves = attributes.octaves;
-			_fractal.Frequency = attributes.FrequencyOver100;
-			_fractal.Offset = attributes.offset;
-			_fractal.Amplitude = attributes.amplitude;
-			_fractal.Lacunarity = attributes.lacunarity;
-			_fractal.UpdateTable();
+			
+			//Has to happen afterwards
+			base.OnBeforeUpdate();
 		}
 
 		public override float Sample1D(float x) => _fractal.Sample1D(x);
@@ -60,7 +40,5 @@ namespace NoiseUltra.Generators
 		public override float Sample2D(float x, float y) => _fractal.Sample2D(x, y);
 
 		public override float Sample3D(float x, float y, float z) => _fractal.Sample3D(x, y, z);
-
-		public override object GetValue(NodePort port) => this;
 	}
 }

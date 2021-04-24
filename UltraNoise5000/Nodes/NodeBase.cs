@@ -10,50 +10,32 @@ namespace NoiseUltra.Nodes
 	[NodeWidth(NodeProprieties.NodeWidth)]
 	public abstract class NodeBase : Node
 	{
-		[SerializeField, ShowIf(nameof(_isPreviewEnabled))]
+		[SerializeField]
 		private PreviewImage previewImage;
-		
-		private bool _isPreviewEnabled = true;
-		
+
 		protected override void Init()
 		{
-			previewImage = new PreviewImage();
-			if(_isPreviewEnabled)
-			{
-				EnablePreview();
-			}
-		}
-		
-		[Button, HideIf(nameof(_isPreviewEnabled))]
-		protected void EnablePreview()
-		{
-			_isPreviewEnabled = true;
 			previewImage = new PreviewImage();
 			Update();
 		}
 
-		[Button, ShowIf(nameof(_isPreviewEnabled))]
-		protected void DisablePreview()
-		{
-			_isPreviewEnabled = false;
-			previewImage.DeleteTexture();
-			previewImage = null;
-		}
-
 		[Button]
-		public virtual void Update()
+		public void Update()
 		{
-			OnUpdate();
-			if (_isPreviewEnabled)
-			{
-				previewImage.Update(Sample2D);
-			}
+			OnBeforeUpdate();
+			previewImage.Update(Sample2D);
 		}
 
-		protected abstract void OnUpdate();
+		protected virtual void OnBeforeUpdate()
+		{
+			
+		}
+
 		public abstract float Sample1D(float x);
 		public abstract float Sample2D(float x, float y);
 		public abstract float Sample3D(float x, float y, float z);
+		
+		//-------------------------------------------------------------------
 
 		public override object GetValue(NodePort port)
 		{

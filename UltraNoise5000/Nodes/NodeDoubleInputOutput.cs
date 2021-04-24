@@ -63,7 +63,7 @@ namespace NoiseUltra.Nodes
 
             var sampleA = GetInputA().Sample3D(x, y, z);
             var sampleB = GetInputB().Sample3D(x, y, z);
-            return ExecuteOperation(sampleA * strengthA * strengthA, sampleB * strengthB);
+            return ExecuteOperation(sampleA * strengthA, sampleB * strengthB);
         }
 
         /// <summary>

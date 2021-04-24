@@ -39,7 +39,7 @@ namespace NoiseUltra.Nodes
 
         private NodeBase GetInput()
         {
-            return GetInputValue(nameof(input), input);
+            return GetInputNode(nameof(input), input);
         }
     }
 }

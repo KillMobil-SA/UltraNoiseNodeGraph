@@ -14,13 +14,13 @@ namespace NoiseUltra.Generators
 
         public int seed;
         public NOISE_TYPE noiseType = NOISE_TYPE.PERLIN;
-        public float frequency = 20f;
+        [SerializeField] private float frequency = 20f;
         [Range(0, 2)] public float amplitude = 1f;
         [Range(0, MaxLacunarity)] public float lacunarity = 2.0f;
         [Range(0, MaxOctaves)] public int octaves = 4;
         public Vector3 offset;
 
         public void RandomizeSeed() => seed = Random.Range(0, 999999);
-        public float FrequencyOver100 => frequency / 100f; //Not sure why
+        public float FrequencyOver100 => frequency / 100f;
     }
 }
