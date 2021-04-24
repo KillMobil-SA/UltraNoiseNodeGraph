@@ -4,23 +4,20 @@ namespace NoiseUltra.Generators
 {
     public static class NoiseFactory
     {
-        public static INoise CreateBaseNoise(int seed, float frequency, NOISE_TYPE type)
+        public static INoise CreateBaseNoise(int seed, float frequency, NOISE_TYPE type, float amplitude)
         {
-            switch (type)
+            INoise noise = type switch
             {
-                case NOISE_TYPE.PERLIN:
-                    return new PerlinNoise(seed, frequency);
-                case NOISE_TYPE.VALUE:
-                    return new ValueNoise(seed, frequency);
-                case NOISE_TYPE.SIMPLEX:
-                    return new SimplexNoise(seed, frequency);
-                case NOISE_TYPE.VORONOI:
-                    return new VoronoiNoise(seed, frequency);
-                case NOISE_TYPE.WORLEY:
-                    return new WorleyNoise(seed, frequency, 1.0f);
-                default:
-                    return new PerlinNoise(seed, frequency);
-            }
+                NOISE_TYPE.PERLIN => new PerlinNoise(seed, frequency),
+                NOISE_TYPE.VALUE => new ValueNoise(seed, frequency),
+                NOISE_TYPE.SIMPLEX => new SimplexNoise(seed, frequency),
+                NOISE_TYPE.VORONOI => new VoronoiNoise(seed, frequency),
+                NOISE_TYPE.WORLEY => new WorleyNoise(seed, frequency, 1.0f),
+                _ => new PerlinNoise(seed, frequency)
+            };
+
+            noise.Amplitude = amplitude;
+            return noise;
         }
 
         public static FractalNoise CreateFractal(INoise noise, int octaves, float frequency)

@@ -2,7 +2,6 @@
 using ProceduralNoiseProject;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using XNode;
 
 namespace NoiseUltra.Generators
 {
@@ -22,12 +21,14 @@ namespace NoiseUltra.Generators
 
 		protected override void OnBeforeUpdate()
 		{
-			var seed = attributes.seed;
-			var noiseType = attributes.noiseType;
+			attributes.SetGenerator(this);
+			var seed = attributes.Seed;
+			var noiseType = attributes.NoiseType;
 			var frequency = attributes.FrequencyOver100;
-			var octaves = attributes.octaves;
-			var offset = attributes.offset;
-			var noise = NoiseFactory.CreateBaseNoise(seed, frequency, noiseType);
+			var octaves = attributes.Octaves;
+			var amplitude = attributes.Amplitude;
+			var offset = attributes.Offset;
+			var noise = NoiseFactory.CreateBaseNoise(seed, frequency, noiseType, amplitude);
 			_fractal = NoiseFactory.CreateFractal(noise, octaves, attributes.FrequencyOver100); 
 			_fractal.Offset = offset;
 			
