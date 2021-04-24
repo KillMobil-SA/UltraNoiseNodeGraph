@@ -20,7 +20,7 @@ namespace NoiseUltra.Nodes
 			previewImage = new PreviewImage();
 			if(_isPreviewEnabled)
 			{
-				previewImage = new PreviewImage();
+				EnablePreview();
 			}
 		}
 		

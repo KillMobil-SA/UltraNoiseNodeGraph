@@ -6,7 +6,7 @@ namespace NoiseUltra.Operations
     public class Step : NodeModifier
     {
         private const int MinSteps = 1;
-        private const int MaxSteps = 10;
+        private const int MaxSteps = 50;
         
         [SerializeField, Range(MinSteps, MaxSteps)]
         private int steps = MinSteps;
