@@ -7,14 +7,13 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using XNode;
 
-namespace NoiseUltra.Generators.Static
-{
-	public class ExternalNode : NodeOutput
-	{
-		[SerializeField] 
+namespace NoiseUltra.Generators.Static {
+	[NodeTint (NodeProprieties.NodeTintYellow)]
+	public class ExternalNode : NodeOutput {
+		[SerializeField]
 		private NodeBase node;
-		public override float Sample1D(float x) => node.Sample1D(x);
-		public override float Sample2D(float x, float y) => node.Sample2D(x, y);
-		public override float Sample3D(float x, float y, float z) => node.Sample3D(x, y, z);
+		public override float Sample1D (float x) => node.Sample1D (x);
+		public override float Sample2D (float x, float y) => node.Sample2D (x, y);
+		public override float Sample3D (float x, float y, float z) => node.Sample3D (x, y, z);
 	}
 }
