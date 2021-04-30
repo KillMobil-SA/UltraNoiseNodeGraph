@@ -191,7 +191,6 @@ namespace NoiseUltra
                 {
                     float x_01 = (float)x/(float)trd.alphamapWidth;
                     float y_01 = (float)y/(float)trd.alphamapHeight;
-                    
                     float steepness = trd.GetSteepness(x_01, y_01);
                     
                     float angleV = clifCurve.Evaluate(Mathf.Clamp01(steepness*steepness/(trd.heightmapResolution/angleDivide)));

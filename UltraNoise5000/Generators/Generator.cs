@@ -8,7 +8,7 @@ namespace NoiseUltra.Generators {
 	public class Generator : NodeOutput {
 		[SerializeField]
 		private Attributes attributes = new Attributes ();
-
+		[SerializeField]
 		private FractalNoise _fractal;
 
 		[Button]

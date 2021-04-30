@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using NoiseUltra.Nodes;
+using NoiseUltra.Output;
 namespace NoiseUltra {
-    public class UltraNoisePlacementTool : SerializedMonoBehaviour {
+    public class UltraNoisePlacementTool : MonoBehaviour {
 
         [Title ("Noise Settings")]
         public int seed;
-        public NodeBase nodeGraph;
+        public ExportNode nodeGraph;
         [Title("Placement Settings")] 
         public bool useWorldPos = true;
+        [Min(1)]
         public float spacing;
         public UltraPlacementItemBase plamentHandler;
         [Title ("Debug Settings")]
         [ReadOnly]
         public int itemCounter = 0;
         public bool showDebugInfo;
-        void PreBuildPreparation () {
+        
+        void PreBuildPreparation ()
+        {
             itemCounter = 0;
             Random.InitState (seed);
         }
@@ -46,7 +49,7 @@ namespace NoiseUltra {
             PerformGeneration (true);
             DebugVal  =  myPlacementBounds.GetPosVector (transform.position.x, 1, transform.position.z);
             
-        }
+        }   
 
         void PerformGeneration (bool isDebug) {
             InitPlacement ();
