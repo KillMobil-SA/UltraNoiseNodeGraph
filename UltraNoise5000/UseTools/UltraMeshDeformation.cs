@@ -1,4 +1,4 @@
-using System.Collections;
+    using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using ProceduralNoiseProject;
@@ -6,13 +6,15 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using XNode;
 using NoiseUltra.Nodes;
+    using NoiseUltra.Tools.Placement;
+
 
 namespace NoiseUltra
 {
     public class UltraMeshDeformation : MonoBehaviour
     {
         public NodeBase @base;
-        public UltraPlacementPositionSettings noisePlacement;
+        public PositionSettings noisePlacement;
         public float heightMultiplayer;
         public float heightFloatMinus = 0.5f;
         private Vector3[] meshPoints;

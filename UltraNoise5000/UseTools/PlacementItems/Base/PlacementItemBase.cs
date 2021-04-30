@@ -3,22 +3,19 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace NoiseUltra
+namespace NoiseUltra.Tools.Placement
 {
-    public class UltraPlacementItemBase : SerializedScriptableObject
+    public class PlacementItemBase : ScriptableObject
     {
         [Header("Placement Settings")] [TabGroup("Placement Settings", "Size")]
-        public UltraPlacementScaleSettings placementSettings;
+        [SerializeField] private ScaleSettings placementSettings;
 
         [TabGroup("Placement Settings", "Rotation")]
-        public UltraPlacementRotationSettings placementRotationSettings;
+        [SerializeField] private RotationSettings placementRotationSettings;
 
         [TabGroup("Placement Settings", "Position")]
-        public UltraPlacementPositionSettings placementPositionsSettings;
-
-        [TabGroup("Placement Settings", "Coloring")]
-        public UltraPlacementColorSettings placementColorSettings;
-
+        [SerializeField] private PositionSettings placementPositionsSettings;
+        
         public Color debugColor;
         public float debugSizeMultiplier = 1;
 

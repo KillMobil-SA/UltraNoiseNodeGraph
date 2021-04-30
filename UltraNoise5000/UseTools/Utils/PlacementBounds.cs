@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace NoiseUltra
+namespace NoiseUltra.Tools.Placement
 {
     public class PlacementBounds
     {
 
-        private UltraNoisePlacementTool ultraNoisePlacementTool;
+        private PlacementGenerator placementGenerator;
 
-        public Collider placementCollider;
+        private Collider placementCollider;
 
-        public PlacementBounds(UltraNoisePlacementTool _ultraNoisePlacementTool, Collider _placementCollider)
+        public PlacementBounds(PlacementGenerator placementGenerator, Collider _placementCollider)
         {
-            this.ultraNoisePlacementTool = _ultraNoisePlacementTool;
+            this.placementGenerator = placementGenerator;
             this.placementCollider = _placementCollider;
         }
 
@@ -107,12 +107,12 @@ namespace NoiseUltra
 
         float spacing
         {
-            get { return ultraNoisePlacementTool.spacing; }
+            get { return placementGenerator.spacing; }
         }
 
         private bool useWorldPos
         {
-            get { return ultraNoisePlacementTool.useWorldPos; }
+            get { return placementGenerator.useWorldPos; }
         }
         
         void ColliderBoundsPrintOut()

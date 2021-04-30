@@ -8,16 +8,20 @@ using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 #endif
 
-namespace NoiseUltra
+namespace NoiseUltra.Tools.Placement
 {
+
     [CreateAssetMenu(fileName = "UltraPlacementItemGameObject", menuName = "KillMobil/UltraNoise/Gameobjects")]
-    public class UltraPlacementItemGameObject : UltraPlacementItemBase
+    public class PlacementItemGameObject : PlacementItemBase
     {
 
         [Header("GameObjects Placement Type Settings ")]
-        public GameObject[] items;
+        [SerializeField]
+        private GameObject[] items;
+        
 
-        public PlacementObjectType placementObjectType = PlacementObjectType.Linear;
+        [SerializeField]
+        private PlacementObjectType placementObjectType = PlacementObjectType.Linear;
         int linearID;
 
         public GameObject GetGameObject(float v)

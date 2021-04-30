@@ -4,20 +4,24 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using NoiseUltra.Nodes;
 
-namespace NoiseUltra
+namespace NoiseUltra.Tools.Placement
 {
     [System.Serializable]
-    public class UltraPlacementRotationSettings
+    public class RotationSettings
     {
-        public bool useNoiseRandomizationBase = false;
-        [ShowIf("useNoiseRandomizationBase", true)]
-        public bool useExternalNoiseSource = false; 
-        [ShowIf("useExternalNoiseSource", true)] public NodeBase externalSource;
-        public Vector3 randomRotation;
+        [SerializeField] private bool useNoiseRandomizationBase = false;
+        [ShowIf("useNoiseRandomizationBase", true) ,SerializeField]
+        private bool useExternalNoiseSource = false; 
+        [ShowIf("useExternalNoiseSource", true) ,SerializeField]
+        private NodeBase externalSource;
+        [ShowIf("useExternalNoiseSource", true) ,SerializeField]
+        private Vector3 randomRotation;
 
 
         public bool roundRotation;
-        [ShowIf("roundRotation", true)] public float rotationRound;
+        
+        [ShowIf("roundRotation", true) ,SerializeField]
+        private float rotationRound;
 
         public Vector3 RotationCalculator(Vector3 pos, float thresHold)
         {

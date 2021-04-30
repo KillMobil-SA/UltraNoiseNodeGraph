@@ -4,8 +4,9 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using NoiseUltra.Output;
-namespace NoiseUltra {
-    public class UltraNoisePlacementTool : MonoBehaviour {
+
+namespace NoiseUltra.Tools.Placement {
+    public class PlacementGenerator : MonoBehaviour {
 
         [Title ("Noise Settings")]
         public int seed;
@@ -14,7 +15,7 @@ namespace NoiseUltra {
         public bool useWorldPos = true;
         [Min(1)]
         public float spacing;
-        public UltraPlacementItemBase plamentHandler;
+        public PlacementItemBase plamentHandler;
         [Title ("Debug Settings")]
         [ReadOnly]
         public int itemCounter = 0;
