@@ -1,29 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProceduralNoiseProject
 {
     public class WorleyNoise : Noise
     {
-
-        private static readonly float[] OFFSET_F = new float[] { -0.5f, 0.5f, 1.5f };
-
         private const float K = 1.0f / 7.0f;
 
         private const float Ko = 3.0f / 7.0f;
 
-        public float Jitter { get; set; }
-
-        public VORONOI_DISTANCE Distance { get; set; }
-
-        public VORONOI_COMBINATION Combination { get; set; }
-
-        private PermutationTable Perm { get; set; }
+        private static readonly float[] OFFSET_F = {-0.5f, 0.5f, 1.5f};
 
         public WorleyNoise(int seed, float frequency, float jitter, float amplitude = 1.0f)
         {
-
             Frequency = frequency;
             Amplitude = amplitude;
             Offset = Vector3.zero;
@@ -34,8 +23,16 @@ namespace ProceduralNoiseProject
             Perm = new PermutationTable(1024, 255, seed);
         }
 
+        public float Jitter { get; set; }
+
+        public VORONOI_DISTANCE Distance { get; set; }
+
+        public VORONOI_COMBINATION Combination { get; set; }
+
+        private PermutationTable Perm { get; }
+
         /// <summary>
-        /// Update the seed.
+        ///     Update the seed.
         /// </summary>
         public override void UpdateSeed(int seed)
         {
@@ -43,31 +40,31 @@ namespace ProceduralNoiseProject
         }
 
         /// <summary>
-        /// Sample the noise in 1 dimension.
+        ///     Sample the noise in 1 dimension.
         /// </summary>
         public override float Sample1D(float x)
         {
             x = (x + Offset.x) * Frequency;
 
-            int Pi0 = (int)Mathf.Floor(x);
-            float Pf0 = Frac(x);
+            var Pi0 = (int) Mathf.Floor(x);
+            var Pf0 = Frac(x);
 
-            Vector3 pX = new Vector3();
+            var pX = new Vector3();
             pX[0] = Perm[Pi0 - 1];
             pX[1] = Perm[Pi0];
             pX[2] = Perm[Pi0 + 1];
 
             float d0, d1, d2;
-            float F0 = float.PositiveInfinity;
-            float F1 = float.PositiveInfinity;
-            float F2 = float.PositiveInfinity;
+            var F0 = float.PositiveInfinity;
+            var F1 = float.PositiveInfinity;
+            var F2 = float.PositiveInfinity;
 
             int px, py, pz;
             float oxx, oxy, oxz;
 
-            px = Perm[(int)pX[0]];
-            py = Perm[(int)pX[1]];
-            pz = Perm[(int)pX[2]];
+            px = Perm[(int) pX[0]];
+            py = Perm[(int) pX[1]];
+            pz = Perm[(int) pX[2]];
 
             oxx = Frac(px * K) - Ko;
             oxy = Frac(py * K) - Ko;
@@ -77,55 +74,90 @@ namespace ProceduralNoiseProject
             d1 = Distance1(Pf0, OFFSET_F[1] + Jitter * oxy);
             d2 = Distance1(Pf0, OFFSET_F[2] + Jitter * oxz);
 
-            if (d0 < F0) { F2 = F1; F1 = F0; F0 = d0; }
-            else if (d0 < F1) { F2 = F1; F1 = d0; }
-            else if (d0 < F2) { F2 = d0; }
+            if (d0 < F0)
+            {
+                F2 = F1;
+                F1 = F0;
+                F0 = d0;
+            }
+            else if (d0 < F1)
+            {
+                F2 = F1;
+                F1 = d0;
+            }
+            else if (d0 < F2)
+            {
+                F2 = d0;
+            }
 
-            if (d1 < F0) { F2 = F1; F1 = F0; F0 = d1; }
-            else if (d1 < F1) { F2 = F1; F1 = d1; }
-            else if (d1 < F2) { F2 = d1; }
+            if (d1 < F0)
+            {
+                F2 = F1;
+                F1 = F0;
+                F0 = d1;
+            }
+            else if (d1 < F1)
+            {
+                F2 = F1;
+                F1 = d1;
+            }
+            else if (d1 < F2)
+            {
+                F2 = d1;
+            }
 
-            if (d2 < F0) { F2 = F1; F1 = F0; F0 = d2; }
-            else if (d2 < F1) { F2 = F1; F1 = d2; }
-            else if (d2 < F2) { F2 = d2; }
+            if (d2 < F0)
+            {
+                F2 = F1;
+                F1 = F0;
+                F0 = d2;
+            }
+            else if (d2 < F1)
+            {
+                F2 = F1;
+                F1 = d2;
+            }
+            else if (d2 < F2)
+            {
+                F2 = d2;
+            }
 
             return Combine(F0, F1, F2) * Amplitude;
         }
 
         /// <summary>
-        /// Sample the noise in 2 dimensions.
+        ///     Sample the noise in 2 dimensions.
         /// </summary>
         public override float Sample2D(float x, float y)
         {
-
             x = (x + Offset.x) * Frequency;
             y = (y + Offset.y) * Frequency;
 
-            int Pi0 = (int)Mathf.Floor(x);
-            int Pi1 = (int)Mathf.Floor(y);
+            var Pi0 = (int) Mathf.Floor(x);
+            var Pi1 = (int) Mathf.Floor(y);
 
-            float Pf0 = Frac(x);
-            float Pf1 = Frac(y);
+            var Pf0 = Frac(x);
+            var Pf1 = Frac(y);
 
-            Vector3 pX = new Vector3();
+            var pX = new Vector3();
             pX[0] = Perm[Pi0 - 1];
             pX[1] = Perm[Pi0];
             pX[2] = Perm[Pi0 + 1];
 
             float d0, d1, d2;
-            float F0 = float.PositiveInfinity;
-            float F1 = float.PositiveInfinity;
-            float F2 = float.PositiveInfinity;
+            var F0 = float.PositiveInfinity;
+            var F1 = float.PositiveInfinity;
+            var F2 = float.PositiveInfinity;
 
             int px, py, pz;
             float oxx, oxy, oxz;
             float oyx, oyy, oyz;
 
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
-                px = Perm[(int)pX[i], Pi1 - 1];
-                py = Perm[(int)pX[i], Pi1];
-                pz = Perm[(int)pX[i], Pi1 + 1];
+                px = Perm[(int) pX[i], Pi1 - 1];
+                py = Perm[(int) pX[i], Pi1];
+                pz = Perm[(int) pX[i], Pi1 + 1];
 
                 oxx = Frac(px * K) - Ko;
                 oxy = Frac(py * K) - Ko;
@@ -139,101 +171,171 @@ namespace ProceduralNoiseProject
                 d1 = Distance2(Pf0, Pf1, OFFSET_F[i] + Jitter * oxy, 0.5f + Jitter * oyy);
                 d2 = Distance2(Pf0, Pf1, OFFSET_F[i] + Jitter * oxz, 1.5f + Jitter * oyz);
 
-                if (d0 < F0) { F2 = F1; F1 = F0; F0 = d0; }
-                else if (d0 < F1) { F2 = F1; F1 = d0; }
-                else if (d0 < F2) { F2 = d0; }
+                if (d0 < F0)
+                {
+                    F2 = F1;
+                    F1 = F0;
+                    F0 = d0;
+                }
+                else if (d0 < F1)
+                {
+                    F2 = F1;
+                    F1 = d0;
+                }
+                else if (d0 < F2)
+                {
+                    F2 = d0;
+                }
 
-                if (d1 < F0) { F2 = F1; F1 = F0; F0 = d1; }
-                else if (d1 < F1) { F2 = F1; F1 = d1; }
-                else if (d1 < F2) { F2 = d1; }
+                if (d1 < F0)
+                {
+                    F2 = F1;
+                    F1 = F0;
+                    F0 = d1;
+                }
+                else if (d1 < F1)
+                {
+                    F2 = F1;
+                    F1 = d1;
+                }
+                else if (d1 < F2)
+                {
+                    F2 = d1;
+                }
 
-                if (d2 < F0) { F2 = F1; F1 = F0; F0 = d2; }
-                else if (d2 < F1) { F2 = F1; F1 = d2; }
-                else if (d2 < F2) { F2 = d2; }
-
+                if (d2 < F0)
+                {
+                    F2 = F1;
+                    F1 = F0;
+                    F0 = d2;
+                }
+                else if (d2 < F1)
+                {
+                    F2 = F1;
+                    F1 = d2;
+                }
+                else if (d2 < F2)
+                {
+                    F2 = d2;
+                }
             }
 
             return Combine(F0, F1, F2) * Amplitude;
         }
 
         /// <summary>
-        /// Sample the noise in 3 dimensions.
+        ///     Sample the noise in 3 dimensions.
         /// </summary>
         public override float Sample3D(float x, float y, float z)
         {
-
             x = (x + Offset.x) * Frequency;
             y = (y + Offset.y) * Frequency;
             z = (z + Offset.z) * Frequency;
 
-            int Pi0 = (int)Mathf.Floor(x);
-            int Pi1 = (int)Mathf.Floor(y);
-            int Pi2 = (int)Mathf.Floor(z);
+            var Pi0 = (int) Mathf.Floor(x);
+            var Pi1 = (int) Mathf.Floor(y);
+            var Pi2 = (int) Mathf.Floor(z);
 
-            float Pf0 = Frac(x);
-            float Pf1 = Frac(y);
-            float Pf2 = Frac(z);
+            var Pf0 = Frac(x);
+            var Pf1 = Frac(y);
+            var Pf2 = Frac(z);
 
-            Vector3 pX = new Vector3();
+            var pX = new Vector3();
             pX[0] = Perm[Pi0 - 1];
             pX[1] = Perm[Pi0];
             pX[2] = Perm[Pi0 + 1];
 
-            Vector3 pY = new Vector3();
+            var pY = new Vector3();
             pY[0] = Perm[Pi1 - 1];
             pY[1] = Perm[Pi1];
             pY[2] = Perm[Pi1 + 1];
 
             float d0, d1, d2;
-            float F0 = 1e6f;
-            float F1 = 1e6f;
-            float F2 = 1e6f;
+            var F0 = 1e6f;
+            var F1 = 1e6f;
+            var F2 = 1e6f;
 
             int px, py, pz;
             float oxx, oxy, oxz;
             float oyx, oyy, oyz;
             float ozx, ozy, ozz;
 
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
+            for (var j = 0; j < 3; j++)
             {
-                for (int j = 0; j < 3; j++)
+                px = Perm[(int) pX[i], (int) pY[j], Pi2 - 1];
+                py = Perm[(int) pX[i], (int) pY[j], Pi2];
+                pz = Perm[(int) pX[i], (int) pY[j], Pi2 + 1];
+
+                oxx = Frac(px * K) - Ko;
+                oxy = Frac(py * K) - Ko;
+                oxz = Frac(pz * K) - Ko;
+
+                oyx = Mod(Mathf.Floor(px * K), 7.0f) * K - Ko;
+                oyy = Mod(Mathf.Floor(py * K), 7.0f) * K - Ko;
+                oyz = Mod(Mathf.Floor(pz * K), 7.0f) * K - Ko;
+
+                px = Perm[px];
+                py = Perm[py];
+                pz = Perm[pz];
+
+                ozx = Frac(px * K) - Ko;
+                ozy = Frac(py * K) - Ko;
+                ozz = Frac(pz * K) - Ko;
+
+                d0 = Distance3(Pf0, Pf1, Pf2, OFFSET_F[i] + Jitter * oxx, OFFSET_F[j] + Jitter * oyx,
+                    -0.5f + Jitter * ozx);
+                d1 = Distance3(Pf0, Pf1, Pf2, OFFSET_F[i] + Jitter * oxy, OFFSET_F[j] + Jitter * oyy,
+                    0.5f + Jitter * ozy);
+                d2 = Distance3(Pf0, Pf1, Pf2, OFFSET_F[i] + Jitter * oxz, OFFSET_F[j] + Jitter * oyz,
+                    1.5f + Jitter * ozz);
+
+                if (d0 < F0)
                 {
+                    F2 = F1;
+                    F1 = F0;
+                    F0 = d0;
+                }
+                else if (d0 < F1)
+                {
+                    F2 = F1;
+                    F1 = d0;
+                }
+                else if (d0 < F2)
+                {
+                    F2 = d0;
+                }
 
-                    px = Perm[(int)pX[i], (int)pY[j], Pi2 - 1]; 
-                    py = Perm[(int)pX[i], (int)pY[j], Pi2]; 
-                    pz = Perm[(int)pX[i], (int)pY[j], Pi2 + 1];
+                if (d1 < F0)
+                {
+                    F2 = F1;
+                    F1 = F0;
+                    F0 = d1;
+                }
+                else if (d1 < F1)
+                {
+                    F2 = F1;
+                    F1 = d1;
+                }
+                else if (d1 < F2)
+                {
+                    F2 = d1;
+                }
 
-                    oxx = Frac(px * K) - Ko;
-                    oxy = Frac(py * K) - Ko;
-                    oxz = Frac(pz * K) - Ko;
-
-                    oyx = Mod(Mathf.Floor(px * K), 7.0f) * K - Ko;
-                    oyy = Mod(Mathf.Floor(py * K), 7.0f) * K - Ko;
-                    oyz = Mod(Mathf.Floor(pz * K), 7.0f) * K - Ko;
-
-                    px = Perm[px];
-                    py = Perm[py];
-                    pz = Perm[pz];
-
-                    ozx = Frac(px * K) - Ko;
-                    ozy = Frac(py * K) - Ko;
-                    ozz = Frac(pz * K) - Ko;
-
-                    d0 = Distance3(Pf0, Pf1, Pf2, OFFSET_F[i] + Jitter * oxx, OFFSET_F[j] + Jitter * oyx, -0.5f + Jitter * ozx);
-                    d1 = Distance3(Pf0, Pf1, Pf2, OFFSET_F[i] + Jitter * oxy, OFFSET_F[j] + Jitter * oyy, 0.5f + Jitter * ozy);
-                    d2 = Distance3(Pf0, Pf1, Pf2, OFFSET_F[i] + Jitter * oxz, OFFSET_F[j] + Jitter * oyz, 1.5f + Jitter * ozz);
-
-                    if (d0 < F0) { F2 = F1; F1 = F0; F0 = d0; }
-                    else if (d0 < F1) { F2 = F1; F1 = d0; }
-                    else if (d0 < F2) { F2 = d0; }
-
-                    if (d1 < F0) { F2 = F1; F1 = F0; F0 = d1; }
-                    else if (d1 < F1) { F2 = F1; F1 = d1; }
-                    else if (d1 < F2) { F2 = d1; }
-
-                    if (d2 < F0) { F2 = F1; F1 = F0; F0 = d2; }
-                    else if (d2 < F1) { F2 = F1; F1 = d2; }
-                    else if (d2 < F2) { F2 = d2; }
+                if (d2 < F0)
+                {
+                    F2 = F1;
+                    F1 = F0;
+                    F0 = d2;
+                }
+                else if (d2 < F1)
+                {
+                    F2 = F1;
+                    F1 = d2;
+                }
+                else if (d2 < F2)
+                {
+                    F2 = d2;
                 }
             }
 

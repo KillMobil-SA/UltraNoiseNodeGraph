@@ -1,16 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using NoiseUltra.Output;
 using Sirenix.OdinInspector;
 using UnityEngine;
+<<<<<<< HEAD:UltraNoise5000/UseTools/PlacementItems/PlacementGenerator.cs
 using Random = UnityEngine.Random;
 using NoiseUltra.Output;
 
 namespace NoiseUltra.Tools.Placement {
     public class PlacementGenerator : MonoBehaviour {
+=======
+>>>>>>> f5ee208a90c9bc5a5c97c3c815672de79590a885:UltraNoise5000/UseTools/UltraNoisePlacementTool.cs
 
-        [Title ("Noise Settings")]
-        public int seed;
+namespace NoiseUltra
+{
+    public class UltraNoisePlacementTool : MonoBehaviour
+    {
+        [Title("Noise Settings")] public int seed;
+
         public ExportNode nodeGraph;
+<<<<<<< HEAD:UltraNoise5000/UseTools/PlacementItems/PlacementGenerator.cs
         [Title("Placement Settings")] 
         public bool useWorldPos = true;
         [Min(1)]
@@ -19,109 +26,121 @@ namespace NoiseUltra.Tools.Placement {
         [Title ("Debug Settings")]
         [ReadOnly]
         public int itemCounter = 0;
+=======
+
+        [Title("Placement Settings")] public bool useWorldPos = true;
+
+        [Min(1)] public float spacing;
+
+        public UltraPlacementItemBase plamentHandler;
+
+        [Title("Debug Settings")] [ReadOnly] public int itemCounter;
+
+>>>>>>> f5ee208a90c9bc5a5c97c3c815672de79590a885:UltraNoise5000/UseTools/UltraNoisePlacementTool.cs
         public bool showDebugInfo;
-        
-        void PreBuildPreparation ()
+
+
+        public Vector3 DebugVal;
+
+        private PlacementBounds _myPlacementBounds;
+
+        private Collider _placementAreaCollider;
+
+        private PlacementBounds myPlacementBounds
+        {
+            get
+            {
+                if (_myPlacementBounds == null)
+                    _myPlacementBounds = new PlacementBounds(this, placementAreaCollider);
+                return _myPlacementBounds;
+            }
+            set => _myPlacementBounds = value;
+        }
+
+        private Collider placementAreaCollider
+        {
+            get
+            {
+                if (_placementAreaCollider == null)
+                    _placementAreaCollider = GetComponent<Collider>();
+                return _placementAreaCollider;
+            }
+            set => _placementAreaCollider = value;
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (plamentHandler == null || !showDebugInfo) return;
+            PerformGeneration(true);
+            DebugVal = myPlacementBounds.GetPosVector(transform.position.x, 1, transform.position.z);
+        }
+
+        private void PreBuildPreparation()
         {
             itemCounter = 0;
-            Random.InitState (seed);
+            Random.InitState(seed);
         }
 
         [Button]
-        public void GenerateObjects ()
+        public void GenerateObjects()
         {
             ClearObjects();
-            PerformGeneration (false);
+            PerformGeneration(false);
             showDebugInfo = false;
         }
 
         [Button]
-        public void ClearObjects () {
-            plamentHandler.CleanObjects (this.transform);
+        public void ClearObjects()
+        {
+            plamentHandler.CleanObjects(transform);
         }
 
+        private void PerformGeneration(bool isDebug)
+        {
+            InitPlacement();
 
-        public Vector3 DebugVal;
-        
-        void OnDrawGizmos () {
-            
-            
-            if (plamentHandler == null || !showDebugInfo) return;
-            PerformGeneration (true);
-            DebugVal  =  myPlacementBounds.GetPosVector (transform.position.x, 1, transform.position.z);
-            
-        }   
+            for (var x = 0; x < myPlacementBounds.xAmount; x++)
+            for (var y = 0; y < myPlacementBounds.yAmount; y++)
+            for (var z = 0; z < myPlacementBounds.zAmount; z++)
+            {
+                var pos = myPlacementBounds.GetPosVector(x, y, z);
 
-        void PerformGeneration (bool isDebug) {
-            InitPlacement ();
+                var v = GetNoise(pos);
 
-            for (int x = 0; x < myPlacementBounds.xAmount; x++) {
-                for (int y = 0; y < myPlacementBounds.yAmount; y++) {
-                    for (int z = 0; z < myPlacementBounds.zAmount; z++) {
-                        Vector3 pos = myPlacementBounds.GetPosVector (x, y, z);
+                if (!PlacementValidation(pos, v)) continue;
 
-                        float v = GetNoise (pos);
-
-                        if (!PlacementValidation (pos, v)) continue;
-
-                        if (isDebug) plamentHandler.DebugObject (pos, v);
-                        else {
-                            plamentHandler.PlaceObject (pos, v, this.transform);
-                        }
-                        itemCounter++;
-                    }
-                }
+                if (isDebug) plamentHandler.DebugObject(pos, v);
+                else
+                    plamentHandler.PlaceObject(pos, v, transform);
+                itemCounter++;
             }
         }
 
-        void InitPlacement () {
+        private void InitPlacement()
+        {
             itemCounter = 0;
-            Random.InitState (seed);
+            Random.InitState(seed);
         }
 
-        bool PlacementValidation (Vector3 pos, float v) {
+        private bool PlacementValidation(Vector3 pos, float v)
+        {
             if (v <= 0) return false;
 
-            bool heightPlacementCheck = plamentHandler.ChechPos (pos);
+            var heightPlacementCheck = plamentHandler.ChechPos(pos);
             if (!heightPlacementCheck)
                 return false;
 
             return true;
-
         }
 
-        float GetNoise (Vector3 pos)
+        private float GetNoise(Vector3 pos)
         {
             if (!useWorldPos)
                 pos -= transform.position;
             if (myPlacementBounds.heightIs2D)
-                return nodeGraph.Sample2D ((float) pos.x, (float) pos.z);
-            else
-                 return nodeGraph.Sample3D ((float) pos.x, (float) pos.y, (float) pos.z);
+                return nodeGraph.Sample2D(pos.x, pos.z);
+            return nodeGraph.Sample3D(pos.x, pos.y, pos.z);
             //
         }
-
-        private PlacementBounds _myPlacementBounds;
-
-        private PlacementBounds myPlacementBounds {
-            get {
-                if (_myPlacementBounds == null)
-                    _myPlacementBounds = new PlacementBounds (this, placementAreaCollider);
-                return _myPlacementBounds;
-            }
-            set { _myPlacementBounds = value; }
-        }
-
-        private Collider _placementAreaCollider;
-
-        private Collider placementAreaCollider {
-            get {
-                if (_placementAreaCollider == null)
-                    _placementAreaCollider = GetComponent<Collider> ();
-                return _placementAreaCollider;
-            }
-            set { _placementAreaCollider = value; }
-        }
-
     }
 }

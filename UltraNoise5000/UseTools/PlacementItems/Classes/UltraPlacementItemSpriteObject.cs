@@ -5,11 +5,10 @@ using UnityEditor;
 
 #endif
 
-namespace NoiseUltra.Tools.Placement
+namespace NoiseUltra
 {
-
-    [CreateAssetMenu(fileName = "UltraPlacementItemGameObject", menuName = "KillMobil/UltraNoise/Gameobjects")]
-    public class PlacementItemGameObject : PlacementItemBase
+    [CreateAssetMenu(fileName = "UltraPlacementItemSpriteObject", menuName = "KillMobil/UltraNoise/Sprites")]
+    public class UltraPlacementItemSpriteObject : UltraPlacementItemBase
     {
         public enum PlacementObjectType
         {
@@ -19,20 +18,13 @@ namespace NoiseUltra.Tools.Placement
         }
 
         [Header("GameObjects Placement Type Settings ")]
-        [SerializeField]
-        private GameObject[] items;
-        
+        public Sprite[] items;
 
-<<<<<<< HEAD:UltraNoise5000/UseTools/PlacementItems/PlacementItemGameObject.cs
-        [SerializeField]
-        private PlacementObjectType placementObjectType = PlacementObjectType.Linear;
-        int linearID;
-=======
+        public GameObject spritePrefab;
         public PlacementObjectType placementObjectType = PlacementObjectType.Linear;
         private int linearID;
->>>>>>> f5ee208a90c9bc5a5c97c3c815672de79590a885:UltraNoise5000/UseTools/PlacementItems/Classes/UltraPlacementItemGameObject.cs
 
-        public GameObject GetGameObject(float v)
+        public Sprite GetSpriteObject(float v)
         {
             var objectID = GetObjectID(v);
             var newPoolObject = items[objectID];
@@ -44,15 +36,19 @@ namespace NoiseUltra.Tools.Placement
             var placemntPos = GetPos(pos, v);
             var placemntScale = GetScale(pos, v);
             var placemntRot = GetRot(pos, v);
-            var sourceGO = GetGameObject(v);
+            var sourceSprite = GetSpriteObject(v);
             GameObject newObject;
 
 #if UNITY_EDITOR
-            newObject = PrefabUtility.InstantiatePrefab(sourceGO, parent) as GameObject;
+            newObject = PrefabUtility.InstantiatePrefab(spritePrefab, parent) as GameObject;
 #else
-        newObject = Instantiate (placementItem.GetGameObject (v)) as GameObject;
+        newObject = Instantiate (spritePrefab) as GameObject;
         newObject.transform.parent = parent;
 #endif
+
+
+            var sR = newObject.GetComponentInChildren<SpriteRenderer>();
+            sR.sprite = sourceSprite;
 
             newObject.SetActive(true);
             newObject.name = ObjectNamePrefix(pos);
