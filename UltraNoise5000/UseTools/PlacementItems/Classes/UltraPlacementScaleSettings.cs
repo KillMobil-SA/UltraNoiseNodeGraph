@@ -1,23 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Sirenix.OdinInspector;
+﻿using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-[System.Serializable]
+[Serializable]
 public class UltraPlacementScaleSettings
 {
-
     [Header("Scaling V2")] public float size = 1;
     public bool hasIndividualScale;
-    public ScaleRange dynamicScaleRange ;
+    public ScaleRange dynamicScaleRange;
     public ScaleRange randomScaleRange;
-    
+
 
     public Vector3 SizeCalculator(Vector3 pos, float thresHold)
     {
-        Vector3 dynamicScale = Vector3.one;
-        Vector3 randomScale = Vector3.one;
-        
+        var dynamicScale = Vector3.one;
+        var randomScale = Vector3.one;
+
         if (hasIndividualScale)
         {
             // Dynamic Scale
@@ -28,47 +26,45 @@ public class UltraPlacementScaleSettings
         else
         {
             // Dynamic Scale
-            float size = dynamicScaleRange.GetPercSizeFloat(thresHold);
+            var size = dynamicScaleRange.GetPercSizeFloat(thresHold);
             dynamicScale = new Vector3(size, size, size);
             //Random Scale
-            randomScale =  randomScaleRange.GetPercSizeVector3(Random.value) ;
+            randomScale = randomScaleRange.GetPercSizeVector3(Random.value);
         }
-        
-        Vector3 ScaleResult = (dynamicScale + randomScale) * size;
+
+        var ScaleResult = (dynamicScale + randomScale) * size;
         return ScaleResult;
     }
 
 
-    Vector3 RandomScale()
+    private Vector3 RandomScale()
     {
-        float xRandomScale = randomScaleRange.GetPercSizeFloat(Random.value , 0);
-        float yRandomScale = randomScaleRange.GetPercSizeFloat(Random.value , 1);
-        float zRandomScale = randomScaleRange.GetPercSizeFloat(Random.value , 2);
+        var xRandomScale = randomScaleRange.GetPercSizeFloat(Random.value);
+        var yRandomScale = randomScaleRange.GetPercSizeFloat(Random.value, 1);
+        var zRandomScale = randomScaleRange.GetPercSizeFloat(Random.value, 2);
         return new Vector3(xRandomScale, yRandomScale, zRandomScale);
     }
-    
-    
-    [System.Serializable]
+
+
+    [Serializable]
     public class ScaleRange
     {
         public Vector3 minSizeV3 = Vector3.one;
         public Vector3 maxSizeV3 = Vector3.one;
-        public float GetPercSizeFloat(float v , int axis = 0 )
+
+        public float GetPercSizeFloat(float v, int axis = 0)
         {
-            return Mathf.Lerp (minSizeV3[axis], maxSizeV3[axis], v);
+            return Mathf.Lerp(minSizeV3[axis], maxSizeV3[axis], v);
         }
+
         public Vector3 GetPercSizeVector3(float v)
         {
-            return Vector3.Lerp( minSizeV3, maxSizeV3 , v);
+            return Vector3.Lerp(minSizeV3, maxSizeV3, v);
         }
     }
-    
 }
 
 
-
-
-    
 /*
 [Header ("Size Settings")]
 public float size = 1;

@@ -1,33 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using NoiseUltra.Nodes;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using NoiseUltra.Nodes;
+using Random = UnityEngine.Random;
 
 namespace NoiseUltra
 {
-    [System.Serializable]
+    [Serializable]
     public class UltraPlacementRotationSettings
     {
-        public bool useNoiseRandomizationBase = false;
-        [ShowIf("useNoiseRandomizationBase", true)]
-        public bool useExternalNoiseSource = false; 
-        [ShowIf("useExternalNoiseSource", true)] public NodeBase externalSource;
+        public bool useNoiseRandomizationBase;
+
+        [ShowIf("useNoiseRandomizationBase")] public bool useExternalNoiseSource;
+
+        [ShowIf("useExternalNoiseSource")] public NodeBase externalSource;
         public Vector3 randomRotation;
 
 
         public bool roundRotation;
-        [ShowIf("roundRotation", true)] public float rotationRound;
+        [ShowIf("roundRotation")] public float rotationRound;
 
         public Vector3 RotationCalculator(Vector3 pos, float thresHold)
         {
-
             if (useNoiseRandomizationBase)
-                NoiseRandomization(pos , thresHold);
-            
-            float xRot = Random.Range((float) -randomRotation.x, (float) randomRotation.x);
-            float yRot = Random.Range((float) -randomRotation.y, (float) randomRotation.y);
-            float zRot = Random.Range((float) -randomRotation.z, (float) randomRotation.z);
+                NoiseRandomization(pos, thresHold);
+
+            var xRot = Random.Range(-randomRotation.x, randomRotation.x);
+            var yRot = Random.Range(-randomRotation.y, randomRotation.y);
+            var zRot = Random.Range(-randomRotation.z, randomRotation.z);
 
             if (roundRotation)
             {
@@ -36,11 +36,11 @@ namespace NoiseUltra
                 zRot = RoundRotation(zRot);
             }
 
-            Vector3 rotation = new Vector3(xRot, yRot, zRot);
+            var rotation = new Vector3(xRot, yRot, zRot);
             return rotation;
         }
 
-        void NoiseRandomization(Vector3 pos, float thresHold)
+        private void NoiseRandomization(Vector3 pos, float thresHold)
         {
             float v;
             if (useExternalNoiseSource)
@@ -48,13 +48,13 @@ namespace NoiseUltra
                 v = externalSource.Sample3D(pos.x, pos.y, pos.z);
             else
                 v = thresHold;
-                
+
             Random.InitState(Mathf.RoundToInt(v * 9999));
         }
 
-        float RoundRotation(float yRotation)
+        private float RoundRotation(float yRotation)
         {
-            float amount = Mathf.Round(yRotation / rotationRound);
+            var amount = Mathf.Round(yRotation / rotationRound);
             return amount * rotationRound;
 
             /*
@@ -73,7 +73,5 @@ namespace NoiseUltra
             }
             */
         }
-
     }
-
 }

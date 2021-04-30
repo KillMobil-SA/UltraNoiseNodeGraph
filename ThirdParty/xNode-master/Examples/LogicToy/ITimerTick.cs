@@ -1,5 +1,7 @@
-﻿namespace XNode.Examples.LogicToy {
-	public interface ITimerTick {
-		void Tick(float timeDelta);
-	}
+﻿namespace XNode.Examples.LogicToy
+{
+    public interface ITimerTick
+    {
+        void Tick(float timeDelta);
+    }
 }

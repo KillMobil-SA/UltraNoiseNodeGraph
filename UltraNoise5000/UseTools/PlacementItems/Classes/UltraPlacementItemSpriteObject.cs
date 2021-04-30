@@ -1,11 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
 using UnityEngine;
-
 #if UNITY_EDITOR
-using Unity.EditorCoroutines.Editor;
 using UnityEditor;
+
 #endif
 
 namespace NoiseUltra
@@ -13,27 +10,33 @@ namespace NoiseUltra
     [CreateAssetMenu(fileName = "UltraPlacementItemSpriteObject", menuName = "KillMobil/UltraNoise/Sprites")]
     public class UltraPlacementItemSpriteObject : UltraPlacementItemBase
     {
+        public enum PlacementObjectType
+        {
+            Linear,
+            Value,
+            Random
+        }
 
         [Header("GameObjects Placement Type Settings ")]
         public Sprite[] items;
 
         public GameObject spritePrefab;
         public PlacementObjectType placementObjectType = PlacementObjectType.Linear;
-        int linearID;
+        private int linearID;
 
         public Sprite GetSpriteObject(float v)
         {
-            int objectID = GetObjectID(v);
-            Sprite newPoolObject = items[objectID];
+            var objectID = GetObjectID(v);
+            var newPoolObject = items[objectID];
             return newPoolObject;
         }
 
         public override void PlaceObject(Vector3 pos, float v, Transform parent)
         {
-            Vector3 placemntPos = GetPos(pos, v);
-            Vector3 placemntScale = GetScale(pos, v);
-            Vector3 placemntRot = GetRot(pos, v);
-            Sprite sourceSprite = GetSpriteObject(v);
+            var placemntPos = GetPos(pos, v);
+            var placemntScale = GetScale(pos, v);
+            var placemntRot = GetRot(pos, v);
+            var sourceSprite = GetSpriteObject(v);
             GameObject newObject;
 
 #if UNITY_EDITOR
@@ -44,7 +47,7 @@ namespace NoiseUltra
 #endif
 
 
-            SpriteRenderer sR = newObject.GetComponentInChildren<SpriteRenderer>();
+            var sR = newObject.GetComponentInChildren<SpriteRenderer>();
             sR.sprite = sourceSprite;
 
             newObject.SetActive(true);
@@ -59,15 +62,15 @@ namespace NoiseUltra
         {
             Debug.Log(string.Format("CleanObjects () - parent {0}", parent));
 
-            Transform[] transforms = parent.GetComponentsInChildren<Transform>();
+            var transforms = parent.GetComponentsInChildren<Transform>();
 
-            List<Transform> reformList = new List<Transform>();
-            for (int i = 0; i < transforms.Length; i++)
+            var reformList = new List<Transform>();
+            for (var i = 0; i < transforms.Length; i++)
                 if (transforms[i].parent == parent)
                     reformList.Add(transforms[i]);
 
 
-            for (int i = 0; i < reformList.Count; i++)
+            for (var i = 0; i < reformList.Count; i++)
             {
 #if UNITY_EDITOR
                 DestroyImmediate(reformList[i].gameObject);
@@ -77,16 +80,16 @@ namespace NoiseUltra
             }
         }
 
-        string ObjectNamePrefix(Vector3 pos)
+        private string ObjectNamePrefix(Vector3 pos)
         {
-            string prefix = this.name + "_" + pos.x.ToString() + "_" + pos.y.ToString() + "_" + pos.z.ToString();
+            var prefix = name + "_" + pos.x + "_" + pos.y + "_" + pos.z;
             return prefix;
         }
 
-        int GetObjectID(float v)
+        private int GetObjectID(float v)
         {
             v = Mathf.Clamp01(v);
-            int returnID = 0;
+            var returnID = 0;
             switch (placementObjectType)
             {
                 case PlacementObjectType.Linear:
@@ -101,20 +104,12 @@ namespace NoiseUltra
                     break;
 
                 case PlacementObjectType.Value:
-                    returnID = Mathf.FloorToInt((float) (items.Length - 1) * v);
+                    returnID = Mathf.FloorToInt((items.Length - 1) * v);
                     //Debug.Log(string.Format("returnID {0}", returnID));
                     break;
             }
 
             return returnID;
         }
-
-        public enum PlacementObjectType
-        {
-            Linear,
-            Value,
-            Random
-        }
-
     }
 }

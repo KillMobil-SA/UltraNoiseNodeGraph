@@ -1,39 +1,44 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace XNode.Examples.StateGraph {
-	public class StateNode : Node {
+namespace XNode.Examples.StateGraph
+{
+    public class StateNode : Node
+    {
+        [Input] public Empty enter;
+        [Output] public Empty exit;
 
-		[Input] public Empty enter;
-		[Output] public Empty exit;
+        public void MoveNext()
+        {
+            var fmGraph = graph as StateGraph;
 
-		public void MoveNext() {
-			StateGraph fmGraph = graph as StateGraph;
+            if (fmGraph.current != this)
+            {
+                Debug.LogWarning("Node isn't active");
+                return;
+            }
 
-			if (fmGraph.current != this) {
-				Debug.LogWarning("Node isn't active");
-				return;
-			}
+            var exitPort = GetOutputPort("exit");
 
-			NodePort exitPort = GetOutputPort("exit");
+            if (!exitPort.IsConnected)
+            {
+                Debug.LogWarning("Node isn't connected");
+                return;
+            }
 
-			if (!exitPort.IsConnected) {
-				Debug.LogWarning("Node isn't connected");
-				return;
-			}
+            var node = exitPort.Connection.node as StateNode;
+            node.OnEnter();
+        }
 
-			StateNode node = exitPort.Connection.node as StateNode;
-			node.OnEnter();
-		}
+        public void OnEnter()
+        {
+            var fmGraph = graph as StateGraph;
+            fmGraph.current = this;
+        }
 
-		public void OnEnter() {
-			StateGraph fmGraph = graph as StateGraph;
-			fmGraph.current = this;
-		}
-
-		[Serializable]
-		public class Empty { }
-	}
+        [Serializable]
+        public class Empty
+        {
+        }
+    }
 }
