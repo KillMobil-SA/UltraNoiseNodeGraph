@@ -8,20 +8,19 @@ namespace NoiseUltra.Tools.Placement
     [System.Serializable]
     public class PositionSettings : ShowOdinSerializedPropertiesInInspectorAttribute
     {
-       public Vector3 randomPositioning;
+        public Vector3 randomPositioning;
 
-        [Header("Height Calulations Settings") ,SerializeField]
+        [Header("Height Calulations Settings"), SerializeField]
         private HeightPosType heightPosType = HeightPosType.Grid;
 
-        [ShowIf("heightPosType", HeightPosType.Raycast) ,SerializeField]
+        [ShowIf("heightPosType", HeightPosType.Raycast), SerializeField]
         private RayCastHeightPos rayCastHeightPos = new RayCastHeightPos();
 
-        [ShowIf("heightPosType", HeightPosType.Noise) ,SerializeField]
+        [ShowIf("heightPosType", HeightPosType.Noise), SerializeField]
         private NoiseHeightPos noiseHeightPos = new NoiseHeightPos();
 
         public Vector3 PotisionCalculator(Vector3 pos, float thresHold)
         {
-
             Vector3 sourceHeightCalculation = new Vector3(pos.x, CalculateHeight(pos), pos.z);
 
             float xPos = Random.Range(-randomPositioning.x, randomPositioning.x);
@@ -62,6 +61,5 @@ namespace NoiseUltra.Tools.Placement
                     return true;
             }
         }
-
     }
 }

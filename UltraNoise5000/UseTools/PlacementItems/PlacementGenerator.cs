@@ -5,108 +5,112 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using NoiseUltra.Output;
 
-namespace NoiseUltra.Tools.Placement {
-    public class PlacementGenerator : MonoBehaviour {
-
-        [Title ("Noise Settings")]
-        public int seed;
+namespace NoiseUltra.Tools.Placement
+{
+    public class PlacementGenerator : MonoBehaviour
+    {
+        [Title("Noise Settings")] public int seed;
         public ExportNode nodeGraph;
-        [Title("Placement Settings")] 
-        public bool useWorldPos = true;
-        [Min(1)]
-        public float spacing;
+        [Title("Placement Settings")] public bool useWorldPos = true;
+        [Min(1)] public float spacing;
         public PlacementItemBase plamentHandler;
-        [Title ("Debug Settings")]
-        [ReadOnly]
-        public int itemCounter = 0;
+        [Title("Debug Settings")] [ReadOnly] public int itemCounter = 0;
         public bool showDebugInfo;
-        
-        void PreBuildPreparation ()
+
+        void PreBuildPreparation()
         {
             itemCounter = 0;
-            Random.InitState (seed);
+            Random.InitState(seed);
         }
 
         [Button]
-        public void GenerateObjects ()
+        public void GenerateObjects()
         {
             ClearObjects();
-            PerformGeneration (false);
+            PerformGeneration(false);
             showDebugInfo = false;
         }
 
         [Button]
-        public void ClearObjects () {
-            plamentHandler.CleanObjects (this.transform);
+        public void ClearObjects()
+        {
+            plamentHandler.CleanObjects(this.transform);
         }
 
 
         public Vector3 DebugVal;
-        
-        void OnDrawGizmos () {
-            
-            
+
+        void OnDrawGizmos()
+        {
             if (plamentHandler == null || !showDebugInfo) return;
-            PerformGeneration (true);
-            DebugVal  =  myPlacementBounds.GetPosVector (transform.position.x, 1, transform.position.z);
-            
-        }   
+            PerformGeneration(true);
+            DebugVal = myPlacementBounds.GetPosVector(transform.position.x, 1, transform.position.z);
+        }
 
-        void PerformGeneration (bool isDebug) {
-            InitPlacement ();
+        void PerformGeneration(bool isDebug)
+        {
+            InitPlacement();
 
-            for (int x = 0; x < myPlacementBounds.xAmount; x++) {
-                for (int y = 0; y < myPlacementBounds.yAmount; y++) {
-                    for (int z = 0; z < myPlacementBounds.zAmount; z++) {
-                        Vector3 pos = myPlacementBounds.GetPosVector (x, y, z);
+            for (int x = 0; x < myPlacementBounds.xAmount; x++)
+            {
+                for (int y = 0; y < myPlacementBounds.yAmount; y++)
+                {
+                    for (int z = 0; z < myPlacementBounds.zAmount; z++)
+                    {
+                        Vector3 pos = myPlacementBounds.GetPosVector(x, y, z);
 
-                        float v = GetNoise (pos);
+                        float v = GetNoise(pos);
 
-                        if (!PlacementValidation (pos, v)) continue;
+                        if (!PlacementValidation(pos, v)) continue;
 
-                        if (isDebug) plamentHandler.DebugObject (pos, v);
-                        else {
-                            plamentHandler.PlaceObject (pos, v, this.transform);
+                        if (isDebug) plamentHandler.DebugObject(pos, v);
+                        else
+                        {
+                            plamentHandler.PlaceObject(pos, v, this.transform);
                         }
+
                         itemCounter++;
                     }
                 }
             }
         }
 
-        void InitPlacement () {
+        void InitPlacement()
+        {
             itemCounter = 0;
-            Random.InitState (seed);
+            Random.InitState(seed);
         }
 
-        bool PlacementValidation (Vector3 pos, float v) {
+        bool PlacementValidation(Vector3 pos, float v)
+        {
             if (v <= 0) return false;
 
-            bool heightPlacementCheck = plamentHandler.ChechPos (pos);
+            bool heightPlacementCheck = plamentHandler.ChechPos(pos);
             if (!heightPlacementCheck)
                 return false;
 
             return true;
-
         }
 
-        float GetNoise (Vector3 pos)
+        float GetNoise(Vector3 pos)
         {
             if (!useWorldPos)
                 pos -= transform.position;
             if (myPlacementBounds.heightIs2D)
-                return nodeGraph.Sample2D ((float) pos.x, (float) pos.z);
+                return nodeGraph.Sample2D((float) pos.x, (float) pos.z);
             else
-                 return nodeGraph.Sample3D ((float) pos.x, (float) pos.y, (float) pos.z);
+                return nodeGraph.Sample3D((float) pos.x, (float) pos.y, (float) pos.z);
             //
         }
 
         private PlacementBounds _myPlacementBounds;
 
-        private PlacementBounds myPlacementBounds {
-            get {
+        private PlacementBounds myPlacementBounds
+        {
+            get
+            {
                 if (_myPlacementBounds == null)
-                    _myPlacementBounds = new PlacementBounds (this, placementAreaCollider);
+                    _myPlacementBounds = new PlacementBounds(this, placementAreaCollider);
                 return _myPlacementBounds;
             }
             set { _myPlacementBounds = value; }
@@ -114,14 +118,15 @@ namespace NoiseUltra.Tools.Placement {
 
         private Collider _placementAreaCollider;
 
-        private Collider placementAreaCollider {
-            get {
+        private Collider placementAreaCollider
+        {
+            get
+            {
                 if (_placementAreaCollider == null)
-                    _placementAreaCollider = GetComponent<Collider> ();
+                    _placementAreaCollider = GetComponent<Collider>();
                 return _placementAreaCollider;
             }
             set { _placementAreaCollider = value; }
         }
-
     }
 }

@@ -7,15 +7,15 @@ namespace NoiseUltra.Tools.Placement
 {
     public class PlacementItemBase : ScriptableObject
     {
-        [Header("Placement Settings")] [TabGroup("Placement Settings", "Size")]
-        [SerializeField] private ScaleSettings placementSettings;
+        [Header("Placement Settings")] [TabGroup("Placement Settings", "Size")] [SerializeField]
+        private ScaleSettings placementSettings;
 
-        [TabGroup("Placement Settings", "Rotation")]
-        [SerializeField] private RotationSettings placementRotationSettings;
+        [TabGroup("Placement Settings", "Rotation")] [SerializeField]
+        private RotationSettings placementRotationSettings;
 
-        [TabGroup("Placement Settings", "Position")]
-        [SerializeField] private PositionSettings placementPositionsSettings;
-        
+        [TabGroup("Placement Settings", "Position")] [SerializeField]
+        private PositionSettings placementPositionsSettings;
+
         public Color debugColor;
         public float debugSizeMultiplier = 1;
 
@@ -40,8 +40,6 @@ namespace NoiseUltra.Tools.Placement
             Gizmos.color = debugColor;
             Gizmos.DrawCube(placemntPos, placemntScale);
             Gizmos.color = Color.white;
-
         }
-
     }
 }

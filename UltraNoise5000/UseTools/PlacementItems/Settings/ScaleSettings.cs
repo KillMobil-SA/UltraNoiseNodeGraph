@@ -9,7 +9,6 @@ namespace NoiseUltra.Tools.Placement
     [System.Serializable]
     public class ScaleSettings
     {
-
         [SerializeField] private float size = 1;
         [SerializeField] private bool hasIndividualScale;
         [SerializeField] private ScaleRange dynamicScaleRange;
@@ -54,8 +53,8 @@ namespace NoiseUltra.Tools.Placement
         [System.Serializable]
         public class ScaleRange
         {
-            [SerializeField] private  Vector3 minSizeV3 = Vector3.one;
-            [SerializeField] private  Vector3 maxSizeV3 = Vector3.one;
+            [SerializeField] private Vector3 minSizeV3 = Vector3.one;
+            [SerializeField] private Vector3 maxSizeV3 = Vector3.one;
 
             public float GetPercSizeFloat(float v, int axis = 0)
             {
@@ -67,11 +66,8 @@ namespace NoiseUltra.Tools.Placement
                 return Vector3.Lerp(minSizeV3, maxSizeV3, v);
             }
         }
-
     }
-
 }
-
 
 
 /*

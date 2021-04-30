@@ -6,7 +6,6 @@ namespace NoiseUltra.Tools.Placement
 {
     public class PlacementBounds
     {
-
         private PlacementGenerator placementGenerator;
 
         private Collider placementCollider;
@@ -21,7 +20,7 @@ namespace NoiseUltra.Tools.Placement
         {
             get
             {
-                var v =  (placementCollider.bounds.size.x) / spacing;
+                var v = (placementCollider.bounds.size.x) / spacing;
                 if (v == 0) v = 1;
                 return v;
             }
@@ -29,47 +28,38 @@ namespace NoiseUltra.Tools.Placement
 
         public int xAmountInt
         {
-            get
-            {
-                return Mathf.RoundToInt(xAmount);
-            }
+            get { return Mathf.RoundToInt(xAmount); }
         }
-        
+
 
         public float yAmount
         {
             get
             {
-                var v =  (placementCollider.bounds.size.y) / spacing;
+                var v = (placementCollider.bounds.size.y) / spacing;
                 if (v == 0) v = 1;
                 return v;
             }
         }
-        
+
         public int yAmountInt
         {
-            get
-            {
-                return Mathf.RoundToInt(yAmount);
-            }
+            get { return Mathf.RoundToInt(yAmount); }
         }
 
         public float zAmount
         {
             get
             {
-                var v =  (placementCollider.bounds.size.z) / spacing;
+                var v = (placementCollider.bounds.size.z) / spacing;
                 if (v == 0) v = 1;
                 return v;
             }
         }
-        
+
         public int zAmountInt
         {
-            get
-            {
-                return Mathf.RoundToInt(zAmount);
-            }
+            get { return Mathf.RoundToInt(zAmount); }
         }
 
 
@@ -83,7 +73,7 @@ namespace NoiseUltra.Tools.Placement
         }
 
 
-        public Vector3 GetPosVector(float x, float y, float z) 
+        public Vector3 GetPosVector(float x, float y, float z)
         {
             float xPos = x - xAmount / 2;
             float yPos = y - yAmount / 2;
@@ -91,16 +81,15 @@ namespace NoiseUltra.Tools.Placement
             Vector3 pos = (new Vector3(xPos, yPos, zPos) * spacing) + center;
             return pos;
         }
-        
-        
-        
+
+
         public Vector3 center
         {
             get
             {
                 Vector3 center = placementCollider.bounds.center;
                 Vector3 centerRound = new Vector3(Mathf.Round(center.x / spacing) * spacing, Mathf.Round(center.y),
-                        Mathf.Round(center.z / spacing) * spacing); 
+                    Mathf.Round(center.z / spacing) * spacing);
                 return centerRound;
             }
         }
@@ -114,10 +103,9 @@ namespace NoiseUltra.Tools.Placement
         {
             get { return placementGenerator.useWorldPos; }
         }
-        
+
         void ColliderBoundsPrintOut()
         {
-
             Vector3 m_Center;
             Vector3 m_Size, m_Min, m_Max;
 
@@ -135,6 +123,5 @@ namespace NoiseUltra.Tools.Placement
             Debug.Log("Collider bound Minimum : " + m_Min);
             Debug.Log("Collider bound Maximum : " + m_Max);
         }
-
     }
 }

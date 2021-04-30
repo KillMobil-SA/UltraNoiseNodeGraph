@@ -8,8 +8,7 @@ namespace NoiseUltra.Nodes
     /// </summary>
     public abstract class NodeInputOutput : NodeOutput
     {
-        [SerializeField, Input] 
-        private NodeBase input;
+        [SerializeField, Input] private NodeBase input;
 
         private bool IsValid => GetInput() != null;
 
@@ -17,7 +16,7 @@ namespace NoiseUltra.Nodes
         {
             if (!IsValid)
                 return -1;
-            
+
             return GetInput().Sample1D(x);
         }
 

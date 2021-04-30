@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum HeightPosType {
+public enum HeightPosType
+{
     Raycast,
     Grid,
     Noise

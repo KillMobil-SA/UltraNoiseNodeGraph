@@ -22,7 +22,7 @@ namespace NoiseUltra.Generators
 
         public static FractalNoise CreateFractal(INoise noise, int octaves, float frequency)
         {
-            return new FractalNoise(noise, octaves, frequency ); 
-        }        
+            return new FractalNoise(noise, octaves, frequency);
+        }
     }
 }

@@ -14,11 +14,9 @@ namespace NoiseUltra.Nodes
         private const int Height = ImageSize;
         private float MaxPixel { get; }
 
-        [SerializeField, ReadOnly] 
-        private Bound bounds = new Bound();
-        
-        [SerializeField, Range(0, MaxZoom)] 
-        private float zoom = 200; //need to solve the auto update
+        [SerializeField, ReadOnly] private Bound bounds = new Bound();
+
+        [SerializeField, Range(0, MaxZoom)] private float zoom = 200; //need to solve the auto update
 
         [SerializeField, PreviewField(ImageSize)]
         private Texture2D sourceTexture;
@@ -37,7 +35,7 @@ namespace NoiseUltra.Nodes
             DeleteTexture(); // the trick of the tricks
             CreateTexture();
             bounds.ResetBounds();
-            
+
             for (var x = 0; x < Width; x++)
             {
                 for (var y = 0; y < Height; y++)
@@ -55,7 +53,7 @@ namespace NoiseUltra.Nodes
 
             sourceTexture.Apply();
         }
-        
+
         private float IdentifyBounds(float sample)
         {
             sample = Mathf.Clamp01(sample);
@@ -68,7 +66,7 @@ namespace NoiseUltra.Nodes
         {
             //Need to profile to be sure about this, but I think
             //the tex remains hanging in memory if we dont kill it
-            Object.DestroyImmediate(sourceTexture);  
+            Object.DestroyImmediate(sourceTexture);
             sourceTexture = null;
         }
 

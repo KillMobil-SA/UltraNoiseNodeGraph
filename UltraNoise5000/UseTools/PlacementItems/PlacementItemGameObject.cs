@@ -2,26 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
-
 #if UNITY_EDITOR
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
+
 #endif
 
 namespace NoiseUltra.Tools.Placement
 {
-
     [CreateAssetMenu(fileName = "UltraPlacementItemGameObject", menuName = "KillMobil/UltraNoise/Gameobjects")]
     public class PlacementItemGameObject : PlacementItemBase
     {
-
-        [Header("GameObjects Placement Type Settings ")]
-        [SerializeField]
+        [Header("GameObjects Placement Type Settings ")] [SerializeField]
         private GameObject[] items;
-        
 
-        [SerializeField]
-        private PlacementObjectType placementObjectType = PlacementObjectType.Linear;
+
+        [SerializeField] private PlacementObjectType placementObjectType = PlacementObjectType.Linear;
         int linearID;
 
         public GameObject GetGameObject(float v)
@@ -114,6 +110,5 @@ namespace NoiseUltra.Tools.Placement
             Value,
             Random
         }
-
     }
 }

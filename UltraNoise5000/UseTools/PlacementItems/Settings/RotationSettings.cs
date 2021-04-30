@@ -10,25 +10,27 @@ namespace NoiseUltra.Tools.Placement
     public class RotationSettings
     {
         [SerializeField] private bool useNoiseRandomizationBase = false;
-        [ShowIf("useNoiseRandomizationBase", true) ,SerializeField]
-        private bool useExternalNoiseSource = false; 
-        [ShowIf("useExternalNoiseSource", true) ,SerializeField]
+
+        [ShowIf("useNoiseRandomizationBase", true), SerializeField]
+        private bool useExternalNoiseSource = false;
+
+        [ShowIf("useExternalNoiseSource", true), SerializeField]
         private NodeBase externalSource;
-        [ShowIf("useExternalNoiseSource", true) ,SerializeField]
+
+        [ShowIf("useExternalNoiseSource", true), SerializeField]
         private Vector3 randomRotation;
 
 
         public bool roundRotation;
-        
-        [ShowIf("roundRotation", true) ,SerializeField]
+
+        [ShowIf("roundRotation", true), SerializeField]
         private float rotationRound;
 
         public Vector3 RotationCalculator(Vector3 pos, float thresHold)
         {
-
             if (useNoiseRandomizationBase)
-                NoiseRandomization(pos , thresHold);
-            
+                NoiseRandomization(pos, thresHold);
+
             float xRot = Random.Range((float) -randomRotation.x, (float) randomRotation.x);
             float yRot = Random.Range((float) -randomRotation.y, (float) randomRotation.y);
             float zRot = Random.Range((float) -randomRotation.z, (float) randomRotation.z);
@@ -52,7 +54,7 @@ namespace NoiseUltra.Tools.Placement
                 v = externalSource.Sample3D(pos.x, pos.y, pos.z);
             else
                 v = thresHold;
-                
+
             Random.InitState(Mathf.RoundToInt(v * 9999));
         }
 
@@ -77,7 +79,5 @@ namespace NoiseUltra.Tools.Placement
             }
             */
         }
-
     }
-
 }
