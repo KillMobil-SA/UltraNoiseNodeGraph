@@ -1,21 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-[System.Serializable]
-public class RayCastHeightPos
+namespace NoiseUltra.Tools.Placement
 {
-    [Header("Height Settings")] public string tagCheck = "Ground";
+[System.Serializable]
+public class RayCastHeightPos: HeightBase
+{
+
+    [Header("Height Settings")]
+    public string tagCheck = "Ground";
     public LayerMask layerMask;
     public bool showDebug;
     RaycastHit hit;
 
-    public float GetHeightPos(Vector3 pos)
+    public override float GetHeightPos(Vector3 pos)
     {
+        
         return hit.point.y;
     }
 
-    public bool HeightCheck(Vector3 pos)
+    public override bool HeightCheck(Vector3 pos)
     {
         return RayCastHitTest(pos);
     }
@@ -48,4 +52,6 @@ public class RayCastHeightPos
 
         return hasHitted;
     }
+}
+
 }

@@ -1,4 +1,5 @@
-﻿using NoiseUltra.Nodes;
+﻿using System;
+using NoiseUltra.Nodes;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using XNode;
@@ -11,8 +12,9 @@ namespace NoiseUltra
     [CreateAssetMenu(fileName = "Ultra Noise Graph", menuName = "KillMobil/UltraNoise/Noise Graph")]
     public class NoiseNodeGraph : NodeGraph
     {
-        [Button]
-        public void UpdateAllValues()
+      
+        [Button , ContextMenu("Update All Nodes")]
+        public void UpdateAllNodes()
         {
             foreach (Node node in nodes)
             {

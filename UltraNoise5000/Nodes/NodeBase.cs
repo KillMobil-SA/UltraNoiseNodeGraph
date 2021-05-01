@@ -15,7 +15,7 @@ namespace NoiseUltra.Nodes
         protected override void Init()
         {
             previewImage = new PreviewImage();
-            Update();
+            //Update(); // removed cause all SO init upon compile
         }
 
         [Button]

@@ -6,19 +6,49 @@ using UnityEngine;
 namespace NoiseUltra.Tools.Placement
 {
     [System.Serializable]
-    public class PositionSettings : ShowOdinSerializedPropertiesInInspectorAttribute
+    public class PositionSettings 
     {
         public Vector3 randomPositioning;
 
-        [Header("Height Calulations Settings"), SerializeField]
+        [Header("Height Calulations Settings") , OnValueChanged(nameof(UpdateHeightInterFace)), SerializeField]
         private HeightPosType heightPosType = HeightPosType.Grid;
 
-        [ShowIf("heightPosType", HeightPosType.Raycast), SerializeField]
+        [ShowIf(nameof(heightPosType), HeightPosType.Raycast), SerializeField]
         private RayCastHeightPos rayCastHeightPos = new RayCastHeightPos();
-
         [ShowIf("heightPosType", HeightPosType.Noise), SerializeField]
         private NoiseHeightPos noiseHeightPos = new NoiseHeightPos();
+        private GridHeightPos noiseGridPos = new GridHeightPos();
 
+        [SerializeField] private IHeightBase _heightBase;
+        
+        public PositionSettings()
+        {
+            UpdateHeightInterFace();
+        }
+
+        public void OnEnable() => UpdateHeightInterFace();
+        
+
+        private void UpdateHeightInterFace()
+        {
+            _heightBase = noiseGridPos;
+            switch (heightPosType)
+            {
+                case HeightPosType.Grid:
+                    _heightBase = noiseGridPos;
+                    break;
+                case HeightPosType.Noise:
+                    _heightBase = noiseHeightPos;
+                    break;
+                case HeightPosType.Raycast:
+                    _heightBase = rayCastHeightPos;
+                    break;
+                default:
+                    _heightBase =  noiseGridPos;
+                    break;
+            }
+        }
+        
         public Vector3 PotisionCalculator(Vector3 pos, float thresHold)
         {
             Vector3 sourceHeightCalculation = new Vector3(pos.x, CalculateHeight(pos), pos.z);
@@ -31,12 +61,14 @@ namespace NoiseUltra.Tools.Placement
             return sourceHeightCalculation + randomPosition;
         }
 
-        float CalculateHeight(Vector3 pos)
+        private float CalculateHeight(Vector3 pos)
         {
+            return _heightBase.GetHeightPos(pos);
+            /*  /// i keep this commented area Until we evaluate  current Height pos Implementation
             switch (heightPosType)
             {
                 case HeightPosType.Grid:
-                    return pos.y;
+                    return noiseGridPos.GetHeightPos(pos);
                 case HeightPosType.Noise:
                     return noiseHeightPos.GetHeightPos(pos);
                 case HeightPosType.Raycast:
@@ -44,22 +76,25 @@ namespace NoiseUltra.Tools.Placement
                 default:
                     return pos.y;
             }
+            */
         }
 
         public bool ChechPos(Vector3 pos)
         {
+            return _heightBase.HeightCheck(pos);
+            /*
             switch (heightPosType)
             {
                 case HeightPosType.Grid:
-                    return true;
+                    return noiseGridPos.HeightCheck(pos);
                 case HeightPosType.Noise:
-                    return true;
-                //return noiseHeightPos.HeightCheck (pos);
+                    return noiseHeightPos.HeightCheck(pos);
                 case HeightPosType.Raycast:
                     return rayCastHeightPos.HeightCheck(pos);
                 default:
                     return true;
             }
+            */
         }
     }
 }

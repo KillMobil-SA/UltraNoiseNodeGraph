@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace NoiseUltra.Tools.Placement
 {
-    public class PlacementItemBase : ScriptableObject
+    public class PlacementSettings : ScriptableObject
     {
         [Header("Placement Settings")] [TabGroup("Placement Settings", "Size")] [SerializeField]
         private ScaleSettings placementSettings;
@@ -23,6 +24,11 @@ namespace NoiseUltra.Tools.Placement
         public Vector3 GetPos(Vector3 pos, float v) => placementPositionsSettings.PotisionCalculator(pos, v);
         public Vector3 GetRot(Vector3 pos, float v) => placementRotationSettings.RotationCalculator(pos, v);
         public Vector3 GetScale(Vector3 pos, float v) => placementSettings.SizeCalculator(pos, v);
+
+        private void OnEnable()
+        {
+            placementPositionsSettings.OnEnable();
+        }
 
         public virtual void PlaceObject(Vector3 pos, float v, Transform parent)
         {

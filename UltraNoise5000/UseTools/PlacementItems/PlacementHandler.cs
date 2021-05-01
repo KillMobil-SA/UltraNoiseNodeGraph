@@ -7,13 +7,16 @@ using NoiseUltra.Output;
 
 namespace NoiseUltra.Tools.Placement
 {
-    public class PlacementGenerator : MonoBehaviour
+    public class PlacementHandler : MonoBehaviour
     {
+
+        public List<PlacementItem> generatorItems = new List<PlacementItem>();
+        
         [Title("Noise Settings")] public int seed;
-        public ExportNode nodeGraph;
+        public NodeExport nodeGraph;
         [Title("Placement Settings")] public bool useWorldPos = true;
         [Min(1)] public float spacing;
-        public PlacementItemBase plamentHandler;
+        public PlacementSettings plamentHandler;
         [Title("Debug Settings")] [ReadOnly] public int itemCounter = 0;
         public bool showDebugInfo;
 
@@ -50,30 +53,28 @@ namespace NoiseUltra.Tools.Placement
         void PerformGeneration(bool isDebug)
         {
             InitPlacement();
-
-            for (int x = 0; x < myPlacementBounds.xAmount; x++)
+            for (int i = 0; i < generatorItems.Count; i++)
             {
-                for (int y = 0; y < myPlacementBounds.yAmount; y++)
+                if (!generatorItems[i].active) continue;
+                 
+                myPlacementBounds.SetSpace(generatorItems[i].spacing);
+                
+                for (int x = 0; x < myPlacementBounds.xAmount; x++)
                 {
-                    for (int z = 0; z < myPlacementBounds.zAmount; z++)
+                    for (int y = 0; y < myPlacementBounds.yAmount; y++)
                     {
-                        Vector3 pos = myPlacementBounds.GetPosVector(x, y, z);
-
-                        float v = GetNoise(pos);
-
-                        if (!PlacementValidation(pos, v)) continue;
-
-                        if (isDebug) plamentHandler.DebugObject(pos, v);
-                        else
+                        for (int z = 0; z < myPlacementBounds.zAmount; z++)
                         {
-                            plamentHandler.PlaceObject(pos, v, this.transform);
+                            Vector3 placementPos = new Vector3(x, y, z);
+                            bool placementSuccess = generatorItems[i].GenerateObject(myPlacementBounds, placementPos, isDebug, this.transform);
+                            if (placementSuccess)
+                                itemCounter++;
                         }
-
-                        itemCounter++;
                     }
                 }
             }
         }
+        
 
         void InitPlacement()
         {
@@ -81,30 +82,7 @@ namespace NoiseUltra.Tools.Placement
             Random.InitState(seed);
         }
 
-        bool PlacementValidation(Vector3 pos, float v)
-        {
-            if (v <= 0) return false;
-
-            bool heightPlacementCheck = plamentHandler.ChechPos(pos);
-            if (!heightPlacementCheck)
-                return false;
-
-            return true;
-        }
-
-        float GetNoise(Vector3 pos)
-        {
-            if (!useWorldPos)
-                pos -= transform.position;
-            if (myPlacementBounds.heightIs2D)
-                return nodeGraph.Sample2D((float) pos.x, (float) pos.z);
-            else
-                return nodeGraph.Sample3D((float) pos.x, (float) pos.y, (float) pos.z);
-            //
-        }
-
         private PlacementBounds _myPlacementBounds;
-
         private PlacementBounds myPlacementBounds
         {
             get
@@ -117,7 +95,6 @@ namespace NoiseUltra.Tools.Placement
         }
 
         private Collider _placementAreaCollider;
-
         private Collider placementAreaCollider
         {
             get

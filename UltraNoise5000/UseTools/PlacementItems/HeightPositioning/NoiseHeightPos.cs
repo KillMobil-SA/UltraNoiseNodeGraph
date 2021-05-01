@@ -1,25 +1,28 @@
-﻿using NoiseUltra.Nodes;
+﻿using NoiseUltra.Output;
 using UnityEngine;
 
-[System.Serializable]
-public class NoiseHeightPos
+namespace NoiseUltra.Tools.Placement
 {
-    public NodeBase height;
-    public float heightAmount;
-
-    public bool HeightCheck(Vector3 pos)
+    [System.Serializable]
+    public class NoiseHeightPos  : HeightBase
     {
-        return true;
-    }
+        public NodeExport height;
+        public float heightAmount;
 
-    public float GetHeightPos(Vector3 pos)
-    {
-        if (height)
+        public override bool HeightCheck(Vector3 pos)
         {
-            float v = height.Sample2D(pos.x, pos.z);
-            return v * heightAmount;
+            return true;
         }
-        else
-            return 0;
+
+        public override float GetHeightPos(Vector3 pos)
+        {
+            if (height)
+            {
+                float v = height.Sample2D(pos.x, pos.z);
+                return v * heightAmount;
+            }
+            else
+                return 0;
+        }
     }
 }

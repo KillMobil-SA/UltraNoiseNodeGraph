@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class GridHeightPos
+namespace NoiseUltra.Tools.Placement
 {
-    public bool HeightCheck(Vector3 pos)
+    [System.Serializable]
+    public class GridHeightPos : HeightBase
     {
-        return true;
-    }
+        public override bool HeightCheck(Vector3 pos)
+        {
+            return true;
+        }
 
-    public float GetHeightPos(Vector3 pos)
-    {
-        return pos.y;
+        public override float GetHeightPos(Vector3 pos)
+        {
+            return pos.y;
+        }
     }
 }

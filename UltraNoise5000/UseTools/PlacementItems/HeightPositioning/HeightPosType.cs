@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum HeightPosType
+namespace NoiseUltra.Tools.Placement
 {
-    Raycast,
-    Grid,
-    Noise
+    public enum HeightPosType
+    {
+        Raycast,
+        Grid,
+        Noise
+    }
 }

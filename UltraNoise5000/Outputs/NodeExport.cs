@@ -5,13 +5,11 @@ using XNode;
 namespace NoiseUltra.Output
 {
     [NodeTint(Nodes.NodeProprieties.NodeTintBlue)]
-    public class ExportNode : Nodes.NodeInputOutput
+    public class NodeExport : Nodes.NodeInputOutput
     {
         [SerializeField, OnValueChanged(nameof(UpdateNoiseName))]
         private string nodeTitle;
-
-
-        //Todo Is this a correct?? @ycaro
+        
         protected override void Init()
         {
             base.Init();

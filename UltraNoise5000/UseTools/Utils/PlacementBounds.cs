@@ -6,14 +6,19 @@ namespace NoiseUltra.Tools.Placement
 {
     public class PlacementBounds
     {
-        private PlacementGenerator placementGenerator;
-
+        private PlacementHandler _placementHandler;
+        private float spacing;
         private Collider placementCollider;
 
-        public PlacementBounds(PlacementGenerator placementGenerator, Collider _placementCollider)
+        public PlacementBounds(PlacementHandler placementHandler, Collider _placementCollider)
         {
-            this.placementGenerator = placementGenerator;
+            this._placementHandler = placementHandler;
             this.placementCollider = _placementCollider;
+        }
+
+        public void SetSpace(float _spacing)
+        {
+            spacing = _spacing;
         }
 
         public float xAmount
@@ -73,6 +78,12 @@ namespace NoiseUltra.Tools.Placement
         }
 
 
+        public Vector3 GetPosVector(Vector3 pos)
+        {
+            return GetPosVector(pos.x, pos.y, pos.z);
+        }
+    
+
         public Vector3 GetPosVector(float x, float y, float z)
         {
             float xPos = x - xAmount / 2;
@@ -94,14 +105,13 @@ namespace NoiseUltra.Tools.Placement
             }
         }
 
-        float spacing
-        {
-            get { return placementGenerator.spacing; }
-        }
+            
+        
+      
 
         private bool useWorldPos
         {
-            get { return placementGenerator.useWorldPos; }
+            get { return _placementHandler.useWorldPos; }
         }
 
         void ColliderBoundsPrintOut()

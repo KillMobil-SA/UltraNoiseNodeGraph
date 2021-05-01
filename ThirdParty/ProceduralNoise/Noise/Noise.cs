@@ -11,7 +11,7 @@ namespace ProceduralNoiseProject
 	{
 
         /// <summary>
-        /// The frequency of the fractal.
+        /// The frequency of the fractal.    
         /// </summary>
         public float Frequency { get; set; }
 
