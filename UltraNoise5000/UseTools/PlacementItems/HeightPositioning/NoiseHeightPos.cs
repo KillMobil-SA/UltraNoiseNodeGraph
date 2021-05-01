@@ -1,10 +1,11 @@
-﻿using NoiseUltra.Output;
+﻿using System;
+using NoiseUltra.Output;
 using UnityEngine;
 
 namespace NoiseUltra.Tools.Placement
 {
-    [System.Serializable]
-    public class NoiseHeightPos  : HeightBase
+    [Serializable]
+    public class NoiseHeightPos : HeightBase
     {
         public NodeExport height;
         public float heightAmount;
@@ -18,11 +19,11 @@ namespace NoiseUltra.Tools.Placement
         {
             if (height)
             {
-                float v = height.Sample2D(pos.x, pos.z);
+                var v = height.Sample2D(pos.x, pos.z);
                 return v * heightAmount;
             }
-            else
-                return 0;
+
+            return 0;
         }
     }
 }

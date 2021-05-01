@@ -5,7 +5,7 @@ using XNode;
 namespace NoiseUltra.Nodes
 {
     /// <summary>
-    ///  Class handles the image preview and basic node operations.
+    ///     Class handles the image preview and basic node operations.
     /// </summary>
     [NodeWidth(NodeProprieties.NodeWidth)]
     public abstract class NodeBase : Node

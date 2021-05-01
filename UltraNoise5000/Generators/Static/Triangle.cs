@@ -12,7 +12,10 @@ namespace NoiseUltra.Generators.Static
 
         [SerializeField] private Vector2 p3;
 
-        public override float Sample1D(float x) => 1;
+        public override float Sample1D(float x)
+        {
+            return 1;
+        }
 
         public override float Sample2D(float x, float y)
         {
@@ -34,8 +37,8 @@ namespace NoiseUltra.Generators.Static
             var d1 = Sign(point, p1, p2);
             var d2 = Sign(point, p2, p3);
             var d3 = Sign(point, p3, p1);
-            var hasNeg = (d1 < 0) || (d2 < 0) || (d3 < 0);
-            var hasPos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+            var hasNeg = d1 < 0 || d2 < 0 || d3 < 0;
+            var hasPos = d1 > 0 || d2 > 0 || d3 > 0;
             return !(hasNeg && hasPos);
         }
     }

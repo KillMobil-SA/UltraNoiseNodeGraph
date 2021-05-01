@@ -30,11 +30,14 @@ namespace NoiseUltra.Generators.Static
             Update();
         }
 
-        public override float Sample1D(float x) => 0;
+        public override float Sample1D(float x)
+        {
+            return 0;
+        }
 
         public override float Sample2D(float x, float y)
         {
-            Vector2 scaledPosition = GetScaledPosition(x, y);
+            var scaledPosition = GetScaledPosition(x, y);
 
             if (!IsValid || !IsValidPosition(scaledPosition))
                 return 0;
@@ -51,7 +54,7 @@ namespace NoiseUltra.Generators.Static
 
         public override float Sample3D(float x, float y, float z)
         {
-            Vector2 scaledPosition = GetScaledPosition(x, z);
+            var scaledPosition = GetScaledPosition(x, z);
 
             if (!IsValid || !IsValidPosition(scaledPosition))
                 return 0;
@@ -63,7 +66,7 @@ namespace NoiseUltra.Generators.Static
 
         private Vector2 GetScaledPosition(float x, float y)
         {
-            Vector2 posCord = new Vector2(x, y);
+            var posCord = new Vector2(x, y);
             return (posCord + offSet) * scale;
         }
     }

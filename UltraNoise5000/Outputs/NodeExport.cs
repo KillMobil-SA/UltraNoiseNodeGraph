@@ -1,25 +1,24 @@
 ﻿using NoiseUltra.Nodes;
-using UnityEngine;
 using Sirenix.OdinInspector;
-using XNode;
+using UnityEngine;
 
 namespace NoiseUltra.Output
 {
     [NodeTintAttribute(NodeProprieties.NodeTintBlue)]
     public class NodeExport : NodeInputOutput
     {
-        [SerializeField, OnValueChanged(nameof(UpdateNoiseName))]
+        [SerializeField] [OnValueChanged(nameof(UpdateNoiseName))]
         private string nodeTitle;
-        
+
         protected override void Init()
         {
             base.Init();
-            nodeTitle = this.name;
+            nodeTitle = name;
         }
 
-        void UpdateNoiseName()
+        private void UpdateNoiseName()
         {
-            this.name = nodeTitle;
+            name = nodeTitle;
         }
     }
 }

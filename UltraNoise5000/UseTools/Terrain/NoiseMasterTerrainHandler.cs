@@ -1,11 +1,9 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Sirenix.OdinInspector;
 using NoiseUltra.Nodes;
+using Sirenix.OdinInspector;
+using UnityEngine;
 #if UNITY_EDITOR
 using Unity.EditorCoroutines.Editor;
-using UnityEditor;
 
 #endif
 
@@ -27,7 +25,7 @@ namespace NoiseUltra
         [ReadOnly] public int totalCount;
 
         public int objectPlacementPreFrame = 1000;
-        private int internalPlacementCounter = 0;
+        private int internalPlacementCounter;
 
 
 #if UNITY_EDITOR
@@ -47,39 +45,37 @@ private Coroutine terraCoroutine;
         }
 
 
-        IEnumerator TerraForm()
+        private IEnumerator TerraForm()
         {
             res = myTerrain.terrainData.heightmapResolution;
             heights = new float[res, res];
-            sizeRelativity = (float) myTerrain.terrainData.size.x / (float) res;
+            sizeRelativity = myTerrain.terrainData.size.x / res;
             totalCount = res * res;
             internalPlacementCounter = 0;
             currentStep = 0;
 
 
-            for (int x = 0; x < res; x++)
+            for (var x = 0; x < res; x++)
+            for (var y = 0; y < res; y++)
             {
-                for (int y = 0; y < res; y++)
+                var xPos = x * sizeRelativity;
+                var yPos = y * sizeRelativity;
+
+                if (useWorldPos)
                 {
-                    float xPos = x * sizeRelativity;
-                    float yPos = y * sizeRelativity;
-
-                    if (useWorldPos)
-                    {
-                        xPos += transform.position.x;
-                        yPos += transform.position.z;
-                    }
+                    xPos += transform.position.x;
+                    yPos += transform.position.z;
+                }
 
 
-                    heights[y, x] = nodeGraph.Sample2D(xPos, yPos);
-                    currentStep++;
+                heights[y, x] = nodeGraph.Sample2D(xPos, yPos);
+                currentStep++;
 
-                    internalPlacementCounter++;
-                    if (internalPlacementCounter > objectPlacementPreFrame)
-                    {
-                        internalPlacementCounter = 0;
-                        yield return null;
-                    }
+                internalPlacementCounter++;
+                if (internalPlacementCounter > objectPlacementPreFrame)
+                {
+                    internalPlacementCounter = 0;
+                    yield return null;
                 }
             }
 
@@ -107,7 +103,7 @@ private Coroutine terraCoroutine;
         [Button]
         public void GetTerrainData()
         {
-            Terrain ter = myTerrain;
+            var ter = myTerrain;
             Debug.Log(string.Format("ter.terrainData.size {0}", ter.terrainData.size));
             Debug.Log(string.Format("myTerrain.terrainData.alphamapLayers {0}", myTerrain.terrainData.alphamapLayers));
             Debug.Log(string.Format("ter.terrainData.heightmapResolution {0}", ter.terrainData.heightmapResolution));
@@ -127,7 +123,7 @@ private Coroutine terraCoroutine;
                     _myTerrain = GetComponent<Terrain>();
                 return _myTerrain;
             }
-            set { _myTerrain = value; }
+            set => _myTerrain = value;
         }
     }
 }

@@ -4,27 +4,27 @@ using UnityEngine;
 namespace NoiseUltra.Nodes
 {
     /// <summary>
-    ///  Class is able to sample and process a Three Input Nodes and a Single Output Node.
+    ///     Class is able to sample and process a Three Input Nodes and a Single Output Node.
     /// </summary>
     public abstract class NodeTripleInputOutput : NodeOutput
     {
         private const float MinStrength = 0;
         private const float MaxStrength = 1; // I think the max go be bigger than 1 here, no?
 
-        [SerializeField, Range(MinStrength, MaxStrength), OnValueChanged(nameof(Update))]
+        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(Update))]
         private float strengthA = MaxStrength;
 
-        [SerializeField, Range(MinStrength, MaxStrength), OnValueChanged(nameof(Update))]
+        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(Update))]
         private float strengthB = MaxStrength;
 
-        [SerializeField, Range(MinStrength, MaxStrength), OnValueChanged(nameof(Update))]
+        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(Update))]
         private float strengthC = MaxStrength;
 
-        [SerializeField, Input] private NodeBase inputA;
+        [SerializeField] [Input] private NodeBase inputA;
 
-        [SerializeField, Input] private NodeBase inputB;
+        [SerializeField] [Input] private NodeBase inputB;
 
-        [SerializeField, Input] private NodeBase inputC;
+        [SerializeField] [Input] private NodeBase inputC;
 
         private bool IsValid => GetInputA() != null &&
                                 GetInputB() != null &&

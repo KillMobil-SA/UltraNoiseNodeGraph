@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
 using UnityEngine;
 #if UNITY_EDITOR
-using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 
 #endif
@@ -18,19 +15,19 @@ namespace NoiseUltra.Tools.Placement
 
 
         [SerializeField] private PlacementObjectType placementObjectType = PlacementObjectType.Linear;
-        int linearID;
+        private int linearID;
 
         public GameObject GetGameObject(float v)
         {
-            int objectID = GetObjectID(v);
-            GameObject newPoolObject = items[objectID];
+            var objectID = GetObjectID(v);
+            var newPoolObject = items[objectID];
             return newPoolObject;
         }
 
         private int GetObjectID(float v)
         {
             v = Mathf.Clamp01(v);
-            int returnID = 0;
+            var returnID = 0;
             switch (placementObjectType)
             {
                 case PlacementObjectType.Linear:
@@ -45,22 +42,21 @@ namespace NoiseUltra.Tools.Placement
                     break;
 
                 case PlacementObjectType.Value:
-                    returnID = Mathf.FloorToInt((float) (items.Length - 1) * v);
+                    returnID = Mathf.FloorToInt((items.Length - 1) * v);
                     //Debug.Log(string.Format("returnID {0}", returnID));
                     break;
             }
 
             return returnID;
         }
-        
-        
-        
+
+
         private string ObjectNamePrefix(Vector3 pos)
         {
-            string prefix = this.name + "_" + pos.x.ToString() + "_" + pos.y.ToString() + "_" + pos.z.ToString();
+            var prefix = name + "_" + pos.x + "_" + pos.y + "_" + pos.z;
             return prefix;
         }
-        
+
         public override void PlaceObject(Vector3 pos, float v, Transform parent)
         {
             var placementPos = GetPos(pos, v);
@@ -86,15 +82,15 @@ namespace NoiseUltra.Tools.Placement
 
         public override void CleanObjects(Transform parent)
         {
-            Transform[] transforms = parent.GetComponentsInChildren<Transform>();
+            var transforms = parent.GetComponentsInChildren<Transform>();
 
-            List<Transform> reformList = new List<Transform>();
-            for (int i = 0; i < transforms.Length; i++)
+            var reformList = new List<Transform>();
+            for (var i = 0; i < transforms.Length; i++)
                 if (transforms[i].parent == parent)
                     reformList.Add(transforms[i]);
 
 
-            for (int i = 0; i < reformList.Count; i++)
+            for (var i = 0; i < reformList.Count; i++)
             {
 #if UNITY_EDITOR
                 DestroyImmediate(reformList[i].gameObject);
@@ -103,8 +99,6 @@ namespace NoiseUltra.Tools.Placement
 #endif
             }
         }
-
-
 
 
         private enum PlacementObjectType

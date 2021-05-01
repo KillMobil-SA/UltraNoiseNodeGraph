@@ -1,33 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace NoiseUltra.Tools.Placement
 {
-    [System.Serializable]
-    public class PositionSettings 
+    [Serializable]
+    public class PositionSettings
     {
         public Vector3 randomPositioning;
 
-        [Header("Height Calulations Settings") , OnValueChanged(nameof(UpdateHeightInterFace)), SerializeField]
+        [Header("Height Calulations Settings")] [OnValueChanged(nameof(UpdateHeightInterFace))] [SerializeField]
         private HeightPosType heightPosType = HeightPosType.Grid;
 
-        [ShowIf(nameof(heightPosType), HeightPosType.Raycast), SerializeField]
+        [ShowIf(nameof(heightPosType), HeightPosType.Raycast)] [SerializeField]
         private RayCastHeightPos rayCastHeightPos = new RayCastHeightPos();
-        [ShowIf("heightPosType", HeightPosType.Noise), SerializeField]
+
+        [ShowIf("heightPosType", HeightPosType.Noise)] [SerializeField]
         private NoiseHeightPos noiseHeightPos = new NoiseHeightPos();
-        private GridHeightPos noiseGridPos = new GridHeightPos();
 
         [SerializeField] private IHeightBase _heightBase;
-        
+        private GridHeightPos noiseGridPos = new GridHeightPos();
+
         public PositionSettings()
         {
             UpdateHeightInterFace();
         }
 
-        public void OnEnable() => UpdateHeightInterFace();
-        
+        public void OnEnable()
+        {
+            UpdateHeightInterFace();
+        }
+
 
         private void UpdateHeightInterFace()
         {
@@ -44,19 +48,19 @@ namespace NoiseUltra.Tools.Placement
                     _heightBase = rayCastHeightPos;
                     break;
                 default:
-                    _heightBase =  noiseGridPos;
+                    _heightBase = noiseGridPos;
                     break;
             }
         }
-        
+
         public Vector3 PotisionCalculator(Vector3 pos, float thresHold)
         {
-            Vector3 sourceHeightCalculation = new Vector3(pos.x, CalculateHeight(pos), pos.z);
+            var sourceHeightCalculation = new Vector3(pos.x, CalculateHeight(pos), pos.z);
 
-            float xPos = Random.Range(-randomPositioning.x, randomPositioning.x);
-            float yPos = Random.Range(-randomPositioning.y, randomPositioning.y);
-            float zPos = Random.Range(-randomPositioning.z, randomPositioning.z);
-            Vector3 randomPosition = new Vector3(xPos, yPos, zPos);
+            var xPos = Random.Range(-randomPositioning.x, randomPositioning.x);
+            var yPos = Random.Range(-randomPositioning.y, randomPositioning.y);
+            var zPos = Random.Range(-randomPositioning.z, randomPositioning.z);
+            var randomPosition = new Vector3(xPos, yPos, zPos);
 
             return sourceHeightCalculation + randomPosition;
         }

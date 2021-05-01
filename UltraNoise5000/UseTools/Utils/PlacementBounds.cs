@@ -1,35 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace NoiseUltra.Tools.Placement
 {
     public class PlacementBounds
     {
         private PlacementHandler _placementHandler;
+        private readonly Collider placementCollider;
         private float spacing;
-        private Collider placementCollider;
 
         public PlacementBounds(PlacementHandler placementHandler, Collider _placementCollider)
         {
-            this._placementHandler = placementHandler;
-            this.placementCollider = _placementCollider;
-        }
-
-        public void SetSpace(float _spacing)
-        {
-            spacing = _spacing;
+            _placementHandler = placementHandler;
+            placementCollider = _placementCollider;
         }
 
         public float xAmount
         {
             get
             {
-                var v = (placementCollider.bounds.size.x) / spacing;
+                var v = placementCollider.bounds.size.x / spacing;
                 if (v == 0) v = 1;
                 return v;
             }
         }
+
         public int xAmountInt => Mathf.RoundToInt(xAmount);
 
 
@@ -37,57 +31,64 @@ namespace NoiseUltra.Tools.Placement
         {
             get
             {
-                var v = (placementCollider.bounds.size.y) / spacing;
+                var v = placementCollider.bounds.size.y / spacing;
                 if (v == 0) v = 1;
                 return v;
             }
         }
+
         public int yAmountInt => Mathf.RoundToInt(yAmount);
 
         public float zAmount
         {
             get
             {
-                var v = (placementCollider.bounds.size.z) / spacing;
+                var v = placementCollider.bounds.size.z / spacing;
                 if (v == 0) v = 1;
                 return v;
             }
         }
+
         public int zAmountInt => Mathf.RoundToInt(zAmount);
 
 
-        public bool heightIs2D => (yAmount <= 1);
-
-
-        public Vector3 GetPosVector(Vector3 pos)
-        {
-            return GetPosVector(pos.x, pos.y, pos.z);
-        }
-    
-
-        public Vector3 GetPosVector(float x, float y, float z)
-        {
-            float xPos = x - xAmount / 2;
-            float yPos = y - yAmount / 2;
-            float zPos = z - zAmount / 2;
-            Vector3 pos = (new Vector3(xPos, yPos, zPos) * spacing) + center;
-            return pos;
-        }
+        public bool heightIs2D => yAmount <= 1;
 
 
         public Vector3 center
         {
             get
             {
-                Vector3 center = placementCollider.bounds.center;
-                Vector3 centerRound = new Vector3(Mathf.Round(center.x / spacing) * spacing, Mathf.Round(center.y),
+                var center = placementCollider.bounds.center;
+                var centerRound = new Vector3(Mathf.Round(center.x / spacing) * spacing, Mathf.Round(center.y),
                     Mathf.Round(center.z / spacing) * spacing);
                 return centerRound;
             }
         }
 
-        
-        void ColliderBoundsPrintOut()
+        public void SetSpace(float _spacing)
+        {
+            spacing = _spacing;
+        }
+
+
+        public Vector3 GetPosVector(Vector3 pos)
+        {
+            return GetPosVector(pos.x, pos.y, pos.z);
+        }
+
+
+        public Vector3 GetPosVector(float x, float y, float z)
+        {
+            var xPos = x - xAmount / 2;
+            var yPos = y - yAmount / 2;
+            var zPos = z - zAmount / 2;
+            var pos = new Vector3(xPos, yPos, zPos) * spacing + center;
+            return pos;
+        }
+
+
+        private void ColliderBoundsPrintOut()
         {
             Vector3 m_Center;
             Vector3 m_Size, m_Min, m_Max;

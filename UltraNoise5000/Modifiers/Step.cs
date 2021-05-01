@@ -9,7 +9,7 @@ namespace NoiseUltra.Modifiers
         private const int MinSteps = 1;
         private const int MaxSteps = 50;
 
-        [SerializeField, Range(MinSteps, MaxSteps), OnValueChanged(nameof(Update))]
+        [SerializeField] [Range(MinSteps, MaxSteps)] [OnValueChanged(nameof(Update))]
         private int steps = MinSteps;
 
         protected override float ApplyModifier(float sample)

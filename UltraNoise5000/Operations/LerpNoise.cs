@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using NoiseUltra.Nodes;
+﻿using NoiseUltra.Nodes;
+using UnityEngine;
 
 namespace NoiseUltra.Operations
 {

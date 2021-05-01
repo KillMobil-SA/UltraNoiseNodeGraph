@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Sirenix.OdinInspector;
+﻿using System;
 using UnityEngine;
-
+using Random = UnityEngine.Random;
 
 namespace NoiseUltra.Tools.Placement
 {
-    [System.Serializable]
+    [Serializable]
     public class ScaleSettings
     {
         [SerializeField] private float size = 1;
@@ -17,8 +15,8 @@ namespace NoiseUltra.Tools.Placement
 
         public Vector3 SizeCalculator(Vector3 pos, float thresHold)
         {
-            Vector3 dynamicScale = Vector3.one;
-            Vector3 randomScale = Vector3.one;
+            var dynamicScale = Vector3.one;
+            var randomScale = Vector3.one;
 
             if (hasIndividualScale)
             {
@@ -30,27 +28,27 @@ namespace NoiseUltra.Tools.Placement
             else
             {
                 // Dynamic Scale
-                float size = dynamicScaleRange.GetPercSizeFloat(thresHold);
+                var size = dynamicScaleRange.GetPercSizeFloat(thresHold);
                 dynamicScale = new Vector3(size, size, size);
                 //Random Scale
                 randomScale = randomScaleRange.GetPercSizeVector3(Random.value);
             }
 
-            Vector3 ScaleResult = (dynamicScale + randomScale) * size;
+            var ScaleResult = (dynamicScale + randomScale) * size;
             return ScaleResult;
         }
 
 
-        Vector3 RandomScale()
+        private Vector3 RandomScale()
         {
-            float xRandomScale = randomScaleRange.GetPercSizeFloat(Random.value, 0);
-            float yRandomScale = randomScaleRange.GetPercSizeFloat(Random.value, 1);
-            float zRandomScale = randomScaleRange.GetPercSizeFloat(Random.value, 2);
+            var xRandomScale = randomScaleRange.GetPercSizeFloat(Random.value);
+            var yRandomScale = randomScaleRange.GetPercSizeFloat(Random.value, 1);
+            var zRandomScale = randomScaleRange.GetPercSizeFloat(Random.value, 2);
             return new Vector3(xRandomScale, yRandomScale, zRandomScale);
         }
 
 
-        [System.Serializable]
+        [Serializable]
         public class ScaleRange
         {
             [SerializeField] private Vector3 minSizeV3 = Vector3.one;
