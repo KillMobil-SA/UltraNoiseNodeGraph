@@ -56,7 +56,6 @@ namespace NoiseUltra.Generators
 
         private void UpdateGenerator()
         {
-            Debug.Log($"update generator {Generator}");
             if (Generator)
                 Generator.Update();
         }

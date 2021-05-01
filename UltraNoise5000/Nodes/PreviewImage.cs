@@ -16,7 +16,7 @@ namespace NoiseUltra.Nodes
 
         [SerializeField, ReadOnly] private Bound bounds = new Bound();
 
-        [SerializeField, Range(0, MaxZoom)] private float zoom = 200; //need to solve the auto update
+        [SerializeField, Range(0, MaxZoom)] private float zoom = 200;
 
         [SerializeField, PreviewField(ImageSize)]
         private Texture2D sourceTexture;

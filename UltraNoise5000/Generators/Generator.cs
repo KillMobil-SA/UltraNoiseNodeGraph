@@ -9,18 +9,16 @@ namespace NoiseUltra.Generators
     public class Generator : NodeOutput
     {
         [SerializeField] private Attributes attributes = new Attributes();
-        // private FractalNoise _fractal;
-
+        
         private FractalNoise _fractal;
         private FractalNoise fractal
         {
             get
             {
-                if (_fractal == null)
-                  CreateFractal();
+                if (_fractal == null) 
+                    CreateFractal();
                 return _fractal;
             }
-            set { _fractal = value; }
         }
 
         [Button]
@@ -28,10 +26,9 @@ namespace NoiseUltra.Generators
         {
             attributes.RandomizeSeed();
             CreateFractal();
-          
         }
 
-        void CreateFractal()
+        private void CreateFractal()
         {
             attributes.SetGenerator(this);
             var seed = attributes.Seed;
@@ -45,12 +42,6 @@ namespace NoiseUltra.Generators
             _fractal.Offset = offset;
             
             Update();
-        }
-        
-        protected override void OnBeforeUpdate()
-        {
-            //Has to happen afterwards
-            base.OnBeforeUpdate();
         }
 
         public override float Sample1D(float x) => fractal.Sample1D(x);
