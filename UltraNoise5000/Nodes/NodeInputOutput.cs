@@ -11,28 +11,28 @@ namespace NoiseUltra.Nodes
 
         private bool IsValid => GetInput() != null;
 
-        public override float Sample1D(float x)
+        public override float GetSample(float x)
         {
             if (!IsValid)
-                return -1;
+                return NodeProprieties.Invalid;
 
-            return GetInput().Sample1D(x);
+            return GetInput().GetSample(x);
         }
 
-        public override float Sample2D(float x, float y)
+        public override float GetSample(float x, float y)
         {
             if (!IsValid)
-                return -1;
+                return NodeProprieties.Invalid;
 
-            return GetInput().Sample2D(x, y);
+            return GetInput().GetSample(x, y);
         }
 
-        public override float Sample3D(float x, float y, float z)
+        public override float GetSample(float x, float y, float z)
         {
             if (!IsValid)
-                return -1;
+                return NodeProprieties.Invalid;
 
-            return GetInput().Sample3D(x, y, z);
+            return GetInput().GetSample(x, y, z);
         }
 
         private NodeBase GetInput()

@@ -17,7 +17,7 @@ namespace NoiseUltra.Generators
         {
             attributes.RandomizeSeed();
             SetFractalDirty();
-            DrawPreview();
+            Draw();
         }
 
         public void SetFractalDirty()
@@ -25,17 +25,17 @@ namespace NoiseUltra.Generators
             _fractal = null;
         }
 
-        protected override void OnBeforeDrawPreview()
-        {
-            attributes.SetGenerator(this);
-            base.OnBeforeDrawPreview();
-        }
-
         private FractalNoise GetFractal()
         {
-            if (!IsDirty) 
+            if (!IsDirty)
                 return _fractal;
 
+            return CreateFractal();
+        }
+
+        private FractalNoise CreateFractal()
+        {
+            attributes.SetGenerator(this);
             var seed = attributes.Seed;
             var noiseType = attributes.NoiseType;
             var frequency = attributes.FrequencyOver100;
@@ -48,17 +48,17 @@ namespace NoiseUltra.Generators
             return _fractal;
         }
 
-        public override float Sample1D(float x)
+        public override float GetSample(float x)
         {
             return GetFractal().Sample1D(x);
         }
 
-        public override float Sample2D(float x, float y)
+        public override float GetSample(float x, float y)
         {
             return GetFractal().Sample2D(x, y);
         }
 
-        public override float Sample3D(float x, float y, float z)
+        public override float GetSample(float x, float y, float z)
         {
             return GetFractal().Sample3D(x, y, z);
         }

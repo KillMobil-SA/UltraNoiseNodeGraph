@@ -63,7 +63,7 @@ namespace NoiseUltra.Generators
             if (Generator)
             {
                 Generator.SetFractalDirty();
-                Generator.DrawPreview();
+                Generator.Draw();
             }
         }
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace NoiseUltra.Output
 {
     [NodeTintAttribute(NodeProprieties.NodeTintBlue)]
-    public class NodeExport : NodeInputOutput
+    public class ExportNode : NodeInputOutput
     {
         [SerializeField] [OnValueChanged(nameof(UpdateNoiseName))]
         private string nodeTitle;

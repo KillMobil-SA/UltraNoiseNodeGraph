@@ -10,12 +10,12 @@ namespace NoiseUltra.Tools.Placement
     {
         public bool active;
         [Min(1)] public float spacing = 10;
-        public NodeExport nodeExport;
+        public ExportNode exportNode;
         public PlacementSettings plamentHandler;
 
         public bool GenerateObject(PlacementBounds placementBound, Vector3 plaementPos, bool isDebug, Transform parent)
         {
-            if (nodeExport == null || plamentHandler == null)
+            if (exportNode == null || plamentHandler == null)
                 return false;
 
 
@@ -39,8 +39,8 @@ namespace NoiseUltra.Tools.Placement
             //pos -= transform.position;
 
             if (placementBounds.heightIs2D)
-                return nodeExport.Sample2D(pos.x, pos.z);
-            return nodeExport.Sample3D(pos.x, pos.y, pos.z);
+                return exportNode.GetSample(pos.x, pos.z);
+            return exportNode.GetSample(pos.x, pos.y, pos.z);
         }
 
         private bool PlacementValidation(Vector3 pos, float v)

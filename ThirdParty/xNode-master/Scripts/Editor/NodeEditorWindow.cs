@@ -177,6 +177,7 @@ namespace XNodeEditor {
                 selection.Add(node);
                 Selection.objects = selection.ToArray();
             } else Selection.objects = new Object[] { node };
+            node.SelectNode();
         }
 
         public void DeselectNode(XNode.Node node) {

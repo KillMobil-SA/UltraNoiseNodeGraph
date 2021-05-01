@@ -7,7 +7,7 @@ namespace NoiseUltra.Tools.Placement
     [Serializable]
     public class NoiseHeightPos : HeightBase
     {
-        public NodeExport height;
+        public ExportNode height;
         public float heightAmount;
 
         public override bool HeightCheck(Vector3 pos)
@@ -19,7 +19,7 @@ namespace NoiseUltra.Tools.Placement
         {
             if (height)
             {
-                var v = height.Sample2D(pos.x, pos.z);
+                var v = height.GetSample(pos.x, pos.z);
                 return v * heightAmount;
             }
 

@@ -51,7 +51,7 @@ namespace NoiseUltra.Tools.Placement
             float v;
             if (useExternalNoiseSource)
 
-                v = externalSource.Sample3D(pos.x, pos.y, pos.z);
+                v = externalSource.GetSample(pos.x, pos.y, pos.z);
             else
                 v = thresHold;
 

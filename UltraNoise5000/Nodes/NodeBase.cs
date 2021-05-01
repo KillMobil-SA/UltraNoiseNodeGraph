@@ -18,19 +18,24 @@ namespace NoiseUltra.Nodes
         }
 
         [Button]
-        public void DrawPreview()
+        public void Draw()
         {
             OnBeforeDrawPreview();
-            previewImage.Update(Sample2D);
+            previewImage.Update(GetSample);
         }
 
         protected virtual void OnBeforeDrawPreview()
         {
         }
 
-        public abstract float Sample1D(float x);
-        public abstract float Sample2D(float x, float y);
-        public abstract float Sample3D(float x, float y, float z);
+        protected override void OnSelect()
+        {
+            Draw();
+        }
+
+        public abstract float GetSample(float x);
+        public abstract float GetSample(float x, float y);
+        public abstract float GetSample(float x, float y, float z);
 
         //-------------------------------------------------------------------
 

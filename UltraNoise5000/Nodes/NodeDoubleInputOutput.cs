@@ -11,10 +11,10 @@ namespace NoiseUltra.Nodes
         private const float MinStrength = 0;
         private const float MaxStrength = 1; // I think the max go be bigger than 1 here, no?
 
-        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(DrawPreview))]
+        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(Draw))]
         private float strengthA = MaxStrength;
 
-        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(DrawPreview))]
+        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(Draw))]
         private float strengthB = MaxStrength;
 
         [SerializeField] [Input] private NodeBase inputA;
@@ -34,33 +34,33 @@ namespace NoiseUltra.Nodes
             return GetInputNode(nameof(inputB), inputB);
         }
 
-        public override float Sample1D(float x)
+        public override float GetSample(float x)
         {
             if (!IsValid)
                 return -1;
 
-            var sampleA = GetInputA().Sample1D(x);
-            var sampleB = GetInputB().Sample1D(x);
+            var sampleA = GetInputA().GetSample(x);
+            var sampleB = GetInputB().GetSample(x);
             return ExecuteOperation(sampleA * strengthA, sampleB * strengthB);
         }
 
-        public override float Sample2D(float x, float y)
+        public override float GetSample(float x, float y)
         {
             if (!IsValid)
                 return -1;
 
-            var sampleA = GetInputA().Sample2D(x, y);
-            var sampleB = GetInputB().Sample2D(x, y);
+            var sampleA = GetInputA().GetSample(x, y);
+            var sampleB = GetInputB().GetSample(x, y);
             return ExecuteOperation(sampleA * strengthA, sampleB * strengthB);
         }
 
-        public override float Sample3D(float x, float y, float z)
+        public override float GetSample(float x, float y, float z)
         {
             if (!IsValid)
                 return -1;
 
-            var sampleA = GetInputA().Sample3D(x, y, z);
-            var sampleB = GetInputB().Sample3D(x, y, z);
+            var sampleA = GetInputA().GetSample(x, y, z);
+            var sampleB = GetInputB().GetSample(x, y, z);
             return ExecuteOperation(sampleA * strengthA, sampleB * strengthB);
         }
 

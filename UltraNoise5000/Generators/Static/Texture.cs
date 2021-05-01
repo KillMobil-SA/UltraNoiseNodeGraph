@@ -21,21 +21,21 @@ namespace NoiseUltra.Generators.Static
         public void UpdateTexture()
         {
             textureRect = new Rect(0, 0, texture2d.width, texture2d.height);
-            DrawPreview();
+            Draw();
         }
 
         protected override void Init()
         {
             base.Init();
-            DrawPreview();
+            Draw();
         }
 
-        public override float Sample1D(float x)
+        public override float GetSample(float x)
         {
             return 0;
         }
 
-        public override float Sample2D(float x, float y)
+        public override float GetSample(float x, float y)
         {
             var scaledPosition = GetScaledPosition(x, y);
 
@@ -52,7 +52,7 @@ namespace NoiseUltra.Generators.Static
             return textureRect.Contains(scaledPosition);
         }
 
-        public override float Sample3D(float x, float y, float z)
+        public override float GetSample(float x, float y, float z)
         {
             var scaledPosition = GetScaledPosition(x, z);
 

@@ -17,7 +17,7 @@ namespace NoiseUltra
         {
             foreach (var node in nodes)
                 if (node is NodeBase item)
-                    item.DrawPreview();
+                    item.Draw();
         }
     }
 }

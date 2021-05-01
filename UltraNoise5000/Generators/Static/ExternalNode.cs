@@ -8,19 +8,19 @@ namespace NoiseUltra.Generators.Static
     {
         [SerializeField] private NodeBase node;
 
-        public override float Sample1D(float x)
+        public override float GetSample(float x)
         {
-            return node.Sample1D(x);
+            return node.GetSample(x);
         }
 
-        public override float Sample2D(float x, float y)
+        public override float GetSample(float x, float y)
         {
-            return node.Sample2D(x, y);
+            return node.GetSample(x, y);
         }
 
-        public override float Sample3D(float x, float y, float z)
+        public override float GetSample(float x, float y, float z)
         {
-            return node.Sample3D(x, y, z);
+            return node.GetSample(x, y, z);
         }
     }
 }

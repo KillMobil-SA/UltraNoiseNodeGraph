@@ -12,7 +12,7 @@ namespace NoiseUltra.Nodes
 
         public override void OnCreateConnection(NodePort from, NodePort to)
         {
-            DrawPreview();
+            Draw();
         }
 
         private void UpdateOutPut()
@@ -26,7 +26,7 @@ namespace NoiseUltra.Nodes
                 var connectedPort = port.GetConnection(i);
                 var node = connectedPort.node as NodeBase;
                 if (node)
-                    node.DrawPreview();
+                    node.Draw();
             }
         }
 

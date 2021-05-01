@@ -412,5 +412,15 @@ namespace XNode {
                     this.Add(keys[i], values[i]);
             }
         }
+
+        public void SelectNode()
+        {
+            OnSelect();
+        }
+
+        protected virtual void OnSelect()
+        {
+            
+        }
     }
 }

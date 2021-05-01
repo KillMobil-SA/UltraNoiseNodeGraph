@@ -11,12 +11,12 @@ namespace NoiseUltra.Generators.Static
         [SerializeField] private float radius = Default;
         [SerializeField] private bool hardEdges;
 
-        public override float Sample1D(float x)
+        public override float GetSample(float x)
         {
             return 1;
         }
 
-        public override float Sample2D(float x, float y)
+        public override float GetSample(float x, float y)
         {
             var distance = Vector2.Distance(center, new Vector2(x, y));
             var isInRange = distance < radius;
@@ -27,7 +27,7 @@ namespace NoiseUltra.Generators.Static
             return 0;
         }
 
-        public override float Sample3D(float x, float y, float z)
+        public override float GetSample(float x, float y, float z)
         {
             var distance = Vector3.Distance(center, new Vector3(x, y, z));
             var isInRange = distance < radius;

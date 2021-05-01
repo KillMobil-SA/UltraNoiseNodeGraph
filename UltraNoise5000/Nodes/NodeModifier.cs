@@ -2,21 +2,21 @@
 {
     public abstract class NodeModifier : NodeInputOutput
     {
-        public override float Sample1D(float x)
+        public override float GetSample(float x)
         {
-            var sample = base.Sample1D(x);
+            var sample = base.GetSample(x);
             return ApplyModifier(sample);
         }
 
-        public override float Sample2D(float x, float y)
+        public override float GetSample(float x, float y)
         {
-            var sample = base.Sample2D(x, y);
+            var sample = base.GetSample(x, y);
             return ApplyModifier(sample);
         }
 
-        public override float Sample3D(float x, float y, float z)
+        public override float GetSample(float x, float y, float z)
         {
-            var sample = base.Sample3D(x, y, z);
+            var sample = base.GetSample(x, y, z);
             return ApplyModifier(sample);
         }
 

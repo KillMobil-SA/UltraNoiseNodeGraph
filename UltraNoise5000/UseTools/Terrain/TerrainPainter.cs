@@ -9,7 +9,7 @@ using Unity.EditorCoroutines.Editor;
 
 #endif
 
-namespace NoiseUltra
+namespace NoiseUltra.Tools.Terrains
 {
     public class TerrainPainter : MonoBehaviour
     {
@@ -165,7 +165,7 @@ namespace NoiseUltra
 
 
                 if (nodeGraph != null)
-                    v = nodeGraph.Sample2D(xPos, yPos);
+                    v = nodeGraph.GetSample(xPos, yPos);
                 else
                     v = 1;
 
