@@ -10,7 +10,7 @@ using Unity.EditorCoroutines.Editor;
 
 namespace NoiseUltra
 {
-    public class NoiseMasterTerrainHandler : MonoBehaviour
+    public class TerrainShaper : MonoBehaviour
     {
         public bool useWorldPos;
 
@@ -26,6 +26,18 @@ namespace NoiseUltra
 
         public int objectPlacementPreFrame = 1000;
         private int internalPlacementCounter;
+
+        private Terrain _myTerrain;
+
+        private Terrain myTerrain
+        {
+            get
+            {
+                if (_myTerrain == null)
+                    _myTerrain = GetComponent<Terrain>();
+                return _myTerrain;
+            }
+        }
 
 
 #if UNITY_EDITOR
@@ -79,7 +91,6 @@ private Coroutine terraCoroutine;
                 }
             }
 
-
             ApplyTerrainData();
         }
 
@@ -111,19 +122,6 @@ private Coroutine terraCoroutine;
             Debug.Log(string.Format("ter.terrainData.alphamapHeight {0}", ter.terrainData.alphamapHeight));
             Debug.Log(string.Format("ter.terrainData.detailWidth {0}", ter.terrainData.detailWidth));
             Debug.Log(string.Format("ter.terrainData.detailHeight {0}", ter.terrainData.detailHeight));
-        }
-
-        private Terrain _myTerrain;
-
-        private Terrain myTerrain
-        {
-            get
-            {
-                if (_myTerrain == null)
-                    _myTerrain = GetComponent<Terrain>();
-                return _myTerrain;
-            }
-            set => _myTerrain = value;
         }
     }
 }

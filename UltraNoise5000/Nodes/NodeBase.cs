@@ -15,17 +15,16 @@ namespace NoiseUltra.Nodes
         protected override void Init()
         {
             previewImage = new PreviewImage();
-            //Update(); // removed cause all SO init upon compile
         }
 
         [Button]
-        public void Update()
+        public void DrawPreview()
         {
-            OnBeforeUpdate();
+            OnBeforeDrawPreview();
             previewImage.Update(Sample2D);
         }
 
-        protected virtual void OnBeforeUpdate()
+        protected virtual void OnBeforeDrawPreview()
         {
         }
 

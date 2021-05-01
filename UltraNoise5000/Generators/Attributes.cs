@@ -12,25 +12,25 @@ namespace NoiseUltra.Generators
         private const float MaxLacunarity = 20f;
         private const float MaxAmplitude = 2f;
 
-        [SerializeField] [OnValueChanged(nameof(UpdateGenerator))]
+        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
         private int seed;
 
-        [SerializeField] [OnValueChanged(nameof(UpdateGenerator))]
+        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
         private NOISE_TYPE noiseType = NOISE_TYPE.PERLIN;
 
-        [SerializeField] [OnValueChanged(nameof(UpdateGenerator))]
+        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
         private float frequency = 20f;
 
-        [SerializeField] [Range(0, MaxAmplitude)] [OnValueChanged(nameof(UpdateGenerator))]
+        [SerializeField] [Range(0, MaxAmplitude)] [OnValueChanged(nameof(DrawPreview))]
         private float amplitude = 1f;
 
-        [SerializeField] [Range(0, MaxLacunarity)] [OnValueChanged(nameof(UpdateGenerator))]
+        [SerializeField] [Range(0, MaxLacunarity)] [OnValueChanged(nameof(DrawPreview))]
         private float lacunarity = 2.0f;
 
-        [SerializeField] [Range(0, MaxOctaves)] [OnValueChanged(nameof(UpdateGenerator))]
+        [SerializeField] [Range(0, MaxOctaves)] [OnValueChanged(nameof(DrawPreview))]
         private int octaves = 4;
 
-        [SerializeField] [OnValueChanged(nameof(UpdateGenerator))]
+        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
         private Vector3 offset;
 
         public float FrequencyOver100 => frequency / 100f;
@@ -58,10 +58,13 @@ namespace NoiseUltra.Generators
             Generator = generator;
         }
 
-        private void UpdateGenerator()
+        private void DrawPreview()
         {
             if (Generator)
-                Generator.Update();
+            {
+                Generator.SetFractalDirty();
+                Generator.DrawPreview();
+            }
         }
     }
 }

@@ -6,10 +6,10 @@ namespace NoiseUltra.Modifiers
 {
     public class Clamp : NodeModifier
     {
-        [SerializeField] [OnValueChanged(nameof(Update))]
+        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
         private Vector2 limit = new Vector2(0, 1);
 
-        [SerializeField] [OnValueChanged(nameof(Update))]
+        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
         private bool smoothClampValue;
 
         protected override float ApplyModifier(float sample)

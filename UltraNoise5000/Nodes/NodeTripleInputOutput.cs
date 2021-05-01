@@ -11,13 +11,13 @@ namespace NoiseUltra.Nodes
         private const float MinStrength = 0;
         private const float MaxStrength = 1; // I think the max go be bigger than 1 here, no?
 
-        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(Update))]
+        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(DrawPreview))]
         private float strengthA = MaxStrength;
 
-        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(Update))]
+        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(DrawPreview))]
         private float strengthB = MaxStrength;
 
-        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(Update))]
+        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(DrawPreview))]
         private float strengthC = MaxStrength;
 
         [SerializeField] [Input] private NodeBase inputA;

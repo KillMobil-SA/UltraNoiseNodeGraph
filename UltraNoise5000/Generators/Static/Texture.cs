@@ -21,13 +21,13 @@ namespace NoiseUltra.Generators.Static
         public void UpdateTexture()
         {
             textureRect = new Rect(0, 0, texture2d.width, texture2d.height);
-            Update();
+            DrawPreview();
         }
 
         protected override void Init()
         {
             base.Init();
-            Update();
+            DrawPreview();
         }
 
         public override float Sample1D(float x)

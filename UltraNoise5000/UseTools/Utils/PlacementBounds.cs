@@ -4,8 +4,8 @@ namespace NoiseUltra.Tools.Placement
 {
     public class PlacementBounds
     {
-        private PlacementHandler _placementHandler;
         private readonly Collider placementCollider;
+        private PlacementHandler _placementHandler;
         private float spacing;
 
         public PlacementBounds(PlacementHandler placementHandler, Collider _placementCollider)

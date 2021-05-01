@@ -6,11 +6,12 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 #if UNITY_EDITOR
 using Unity.EditorCoroutines.Editor;
+
 #endif
 
 namespace NoiseUltra
 {
-    public class UltraNoiseTerrainPainter : MonoBehaviour
+    public class TerrainPainter : MonoBehaviour
     {
         public bool useWorldPos;
 
