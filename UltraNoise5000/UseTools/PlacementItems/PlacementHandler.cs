@@ -13,11 +13,7 @@ namespace NoiseUltra.Tools.Placement
         public List<PlacementItem> generatorItems = new List<PlacementItem>();
         
         [Title("Noise Settings")] public int seed;
-        public NodeExport nodeGraph;
-        [Title("Placement Settings")] public bool useWorldPos = true;
-        [Min(1)] public float spacing;
-        public PlacementSettings plamentHandler;
-        [Title("Debug Settings")] [ReadOnly] public int itemCounter = 0;
+     [Title("Debug Settings")] [ReadOnly] public int itemCounter = 0;
         public bool showDebugInfo;
 
         void PreBuildPreparation()
@@ -37,7 +33,11 @@ namespace NoiseUltra.Tools.Placement
         [Button]
         public void ClearObjects()
         {
-            plamentHandler.CleanObjects(this.transform);
+            for (int i = 0; i < generatorItems.Count; i++)
+            {
+                generatorItems[i].plamentHandler.CleanObjects(this.transform);
+            }
+            
         }
 
 
@@ -45,7 +45,7 @@ namespace NoiseUltra.Tools.Placement
 
         void OnDrawGizmos()
         {
-            if (plamentHandler == null || !showDebugInfo) return;
+            if (!showDebugInfo) return;
             PerformGeneration(true);
             DebugVal = myPlacementBounds.GetPosVector(transform.position.x, 1, transform.position.z);
         }
@@ -56,7 +56,6 @@ namespace NoiseUltra.Tools.Placement
             for (int i = 0; i < generatorItems.Count; i++)
             {
                 if (!generatorItems[i].active) continue;
-                 
                 myPlacementBounds.SetSpace(generatorItems[i].spacing);
                 
                 for (int x = 0; x < myPlacementBounds.xAmount; x++)

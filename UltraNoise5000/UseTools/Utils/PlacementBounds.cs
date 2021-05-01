@@ -30,11 +30,7 @@ namespace NoiseUltra.Tools.Placement
                 return v;
             }
         }
-
-        public int xAmountInt
-        {
-            get { return Mathf.RoundToInt(xAmount); }
-        }
+        public int xAmountInt => Mathf.RoundToInt(xAmount);
 
 
         public float yAmount
@@ -46,11 +42,7 @@ namespace NoiseUltra.Tools.Placement
                 return v;
             }
         }
-
-        public int yAmountInt
-        {
-            get { return Mathf.RoundToInt(yAmount); }
-        }
+        public int yAmountInt => Mathf.RoundToInt(yAmount);
 
         public float zAmount
         {
@@ -61,21 +53,10 @@ namespace NoiseUltra.Tools.Placement
                 return v;
             }
         }
-
-        public int zAmountInt
-        {
-            get { return Mathf.RoundToInt(zAmount); }
-        }
+        public int zAmountInt => Mathf.RoundToInt(zAmount);
 
 
-        public bool heightIs2D
-        {
-            get
-            {
-                if (yAmount <= 1) return true;
-                else return false;
-            }
-        }
+        public bool heightIs2D => (yAmount <= 1);
 
 
         public Vector3 GetPosVector(Vector3 pos)
@@ -105,15 +86,7 @@ namespace NoiseUltra.Tools.Placement
             }
         }
 
-            
         
-      
-
-        private bool useWorldPos
-        {
-            get { return _placementHandler.useWorldPos; }
-        }
-
         void ColliderBoundsPrintOut()
         {
             Vector3 m_Center;
