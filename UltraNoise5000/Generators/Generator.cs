@@ -9,29 +9,33 @@ namespace NoiseUltra.Generators
     public class Generator : NodeOutput
     {
         [SerializeField] private Attributes attributes = new Attributes();
-
         private FractalNoise _fractal;
-
-        private FractalNoise fractal
-        {
-            get
-            {
-                if (_fractal == null)
-                    CreateFractal();
-                return _fractal;
-            }
-        }
+        private bool IsDirty => _fractal == null;
 
         [Button]
         private void New()
         {
             attributes.RandomizeSeed();
-            CreateFractal();
+            SetFractalDirty();
+            DrawPreview();
         }
 
-        private void CreateFractal()
+        public void SetFractalDirty()
+        {
+            _fractal = null;
+        }
+
+        protected override void OnBeforeDrawPreview()
         {
             attributes.SetGenerator(this);
+            base.OnBeforeDrawPreview();
+        }
+
+        private FractalNoise GetFractal()
+        {
+            if (!IsDirty) 
+                return _fractal;
+
             var seed = attributes.Seed;
             var noiseType = attributes.NoiseType;
             var frequency = attributes.FrequencyOver100;
@@ -41,23 +45,22 @@ namespace NoiseUltra.Generators
             var noise = NoiseFactory.CreateBaseNoise(seed, frequency, noiseType, amplitude);
             _fractal = NoiseFactory.CreateFractal(noise, octaves, attributes.FrequencyOver100);
             _fractal.Offset = offset;
-
-            Update();
+            return _fractal;
         }
 
         public override float Sample1D(float x)
         {
-            return fractal.Sample1D(x);
+            return GetFractal().Sample1D(x);
         }
 
         public override float Sample2D(float x, float y)
         {
-            return fractal.Sample2D(x, y);
+            return GetFractal().Sample2D(x, y);
         }
 
         public override float Sample3D(float x, float y, float z)
         {
-            return fractal.Sample3D(x, y, z);
+            return GetFractal().Sample3D(x, y, z);
         }
     }
 }
