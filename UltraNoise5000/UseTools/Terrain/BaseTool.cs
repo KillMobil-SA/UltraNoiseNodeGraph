@@ -6,7 +6,7 @@ namespace NoiseUltra.Tools
 {
     public abstract class BaseTool : MonoBehaviour
     {
-        [SerializeField] private ExportNode sourceNode;
+        [SerializeField] protected ExportNode sourceNode;
 
         private bool IsValid => sourceNode != null;
         protected bool IsInitialized { get; private set; }

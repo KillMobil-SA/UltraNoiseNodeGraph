@@ -8,7 +8,7 @@ namespace NoiseUltra.Tools.Terrains
     {
         [ReadOnly] [ProgressBar(0, nameof(_maxValue))]
         public int currentValue;
-
+        public int iterationsPerFrame = 1000;
         private int _maxValue;
 
         public void SetSize(int max)
