@@ -9,6 +9,7 @@ namespace NoiseUltra.Tools.Terrains
     {
         [SerializeField] protected ProgressBar progress = new ProgressBar();
         [SerializeField] protected bool useWorldPos;
+        [SerializeField] protected int size;
         private CoroutineWrapper _routineWrapper;
         protected Terrain terrain;
 
@@ -23,9 +24,15 @@ namespace NoiseUltra.Tools.Terrains
         {
             if (!IsInitialized)
                 Initialize();
-
+            MatchSize();
             _routineWrapper = new CoroutineWrapper(this, Operation());
             _routineWrapper.StartCoroutine();
+        }
+
+        [Button]
+        private void MatchSize()
+        {
+            terrain.terrainData.size = Vector3.one * sourceNode.Size;
         }
 
         [Button]

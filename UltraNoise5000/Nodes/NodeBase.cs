@@ -11,10 +11,11 @@ namespace NoiseUltra.Nodes
     public abstract class NodeBase : Node
     {
         [SerializeField] private PreviewImage previewImage;
+        public float Size => previewImage.Size;
 
         protected override void Init()
         {
-            previewImage = new PreviewImage();
+            previewImage = new PreviewImage(this);
         }
 
         [Button]

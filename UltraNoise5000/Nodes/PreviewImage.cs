@@ -8,25 +8,28 @@ namespace NoiseUltra.Nodes
     [Serializable]
     public class PreviewImage
     {
-        private const int MaxZoom = 1000;
         private const int ImageSize = 256;
         private const int Width = ImageSize;
         private const int Height = ImageSize;
 
-        [SerializeField] [ReadOnly] private Bound bounds = new Bound();
+        [SerializeField, ReadOnly] private Bound bounds = new Bound();
 
-        [SerializeField] [Range(0, MaxZoom)] private float zoom = 200;
+        [SerializeField, OnValueChanged(nameof(Draw))] private float size = 200;
 
-        [SerializeField] [PreviewField(ImageSize)]
+        [SerializeField, PreviewField(ImageSize)]
         private Texture2D sourceTexture;
+        
+        private NodeBase Node { get; }
 
-        public PreviewImage()
+        public PreviewImage(NodeBase nodeBase)
         {
             MaxPixel = ImageSize - 1;
             bounds.ResetBounds();
+            Node = nodeBase;
         }
 
         private float MaxPixel { get; }
+        public float Size => size;
 
         public void Update(Func<float, float, float> sampleFunction)
         {
@@ -38,16 +41,18 @@ namespace NoiseUltra.Nodes
             bounds.ResetBounds();
 
             for (var x = 0; x < Width; x++)
-            for (var y = 0; y < Height; y++)
             {
-                var pixelX = x / MaxPixel;
-                var pixelY = y / MaxPixel;
-                var px = zoom * pixelX;
-                var py = zoom * pixelY;
-                var sample = sampleFunction(px, py);
-                var pixelColor = new Color(sample, sample, sample, 1);
-                IdentifyBounds(sample);
-                sourceTexture.SetPixel(x, y, pixelColor);
+                for (var y = 0; y < Height; y++)
+                {
+                    var pixelX = x / MaxPixel;
+                    var pixelY = y / MaxPixel;
+                    var px = size * pixelX;
+                    var py = size * pixelY;
+                    var sample = sampleFunction(px, py);
+                    var pixelColor = new Color(sample, sample, sample, 1);
+                    IdentifyBounds(sample);
+                    sourceTexture.SetPixel(x, y, pixelColor);
+                }
             }
 
             sourceTexture.Apply();
@@ -72,6 +77,12 @@ namespace NoiseUltra.Nodes
         private void CreateTexture()
         {
             sourceTexture = new Texture2D(Width, Height, TextureFormat.RGB24, false, false);
+        }
+
+        private void Draw()
+        {
+            if(Node)
+                Node.Draw();
         }
     }
 }
