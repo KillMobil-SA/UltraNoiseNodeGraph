@@ -1,7 +1,4 @@
 using System.Collections;
-using System.Data;
-using Sirenix.OdinInspector;
-using UnityEngine;
 
 namespace NoiseUltra.Tools.Terrains
 {
@@ -14,7 +11,6 @@ namespace NoiseUltra.Tools.Terrains
             var resolution = GetHeightMapResolution();
             _heightMap = new float[resolution, resolution];
             progress.SetSize(resolution * resolution);
-            var interationsCount = 0;
             var position = transform.position;
             
             for (var x = 0; x < resolution; x++)
@@ -31,13 +27,9 @@ namespace NoiseUltra.Tools.Terrains
                     }
             
                     _heightMap[y, x] = GetSample(xPos, yPos);
-                    progress.Increment();
-            
-                    interationsCount++;
-                    if (interationsCount > progress.iterationsPerFrame)
+                    if (!progress.TryProcess())
                     {
-                        interationsCount = 0;
-                        yield return null;
+                        yield return progress.ResetIteraction();
                     }
                 }
             }
