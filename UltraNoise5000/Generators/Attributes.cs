@@ -8,10 +8,6 @@ namespace NoiseUltra.Generators
     [Serializable]
     public class Attributes
     {
-        private const int MaxOctaves = 8;
-        private const float MaxLacunarity = 20f;
-        private const float MaxAmplitude = 2f;
-
         [SerializeField] [OnValueChanged(nameof(DrawPreview))]
         private int seed;
 
@@ -21,13 +17,13 @@ namespace NoiseUltra.Generators
         [SerializeField] [OnValueChanged(nameof(DrawPreview))]
         private float frequency = 20f;
 
-        [SerializeField] [Range(0, MaxAmplitude)] [OnValueChanged(nameof(DrawPreview))]
+        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
         private float amplitude = 1f;
 
-        [SerializeField] [Range(0, MaxLacunarity)] [OnValueChanged(nameof(DrawPreview))]
+        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
         private float lacunarity = 2.0f;
 
-        [SerializeField] [Range(0, MaxOctaves)] [OnValueChanged(nameof(DrawPreview))]
+        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
         private int octaves = 4;
 
         [SerializeField] [OnValueChanged(nameof(DrawPreview))]
