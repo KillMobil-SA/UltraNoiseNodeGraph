@@ -10,14 +10,19 @@ namespace NoiseUltra.Nodes
     [NodeWidth(NodeProprieties.NodeWidth)]
     public abstract class NodeBase : Node
     {
-        [SerializeField] private PreviewImage previewImage;
-        public float Size => previewImage.Size;
+        [SerializeField] private PreviewImage previewImage = new PreviewImage();
+        public float Resolution => previewImage.Resolution;
 
         protected override void Init()
         {
-            previewImage = new PreviewImage(this);
+            previewImage.SetNode(this);
+            if (previewImage.autoPreview)
+            {
+                Draw();
+            }
         }
-
+        
+        
         [Button]
         public void Draw()
         {

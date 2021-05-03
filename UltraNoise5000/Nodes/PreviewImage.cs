@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -11,31 +12,30 @@ namespace NoiseUltra.Nodes
         private const int ImageSize = 256;
         private const int Width = ImageSize;
         private const int Height = ImageSize;
-
+        public bool autoPreview;
+        
         [SerializeField, ReadOnly] private Bound bounds = new Bound();
 
-        [SerializeField, OnValueChanged(nameof(Draw))] private float size = 200;
+        [SerializeField, OnValueChanged(nameof(Draw))] private int size = 200;
 
         [SerializeField, PreviewField(ImageSize)]
         private Texture2D sourceTexture;
-        
-        private NodeBase Node { get; }
 
-        public PreviewImage(NodeBase nodeBase)
+        private NodeBase Node { get; set; }
+
+        public PreviewImage()
         {
             MaxPixel = ImageSize - 1;
             bounds.ResetBounds();
-            Node = nodeBase;
         }
-
+        
         private float MaxPixel { get; }
-        public float Size => size;
+        public float Resolution => size;
 
         public void Update(Func<float, float, float> sampleFunction)
         {
             if (sampleFunction == null)
                 return;
-
             DeleteTexture(); // the trick of the tricks
             CreateTexture();
             bounds.ResetBounds();
@@ -84,5 +84,14 @@ namespace NoiseUltra.Nodes
             if(Node)
                 Node.Draw();
         }
+
+        public void SetNode(NodeBase nodeBase)
+        {
+            Node = nodeBase;
+        }
     }
 }
+
+
+
+
