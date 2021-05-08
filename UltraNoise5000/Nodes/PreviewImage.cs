@@ -89,6 +89,11 @@ namespace NoiseUltra.Nodes
         {
             Node = nodeBase;
         }
+
+        public void SetZoom(int globalZoom)
+        {
+            size = globalZoom;
+        }
     }
 }
 

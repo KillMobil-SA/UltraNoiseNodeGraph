@@ -11,6 +11,9 @@ namespace NoiseUltra
     [CreateAssetMenu(fileName = "Ultra Noise Graph", menuName = "KillMobil/UltraNoise/Noise Graph")]
     public class NoiseNodeGraph : NodeGraph
     {
+        [SerializeField] 
+        private int globalZoom = 200;
+        
         [Button]
         [ContextMenu("Update All Nodes")]
         public void UpdateAllNodes()
@@ -18,6 +21,15 @@ namespace NoiseUltra
             foreach (var node in nodes)
                 if (node is NodeBase item)
                     item.Draw();
+        }
+
+        [Button]
+        [ContextMenu("Update All Zooms")]
+        public void UpdateAllZooms()
+        {
+            foreach (var node in nodes)
+                if (node is NodeBase item)
+                    item.SetZoom(globalZoom);
         }
     }
 }

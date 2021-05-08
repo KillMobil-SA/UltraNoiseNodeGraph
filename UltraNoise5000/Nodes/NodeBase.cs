@@ -65,5 +65,11 @@ namespace NoiseUltra.Nodes
         {
             return GetInputValue(nodeName, fallback);
         }
+
+        public void SetZoom(int globalZoom)
+        {
+            previewImage.SetZoom(globalZoom);
+            Draw();
+        }
     }
 }
