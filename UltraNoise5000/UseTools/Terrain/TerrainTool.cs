@@ -30,7 +30,13 @@ namespace NoiseUltra.Tools.Terrains
         [Button]
         private void MatchSize()
         {
-            terrain.terrainData.size = Vector3.one * sourceNode.Resolution;
+            var terrainData = terrain.terrainData;
+            var currentSize = terrainData.size;
+            var sizeX = sourceNode.Resolution;
+            var sizeY = currentSize.y;
+            var sizeZ = sourceNode.Resolution;
+            var size = new Vector3(sizeX, sizeY, sizeZ);
+            terrainData.size = size;
         }
 
         [Button]
