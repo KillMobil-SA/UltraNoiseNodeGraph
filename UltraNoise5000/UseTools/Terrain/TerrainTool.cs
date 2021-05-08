@@ -23,7 +23,6 @@ namespace NoiseUltra.Tools.Terrains
         {
             if (!IsInitialized)
                 Initialize();
-            MatchSize();
             _routineWrapper = new CoroutineWrapper(this, Operation());
             _routineWrapper.StartCoroutine();
         }
