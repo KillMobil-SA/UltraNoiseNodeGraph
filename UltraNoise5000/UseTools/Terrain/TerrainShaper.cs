@@ -18,7 +18,7 @@ namespace NoiseUltra.Tools.Terrains
             yield return Operate(resolution, position, relativeSize);
             GetTerrainData().SetHeights(0, 0, _heightMap);
             progress.Reset();
-        }
+        } 
 
         private IEnumerator Operate(int resolution, Vector3 position, float relativeSize)
         {

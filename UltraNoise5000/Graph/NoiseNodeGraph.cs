@@ -12,7 +12,8 @@ namespace NoiseUltra
     public class NoiseNodeGraph : NodeGraph
     {
         [SerializeField] 
-        private int globalZoom = 200;
+        private int globalZoom = 1024;
+        public int GlobalZoom => globalZoom;
         
         [Button]
         [ContextMenu("Update All Nodes")]

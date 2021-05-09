@@ -1,11 +1,12 @@
 ﻿using System.Collections;
+using NoiseUltra.Output;
 using UnityEngine;
 
 namespace NoiseUltra.Tools.Terrains
 {
-    public partial class TerrainPainter : TerrainTool
+    public class TerrainPainter : TerrainTool
     {
-        [SerializeField] private PaintItem[] paintItems;
+        private TerrainLayerExportGroup ExportGroup => sourceNode as TerrainLayerExportGroup;
         
         protected override IEnumerator Operation()
         {
@@ -13,66 +14,71 @@ namespace NoiseUltra.Tools.Terrains
             var terrainData = GetTerrainData();
             var width = terrainData.alphamapWidth;
             var height = terrainData.alphamapHeight;
+            terrainData.terrainLayers = GetTerrainLayers();
             var alphaLayers = terrainData.alphamapLayers;
             var splatmapData = new float[width, height, alphaLayers];
-            var interationsCount = 0;
+            var relativeSize = GetRelativeSize();
+            var paintLayers = GetPaintLayers();
+            var totalLayers = paintLayers.Length;
+            var splatWeights = new float[alphaLayers]; //create splatWeight
+
             progress.SetSize(resolution * resolution);
+            
 
-            for (var x = 0; x < terrainData.alphamapWidth; x++)
+            for (var pixelX = 0; pixelX < width; pixelX++)// for each x
             {
-                for (var y = 0; y < terrainData.alphamapHeight; y++)
+                var relativeX = pixelX * relativeSize;
+                for (var pixelY = 0; pixelY < height; pixelY++) //for each y
                 {
-                    var splatWeights = new float[terrainData.alphamapLayers];
-
-                    for (var i = 0; i < paintItems.Length; i++)
+                    var relativeY = pixelY * relativeSize;
+                    splatWeights = new float[alphaLayers]; //create splatWeight
+                    
+                    for (var i = 0; i < totalLayers; i++) //for each layer
                     {
-                        var xPos = x * GetRelativeSize();
-                        var yPos = y * GetRelativeSize();
-                        var current = paintItems[i];
-                        var currentID = current.splatID;
-                        var sample = current.GetSample(xPos, yPos, terrain, useWorldPos);
-                        splatWeights[currentID] = sample;
+                        var layer = paintLayers[i];
+                        var sample = layer.GetSample(relativeX, relativeY, terrainData, useWorldPos);
+                        var sampleComplement = 1 - sample;
+                        splatWeights[i] = sample;
 
-                        if (i > 0)
+                        if (i == totalLayers -1)
                         {
                             float sum = 0;
-                            var complementValue = 1 - sample;
-                            for (var j = i - 1; j >= 0; j--)
+                            for (var j = i - 1; j >= 0; j--) //recalculate total sum from current to bottom
                             {
-                                var inner = paintItems[j];
-                                var innerID = inner.splatID;
-                                var prevVal = splatWeights[innerID];
-                                sum += prevVal;
+                                sum += splatWeights[j];
                             }
 
-                            for (var j = i - 1; j >= 0; j--)
+                            for (var j = i - 1; j >= 0; j--) // recalculate percentages based on the sum from current to bottom
                             {
-                                var inner = paintItems[j];
-                                var innerID = inner.splatID;
-                                var prevVal = splatWeights[innerID];
-                                prevVal = prevVal / sum * complementValue;
-                                splatWeights[innerID] = prevVal;
+                                var percentage = splatWeights[j] / sum;
+                                splatWeights[j] = percentage * sampleComplement;
                             }
                         }
                     }
 
-                    for (var a = 0; a < terrainData.alphamapLayers; a++)
+                    for (var a = 0; a < alphaLayers; a++)
                     {
-                        splatmapData[y, x, a] = splatWeights[a];
+                        splatmapData[pixelY, pixelX, a] = splatWeights[a];
                     }
-
-                    progress.Increment();
-
-                    interationsCount++;
-                    if (interationsCount > progress.iterationsPerFrame)
+                    
+                    if (!progress.TryProcess())
                     {
-                        interationsCount = 0;
-                        yield return null;
+                        yield return progress.ResetIteraction();
                     }
                 }
             }
 
             terrainData.SetAlphamaps(0, 0, splatmapData);
+        }
+
+        private TerrainLayer[] GetTerrainLayers()
+        {
+            return ExportGroup.GetTerrainLayers();
+        }
+
+        private PaintLayer[] GetPaintLayers()
+        {
+            return ExportGroup.GetPaintLayers();
         }
     }
 }

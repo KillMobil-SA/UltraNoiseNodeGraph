@@ -10,9 +10,9 @@ namespace NoiseUltra.Tools.Terrains
     {
         [ReadOnly] [ProgressBar(0, nameof(_maxValue))]
         public int currentValue;
-        public int iterationsPerFrame = 1000;
+        private int _iterationsPerFrame = 4096;
         private int _maxValue;
-        [SerializeField, ReadOnly] private int interationsCount;
+        private int _iterationsCount;
 
         public void SetSize(int max)
         {
@@ -23,25 +23,25 @@ namespace NoiseUltra.Tools.Terrains
         public void Reset()
         {
             currentValue = 0;
-            interationsCount = 0;
+            _iterationsCount = 0;
         }
 
         public void Increment()
         {
             currentValue++;
-            interationsCount++;
+            _iterationsCount++;
         }
 
         public IEnumerator ResetIteraction()
         {
-            interationsCount = 0;
+            _iterationsCount = 0;
             yield return null;
         }
 
         public bool TryProcess()
         {
             Increment();
-            return interationsCount < iterationsPerFrame;
+            return _iterationsCount < _iterationsPerFrame;
         }
 
         public void Decrement()

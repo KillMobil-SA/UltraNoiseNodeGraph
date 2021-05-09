@@ -16,6 +16,7 @@ namespace NoiseUltra.Nodes
         protected override void Init()
         {
             previewImage.SetNode(this);
+            SetDefaultZoom();
             if (previewImage.autoPreview)
             {
                 Draw();
@@ -70,6 +71,15 @@ namespace NoiseUltra.Nodes
         {
             previewImage.SetZoom(globalZoom);
             Draw();
+        }
+
+        private void SetDefaultZoom()
+        {
+            var nodeGraph = graph as NoiseNodeGraph;
+            if (nodeGraph == null) 
+                return;
+            var globalZoom = nodeGraph.GlobalZoom;
+            previewImage.SetZoom(globalZoom);
         }
     }
 }
