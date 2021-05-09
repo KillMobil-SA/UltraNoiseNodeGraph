@@ -10,8 +10,6 @@ namespace NoiseUltra.Output
     public class PaintLayer : NodeInputOutput
     {
         [SerializeField] private TerrainLayer terrainLayer;
-        [SerializeField] private bool isActive = true;
-        [SerializeField] private bool isOneMinus;
         [SerializeField] private bool isAnglePaint;
 
         [ShowIf("isAnglePaint")] [SerializeField]
@@ -25,10 +23,6 @@ namespace NoiseUltra.Output
         public float GetSample(float x, float y, TerrainData terrainData, bool useWorldPos)
         {
             float sample = GetSample(x, y);
-
-            if (!isActive)
-                return 0;
-
             var heightMapResolution = terrainData.heightmapResolution;
 
             if (isAnglePaint)
@@ -41,11 +35,6 @@ namespace NoiseUltra.Output
                     clifCurve.Evaluate(
                         Mathf.Clamp01(steepness * steepness / (heightMapResolution / angleDivide)));
                 sample *= angleV;
-            }
-
-            if (isOneMinus)
-            {
-                return 1 - sample;
             }
 
             return sample;

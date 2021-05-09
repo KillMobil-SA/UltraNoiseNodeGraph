@@ -31,8 +31,7 @@ namespace NoiseUltra.Tools.Terrains
                 for (var pixelY = 0; pixelY < height; pixelY++) //for each y
                 {
                     var relativeY = pixelY * relativeSize;
-                    splatWeights = new float[alphaLayers]; //create splatWeight
-                    
+
                     for (var i = 0; i < totalLayers; i++) //for each layer
                     {
                         var layer = paintLayers[i];
