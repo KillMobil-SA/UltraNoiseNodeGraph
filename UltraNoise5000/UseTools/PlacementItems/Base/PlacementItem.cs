@@ -3,55 +3,60 @@ using NoiseUltra.Output;
 using UnityEngine;
 
 namespace NoiseUltra.Tools.Placement
-
 {
     [Serializable]
     public class PlacementItem
     {
-        public bool active;
-        [Min(1)] public float spacing = 10;
-        public ExportNode exportNode;
-        public PlacementSettings plamentHandler;
+        [SerializeField] public bool active;
+        [SerializeField, Min(1)] public float spacing = 10;
+        [SerializeField] private  ExportNode exportNode;
+        [SerializeField] public PlacementSettings plamentHandler;
 
-        public bool GenerateObject(PlacementBounds placementBound, Vector3 plaementPos, bool isDebug, Transform parent)
+        public bool GenerateObject(PlacementBounds placementBound, Vector3 placementPosition, bool isDebug, Transform parent)
         {
             if (exportNode == null || plamentHandler == null)
                 return false;
 
+            var pos = placementBound.GetPosVector(placementPosition);
+            var v = GetSample(pos, placementBound);
 
-            var pos = placementBound.GetPosVector(plaementPos);
+            if (!PlacementValidation(pos, v)) 
+                return false;
 
-            var v = GetNoise(pos, placementBound);
-
-            if (!PlacementValidation(pos, v)) return false;
-
-            if (isDebug) plamentHandler.DebugObject(pos, v);
+            if (isDebug) 
+                plamentHandler.DebugObject(pos, v);
             else
                 plamentHandler.PlaceObject(pos, v, parent);
 
             return true;
         }
 
-        private float GetNoise(Vector3 pos, PlacementBounds placementBounds)
+        private float GetSample(Vector3 pos, PlacementBounds placementBounds)
         {
             // to enable world relativity later
             //if (!useWorldPos)
             //pos -= transform.position;
+            var is2D = placementBounds.heightIs2D;
+            return  is2D ? GetSample(pos.x, pos.z) : GetSample(pos);
+        }
 
-            if (placementBounds.heightIs2D)
-                return exportNode.GetSample(pos.x, pos.z);
+        private float GetSample(float x, float z)
+        {
+            return exportNode.GetSample(x, z);
+        }
+        
+        private float GetSample(Vector3 pos)
+        {
             return exportNode.GetSample(pos.x, pos.y, pos.z);
         }
 
         private bool PlacementValidation(Vector3 pos, float v)
         {
-            if (v <= 0) return false;
-
-            var heightPlacementCheck = plamentHandler.ChechPos(pos);
-            if (!heightPlacementCheck)
+            if (v <= 0) 
                 return false;
 
-            return true;
+            var heightPlacementCheck = plamentHandler.ChechPos(pos);
+            return heightPlacementCheck;
         }
     }
 }

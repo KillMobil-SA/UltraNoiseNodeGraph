@@ -4,15 +4,16 @@ using UnityEngine;
 
 namespace NoiseUltra.Tools.Placement
 {
-    public class PlacementHandler : MonoBehaviour
+    public class PlacementTool : MonoBehaviour
     {
-        public List<PlacementItem> generatorItems = new List<PlacementItem>();
+        [SerializeField] 
+        private List<PlacementItem> generatorItems = new List<PlacementItem>();
 
-        [Title("Noise Settings")] public int seed;
-        [Title("Debug Settings")] [ReadOnly] public int itemCounter;
-        public bool showDebugInfo;
+        [SerializeField, Title("Noise Settings")] private int seed;
 
-
+        [SerializeField] 
+        private bool showDebugInfo;
+        
         public Vector3 DebugVal;
 
         private PlacementBounds _myPlacementBounds;
@@ -27,7 +28,6 @@ namespace NoiseUltra.Tools.Placement
                     _myPlacementBounds = new PlacementBounds(this, placementAreaCollider);
                 return _myPlacementBounds;
             }
-            set => _myPlacementBounds = value;
         }
 
         private Collider placementAreaCollider
@@ -38,27 +38,21 @@ namespace NoiseUltra.Tools.Placement
                     _placementAreaCollider = GetComponent<Collider>();
                 return _placementAreaCollider;
             }
-            set => _placementAreaCollider = value;
         }
 
         private void OnDrawGizmos()
         {
-            if (!showDebugInfo) return;
-            PerformGeneration(true);
+            if (!showDebugInfo) 
+                return;
+            PerformPlacement(true);
             DebugVal = myPlacementBounds.GetPosVector(transform.position.x, 1, transform.position.z);
-        }
-
-        private void PreBuildPreparation()
-        {
-            itemCounter = 0;
-            Random.InitState(seed);
         }
 
         [Button]
         public void GenerateObjects()
         {
             ClearObjects();
-            PerformGeneration(false);
+            PerformPlacement(false);
             showDebugInfo = false;
         }
 
@@ -68,31 +62,30 @@ namespace NoiseUltra.Tools.Placement
             for (var i = 0; i < generatorItems.Count; i++) generatorItems[i].plamentHandler.CleanObjects(transform);
         }
 
-        private void PerformGeneration(bool isDebug)
+        private void PerformPlacement(bool isDebug)
         {
             InitPlacement();
             for (var i = 0; i < generatorItems.Count; i++)
             {
-                if (!generatorItems[i].active) continue;
-                myPlacementBounds.SetSpace(generatorItems[i].spacing);
+                if (!generatorItems[i].active) 
+                    continue;
+                
+                var spacing = generatorItems[i].spacing;
+                myPlacementBounds.SetSpace(spacing);
 
                 for (var x = 0; x < myPlacementBounds.xAmount; x++)
                 for (var y = 0; y < myPlacementBounds.yAmount; y++)
                 for (var z = 0; z < myPlacementBounds.zAmount; z++)
                 {
                     var placementPos = new Vector3(x, y, z);
-                    var placementSuccess = generatorItems[i]
-                        .GenerateObject(myPlacementBounds, placementPos, isDebug, transform);
-                    if (placementSuccess)
-                        itemCounter++;
+                    var placedItem = generatorItems[i];
+                    placedItem.GenerateObject(myPlacementBounds, placementPos, isDebug, transform);
                 }
             }
         }
 
-
         private void InitPlacement()
         {
-            itemCounter = 0;
             Random.InitState(seed);
         }
     }
