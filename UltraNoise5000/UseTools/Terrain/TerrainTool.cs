@@ -49,8 +49,10 @@ namespace NoiseUltra.Tools.Terrains
         
         protected TerrainData GetTerrainData() => terrain.terrainData;
         protected int GetHeightMapResolution () =>  GetTerrainData().heightmapResolution;
+        protected int GetAlphaMapResolution () =>  GetTerrainData().alphamapResolution;
         protected Vector3 GetTerrainSize() => GetTerrainData().size;
         protected float GetRelativeSize() => GetTerrainSize().x / GetHeightMapResolution();
+        protected float GetRelativeAlphaMapSize() => GetTerrainSize().x / GetAlphaMapResolution();
         protected Vector3 GetTerrainPosition() => transform.position;
         protected Transform GetTerrainTransform() => terrain.transform;
     }

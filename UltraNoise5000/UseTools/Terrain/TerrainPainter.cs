@@ -18,6 +18,7 @@ namespace NoiseUltra.Tools.Terrains
             var alphaLayers = terrainData.alphamapLayers;
             var splatmapData = new float[width, height, alphaLayers];
             var relativeSize = GetRelativeSize();
+            var relativeAlphaMapSize = GetRelativeAlphaMapSize();
             var paintLayers = GetPaintLayers();
             var totalLayers = paintLayers.Length;
             var splatWeights = new float[alphaLayers]; //create splatWeight
@@ -28,18 +29,20 @@ namespace NoiseUltra.Tools.Terrains
             for (var pixelX = 0; pixelX < width; pixelX++)// for each x
             {
                 var relativeX = pixelX * relativeSize;
+                var relativeAlphaMapX = pixelX * relativeAlphaMapSize;
                 for (var pixelY = 0; pixelY < height; pixelY++) //for each y
                 {
                     var relativeY = pixelY * relativeSize;
-
+                    var relativeAlphaMapY = pixelY * relativeAlphaMapSize;
+                    
                     for (var i = 0; i < totalLayers; i++) //for each layer
                     {
                         var layer = paintLayers[i];
-                        var sample = layer.GetSample(relativeX, relativeY, terrainData, useWorldPos);
+                        var sample = layer.GetSample(relativeX, relativeY , pixelX , pixelY, terrainData, useWorldPos);
                         var sampleComplement = 1 - sample;
                         splatWeights[i] = sample;
 
-                        if (i == totalLayers -1)
+                        if (i > 0 )
                         {
                             float sum = 0;
                             for (var j = i - 1; j >= 0; j--) //recalculate total sum from current to bottom

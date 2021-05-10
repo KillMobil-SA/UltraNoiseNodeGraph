@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Output
 {
-    [Serializable]
+    [Serializable,NodeTint(NodeProprieties.NodeTintYellow)]
     public class PaintLayer : NodeInputOutput
     {
         [SerializeField] private TerrainLayer terrainLayer;
@@ -20,20 +20,23 @@ namespace NoiseUltra.Output
 
         public TerrainLayer TerrainLayer => terrainLayer;
 
-        public float GetSample(float x, float y, TerrainData terrainData, bool useWorldPos)
+        public float GetSample(float x, float y , float xAlpha , float yAlpha, TerrainData terrainData, bool useWorldPos)
         {
             float sample = GetSample(x, y);
             var heightMapResolution = terrainData.heightmapResolution;
 
             if (isAnglePaint)
             {
-                var x01 = x / terrainData.alphamapWidth;
-                var y01 = y / terrainData.alphamapHeight;
+                var x01 = xAlpha / terrainData.alphamapWidth;
+                var y01 = yAlpha / terrainData.alphamapHeight;
                 var steepness = terrainData.GetSteepness(x01, y01);
 
                 var angleV =
                     clifCurve.Evaluate(
-                        Mathf.Clamp01(steepness * steepness / (heightMapResolution / angleDivide)));
+                        Mathf.Clamp01(
+                            steepness * steepness / (heightMapResolution / angleDivide)
+                          )
+                        );
                 sample *= angleV;
             }
 
