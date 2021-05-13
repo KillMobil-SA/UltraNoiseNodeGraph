@@ -8,7 +8,7 @@ namespace NoiseUltra.Generators.Static
     public class Circle : NodeOutput
     {
         private const float Default = 100;
-        [SerializeField] private Vector2 center = new Vector2(Default, Default);
+        [SerializeField] private Vector3 center = new Vector2(Default, Default);
         [SerializeField, OnValueChanged(nameof(RebuildCurve))] private float radius = Default;
         [SerializeField] private bool hardEdges;
         [SerializeField] private AnimationCurve heightCurve = AnimationCurve.Linear(0, 0, Default, 1);
