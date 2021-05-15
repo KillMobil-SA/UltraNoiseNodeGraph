@@ -53,7 +53,7 @@ namespace NoiseUltra.Nodes
             var sampleA = GetInputA().GetSample(x);
             var sampleB = GetInputB().GetSample(x);
             var sampleC = GetInputC().GetSample(x);
-            return ExecuteOperation(sampleA * strengthA, sampleB * strengthB, sampleC * strengthC);
+            return Clamp(sampleA * strengthA, sampleB * strengthB, sampleC * strengthC);
         }
 
         public override float GetSample(float x, float y)
@@ -64,7 +64,7 @@ namespace NoiseUltra.Nodes
             var sampleA = GetInputA().GetSample(x, y);
             var sampleB = GetInputB().GetSample(x, y);
             var sampleC = GetInputC().GetSample(x, y);
-            return ExecuteOperation(sampleA * strengthA, sampleB * strengthB, sampleC * strengthC);
+            return Clamp(sampleA * strengthA, sampleB * strengthB, sampleC * strengthC);
         }
 
         public override float GetSample(float x, float y, float z)
@@ -75,7 +75,12 @@ namespace NoiseUltra.Nodes
             var sampleA = GetInputA().GetSample(x, y, z);
             var sampleB = GetInputB().GetSample(x, y, z);
             var sampleC = GetInputC().GetSample(x, y, z);
-            return ExecuteOperation(sampleA * strengthA, sampleB * strengthB, sampleC * strengthC);
+            return Clamp(sampleA * strengthA, sampleB * strengthB, sampleC * strengthC);
+        }
+
+        private float Clamp(float sampleA, float sampleB, float sampleC)
+        {
+            return Mathf.Clamp01(ExecuteOperation(sampleA, sampleB, sampleC));
         }
 
         /// <summary>

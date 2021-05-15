@@ -16,7 +16,7 @@ namespace NoiseUltra.Nodes
             if (!IsValid)
                 return NodeProprieties.Invalid;
 
-            return GetInput().GetSample(x);
+            return Clamp(GetInput().GetSample(x));
         }
 
         public override float GetSample(float x, float y)
@@ -24,7 +24,7 @@ namespace NoiseUltra.Nodes
             if (!IsValid)
                 return NodeProprieties.Invalid;
 
-            return GetInput().GetSample(x, y);
+            return Clamp(GetInput().GetSample(x, y));
         }
 
         public override float GetSample(float x, float y, float z)
@@ -32,7 +32,12 @@ namespace NoiseUltra.Nodes
             if (!IsValid)
                 return NodeProprieties.Invalid;
 
-            return GetInput().GetSample(x, y, z);
+            return Clamp(GetInput().GetSample(x, y, z));
+        }
+        
+        private float Clamp(float sample)
+        {
+            return Mathf.Clamp01(sample);
         }
 
         private NodeBase GetInput()
