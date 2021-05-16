@@ -7,6 +7,7 @@ namespace NoiseUltra.Nodes
         public const string NodeTintRed = "#e2468e";
         public const string NodeTintYellow = "#86853C";
         public const string NodeTintBlue = "#4983a4";
+        public const string NodeTintPurple = "#8C4472";
         public const float Invalid = -1;
     }
 }

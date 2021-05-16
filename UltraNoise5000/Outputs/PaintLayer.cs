@@ -9,7 +9,7 @@ namespace NoiseUltra.Output
     [Serializable,NodeTint(NodeProprieties.NodeTintYellow)]
     public class PaintLayer : NodeInputOutput
     {
-        [SerializeField] private TerrainLayer terrainLayer;
+        [SerializeField,OnValueChanged(nameof(UpdateNoiseName))] private TerrainLayer terrainLayer;
         [SerializeField] private bool isAnglePaint;
 
         [ShowIf("isAnglePaint")] [SerializeField]
@@ -41,6 +41,11 @@ namespace NoiseUltra.Output
             }
 
             return sample;
+        }
+        
+        private void UpdateNoiseName()
+        {
+            name = terrainLayer.name;
         }
     }
 }
