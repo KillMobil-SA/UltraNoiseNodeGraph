@@ -6,13 +6,13 @@ namespace NoiseUltra.Tools.Placement
     public class PlacementSettings : ScriptableObject
     {
         [Header("Placement Settings")] [TabGroup("Placement Settings", "Size")] [SerializeField]
-        private ScaleSettings placementSettings;
+        private ScaleSettings placementScaleSettings = new ScaleSettings();
 
         [TabGroup("Placement Settings", "Rotation")] [SerializeField]
-        private RotationSettings placementRotationSettings;
+        private RotationSettings placementRotationSettings = new RotationSettings();
 
         [TabGroup("Placement Settings", "Position")] [SerializeField]
-        private PositionSettings placementPositionsSettings;
+        private PositionSettings placementPositionsSettings = new PositionSettings();
 
         public Color debugColor;
         public float debugSizeMultiplier = 1;
@@ -22,6 +22,12 @@ namespace NoiseUltra.Tools.Placement
             placementPositionsSettings.OnEnable();
         }
 
+        public void InitializeProperties()
+        {
+            placementScaleSettings.InitPropertie();
+            placementRotationSettings.InitPropertie();
+            placementPositionsSettings.InitPropertie();
+        }
         public bool ChechPos(Vector3 pos)
         {
             return placementPositionsSettings.ChechPos(pos);
@@ -29,17 +35,17 @@ namespace NoiseUltra.Tools.Placement
 
         public Vector3 GetPos(Vector3 pos, float v)
         {
-            return placementPositionsSettings.PotisionCalculator(pos, v);
+            return placementPositionsSettings.Calculator(pos, v);
         }
 
         public Vector3 GetRot(Vector3 pos, float v)
         {
-            return placementRotationSettings.RotationCalculator(pos, v);
+            return placementRotationSettings.Calculator(pos, v);
         }
 
         public Vector3 GetScale(Vector3 pos, float v)
         {
-            return placementSettings.SizeCalculator(pos, v);
+            return placementScaleSettings.Calculator(pos, v);
         }
 
         public virtual void PlaceObject(Vector3 pos, float v, Transform parent)

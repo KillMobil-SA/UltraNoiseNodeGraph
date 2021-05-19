@@ -2,38 +2,38 @@
 using NoiseUltra.Nodes;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using Random = System.Random;
 
 namespace NoiseUltra.Tools.Placement
 {
     [Serializable]
-    public class RotationSettings
+    public class RotationSettings :PlacementProperties
     {
+        
+        [SerializeField] private Vector3 randomRotation;
         [SerializeField] private bool useNoiseRandomizationBase;
-
         [ShowIf("useNoiseRandomizationBase")] [SerializeField]
         private bool useExternalNoiseSource;
 
         [ShowIf("useExternalNoiseSource")] [SerializeField]
         private NodeBase externalSource;
 
-        [ShowIf("useExternalNoiseSource")] [SerializeField]
-        private Vector3 randomRotation;
-
-
         public bool roundRotation;
 
         [ShowIf("roundRotation")] [SerializeField]
         private float rotationRound;
 
-        public Vector3 RotationCalculator(Vector3 pos, float thresHold)
+        
+  
+        public override Vector3 Calculator(Vector3 pos, float thresHold)
         {
             if (useNoiseRandomizationBase)
                 NoiseRandomization(pos, thresHold);
 
-            var xRot = Random.Range(-randomRotation.x, randomRotation.x);
-            var yRot = Random.Range(-randomRotation.y, randomRotation.y);
-            var zRot = Random.Range(-randomRotation.z, randomRotation.z);
+            var xRot =(float) random.Next(Mathf.RoundToInt(-randomRotation.x * DemDevide), Mathf.RoundToInt(randomRotation.x* DemDevide)) / DemDevide;
+            var yRot =(float) random.Next(Mathf.RoundToInt(-randomRotation.y * DemDevide), Mathf.RoundToInt(randomRotation.y* DemDevide)) / DemDevide;
+            var zRot =(float) random.Next(Mathf.RoundToInt(-randomRotation.z * DemDevide), Mathf.RoundToInt(randomRotation.z* DemDevide)) / DemDevide;
+     
 
             if (roundRotation)
             {
@@ -54,30 +54,18 @@ namespace NoiseUltra.Tools.Placement
                 v = externalSource.GetSample(pos.x, pos.y, pos.z);
             else
                 v = thresHold;
+            
+            random = new Random(Mathf.RoundToInt(v * 9999));
 
-            Random.InitState(Mathf.RoundToInt(v * 9999));
         }
 
         private float RoundRotation(float yRotation)
         {
             var amount = Mathf.Round(yRotation / rotationRound);
             return amount * rotationRound;
-
-            /*
-            if (90 < yRotation + 45 && 90 > yRotation - 45) {
-                return 90;
-            } else if (180 < yRotation + 45 && 180 > yRotation - 45) {
-                return 180;
-            } else if (270 < yRotation + 45 && 270 > yRotation - 45) {
-                return 270;
-            } else if (0 < yRotation + 45 && 0 > yRotation - 45) {
-                return 0;
-            } else if (360 < yRotation + 45 && 360 > yRotation - 45) {
-                return 0;
-            } else {
-                return 0;
-            }
-            */
         }
+
+
+  
     }
 }

@@ -9,13 +9,11 @@ namespace NoiseUltra.Tools.Placement
         [SerializeField] 
         private List<PlacementItem> generatorItems = new List<PlacementItem>();
 
-        [SerializeField, Title("Noise Settings")] private int seed;
+    
 
         [SerializeField] 
         private bool showDebugInfo;
         
-        public Vector3 DebugVal;
-
         private PlacementBounds _myPlacementBounds;
 
         private Collider _placementAreaCollider;
@@ -45,7 +43,6 @@ namespace NoiseUltra.Tools.Placement
             if (!showDebugInfo) 
                 return;
             PerformPlacement(true);
-            DebugVal = myPlacementBounds.GetPosVector(transform.position.x, 1, transform.position.z);
         }
 
         [Button]
@@ -86,7 +83,8 @@ namespace NoiseUltra.Tools.Placement
 
         private void InitPlacement()
         {
-            Random.InitState(seed);
+            for (var i = 0; i < generatorItems.Count; i++)
+                generatorItems[i].plamentHandler.InitializeProperties();
         }
     }
 }

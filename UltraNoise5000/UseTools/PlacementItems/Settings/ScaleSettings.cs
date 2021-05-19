@@ -1,19 +1,22 @@
 ﻿using System;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using Random = System.Random;
 
-namespace NoiseUltra.Tools.Placement
+
+namespace NoiseUltra.Tools.Placement 
 {
     [Serializable]
-    public class ScaleSettings
+    public class ScaleSettings:PlacementProperties
     {
         [SerializeField] private float size = 1;
         [SerializeField] private bool hasIndividualScale;
         [SerializeField] private ScaleRange dynamicScaleRange;
         [SerializeField] private ScaleRange randomScaleRange;
 
+     
+        
 
-        public Vector3 SizeCalculator(Vector3 pos, float thresHold)
+        public override Vector3 Calculator(Vector3 pos, float thresHold)
         {
             var dynamicScale = Vector3.one;
             var randomScale = Vector3.one;
@@ -30,8 +33,8 @@ namespace NoiseUltra.Tools.Placement
                 // Dynamic Scale
                 var size = dynamicScaleRange.GetPercSizeFloat(thresHold);
                 dynamicScale = new Vector3(size, size, size);
-                //Random Scale
-                randomScale = randomScaleRange.GetPercSizeVector3(Random.value);
+                //Random Scale 
+                randomScale = randomScaleRange.GetPercSizeVector3((float)random.NextDouble());
             }
 
             var ScaleResult = (dynamicScale + randomScale) * size;
@@ -41,9 +44,10 @@ namespace NoiseUltra.Tools.Placement
 
         private Vector3 RandomScale()
         {
-            var xRandomScale = randomScaleRange.GetPercSizeFloat(Random.value);
-            var yRandomScale = randomScaleRange.GetPercSizeFloat(Random.value, 1);
-            var zRandomScale = randomScaleRange.GetPercSizeFloat(Random.value, 2);
+            
+            var xRandomScale = randomScaleRange.GetPercSizeFloat((float)random.NextDouble() , 0);
+            var yRandomScale = randomScaleRange.GetPercSizeFloat((float)random.NextDouble() , 1);
+            var zRandomScale = randomScaleRange.GetPercSizeFloat((float)random.NextDouble() , 2);
             return new Vector3(xRandomScale, yRandomScale, zRandomScale);
         }
 

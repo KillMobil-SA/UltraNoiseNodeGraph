@@ -1,12 +1,12 @@
 ﻿using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using Random = System.Random;
 
 namespace NoiseUltra.Tools.Placement
 {
     [Serializable]
-    public class PositionSettings
+    public class PositionSettings :PlacementProperties
     {
         public Vector3 randomPositioning;
 
@@ -22,6 +22,8 @@ namespace NoiseUltra.Tools.Placement
         [SerializeField] private IHeightBase _heightBase;
         private GridHeightPos noiseGridPos = new GridHeightPos();
 
+        
+     
         public PositionSettings()
         {
             UpdateHeightInterFace();
@@ -53,13 +55,14 @@ namespace NoiseUltra.Tools.Placement
             }
         }
 
-        public Vector3 PotisionCalculator(Vector3 pos, float thresHold)
+        public override Vector3 Calculator(Vector3 pos, float thresHold)
         {
             var sourceHeightCalculation = new Vector3(pos.x, CalculateHeight(pos), pos.z);
-
-            var xPos = Random.Range(-randomPositioning.x, randomPositioning.x);
-            var yPos = Random.Range(-randomPositioning.y, randomPositioning.y);
-            var zPos = Random.Range(-randomPositioning.z, randomPositioning.z);
+            
+            var xPos =(float) random.Next(Mathf.RoundToInt(-randomPositioning.x * DemDevide), Mathf.RoundToInt(randomPositioning.x* DemDevide)) / 1000;
+            var yPos =(float) random.Next(Mathf.RoundToInt(-randomPositioning.y * DemDevide), Mathf.RoundToInt(randomPositioning.y* DemDevide)) / 1000;
+            var zPos =(float) random.Next(Mathf.RoundToInt(-randomPositioning.z * DemDevide), Mathf.RoundToInt(randomPositioning.z* DemDevide)) / 1000;
+            
             var randomPosition = new Vector3(xPos, yPos, zPos);
 
             return sourceHeightCalculation + randomPosition;
