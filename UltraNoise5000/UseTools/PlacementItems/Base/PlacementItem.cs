@@ -8,7 +8,7 @@ namespace NoiseUltra.Tools.Placement
     public class PlacementItem
     {
         [SerializeField] public bool active;
-        [SerializeField, Min(1)] public float spacing = 10;
+        [SerializeField, Min(0.1f)] public float spacing = 10;
         [SerializeField] private  ExportNode exportNode;
         [SerializeField] public PlacementSettings plamentHandler;
 

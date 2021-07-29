@@ -9,40 +9,47 @@ namespace NoiseUltra.Nodes
     [Serializable]
     public class PreviewImage
     {
-        private const int ImageSize = 256;
-        private const int Width = ImageSize;
-        private const int Height = ImageSize;
+        private const int previewSise = 256;
+        private int ImageSize = 256;
         public bool autoPreview;
         
         [SerializeField, ReadOnly] private Bound bounds = new Bound();
 
         [SerializeField, OnValueChanged(nameof(Draw))] private int size = 200;
 
-        [SerializeField, PreviewField(ImageSize)]
+        [SerializeField, PreviewField(previewSise)]
         private Texture2D sourceTexture;
 
         private NodeBase Node { get; set; }
 
+        private float MaxPixel { get; set; }
+        public float Resolution => size;
+        
         public PreviewImage()
+        {
+            ResetBounds();
+        }
+
+        void ResetBounds()
         {
             MaxPixel = ImageSize - 1;
             bounds.ResetBounds();
         }
         
-        private float MaxPixel { get; }
-        public float Resolution => size;
+
 
         public void Update(Func<float, float, float> sampleFunction)
         {
             if (sampleFunction == null)
                 return;
             DeleteTexture(); // the trick of the tricks
+            ResetBounds();
             CreateTexture();
             bounds.ResetBounds();
 
-            for (var x = 0; x < Width; x++)
+            for (var x = 0; x < ImageSize; x++)
             {
-                for (var y = 0; y < Height; y++)
+                for (var y = 0; y < ImageSize; y++)
                 {
                     var pixelX = x / MaxPixel;
                     var pixelY = y / MaxPixel;
@@ -76,9 +83,14 @@ namespace NoiseUltra.Nodes
 
         private void CreateTexture()
         {
-            sourceTexture = new Texture2D(Width, Height, TextureFormat.RGB24, false, false);
+            sourceTexture = new Texture2D(ImageSize, ImageSize, TextureFormat.RGB24, false, false);
         }
 
+        public Texture2D GetTexture()
+        {
+            return sourceTexture;
+        }
+        
         private void Draw()
         {
             if(Node)
@@ -93,6 +105,16 @@ namespace NoiseUltra.Nodes
         public void SetZoom(int globalZoom)
         {
             size = globalZoom;
+        }
+
+        public void SetImageSize(int newImageSize)
+        {
+            ImageSize = newImageSize;
+        }
+
+        public void ResetImageSize()
+        {
+            ImageSize = previewSise;
         }
     }
 }
