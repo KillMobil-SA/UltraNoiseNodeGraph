@@ -47,11 +47,6 @@ namespace NoiseUltra.Generators.Static
             return texture2d.GetPixel(px, py).r;
         }
 
-        private bool IsValidPosition(Vector2 scaledPosition)
-        {
-            return textureRect.Contains(scaledPosition);
-        }
-
         public override float GetSample(float x, float y, float z)
         {
             var scaledPosition = GetScaledPosition(x, z);
@@ -64,6 +59,14 @@ namespace NoiseUltra.Generators.Static
             return texture2d.GetPixel(px, py).r;
         }
 
+        
+        
+        private bool IsValidPosition(Vector2 scaledPosition)
+        {
+            return textureRect.Contains(scaledPosition);
+        }
+
+        
         private Vector2 GetScaledPosition(float x, float y)
         {
             var posCord = new Vector2(x, y);
