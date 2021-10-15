@@ -12,13 +12,14 @@ namespace NoiseUltra.Tools.Placement
         [SerializeField] private  ExportNode exportNode;
         [SerializeField] public PlacementSettings plamentHandler;
 
-        public bool GenerateObject(PlacementBounds placementBound, Vector3 placementPosition, bool isDebug, Transform parent)
+        public bool   GenerateObject(PlacementBounds placementBound, Vector3 placementPosition, bool isDebug, Transform parent, bool cordinatesAbs )
         {
             if (exportNode == null || plamentHandler == null)
                 return false;
 
             var pos = placementBound.GetPosVector(placementPosition);
-            var v = GetSample(pos, placementBound);
+            
+            var v = GetSample(pos, placementBound ,   cordinatesAbs);
 
             if (!PlacementValidation(pos, v)) 
                 return false;
@@ -31,8 +32,10 @@ namespace NoiseUltra.Tools.Placement
             return true;
         }
 
-        private float GetSample(Vector3 pos, PlacementBounds placementBounds)
+        private float GetSample(Vector3 pos, PlacementBounds placementBounds ,  bool cordinatesAbs)
         {
+
+            if (cordinatesAbs) pos = new Vector3(Mathf.Abs(pos.x), Mathf.Abs(pos.y), Mathf.Abs(pos.z));
             // to enable world relativity later
             //if (!useWorldPos)
             //pos -= transform.position;

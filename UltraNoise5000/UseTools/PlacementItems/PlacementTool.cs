@@ -9,7 +9,8 @@ namespace NoiseUltra.Tools.Placement
         [SerializeField] 
         private List<PlacementItem> generatorItems = new List<PlacementItem>();
 
-    
+        [Header("Modifications")] [SerializeField]
+        private bool cordinatesAbs = false;
 
         [SerializeField] 
         private bool showDebugInfo;
@@ -76,7 +77,7 @@ namespace NoiseUltra.Tools.Placement
                 {
                     var placementPos = new Vector3(x, y, z);
                     var placedItem = generatorItems[i];
-                    placedItem.GenerateObject(myPlacementBounds, placementPos, isDebug, transform);
+                    placedItem.GenerateObject(myPlacementBounds, placementPos, isDebug, transform , cordinatesAbs);
                 }
             }
         }

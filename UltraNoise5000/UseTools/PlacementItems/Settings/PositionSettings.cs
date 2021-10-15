@@ -29,7 +29,7 @@ namespace NoiseUltra.Tools.Placement
             UpdateHeightInterFace();
         }
 
-        public void OnEnable()
+        public override void OnEnable()
         {
             UpdateHeightInterFace();
         }
@@ -71,37 +71,28 @@ namespace NoiseUltra.Tools.Placement
         private float CalculateHeight(Vector3 pos)
         {
             return _heightBase.GetHeightPos(pos);
-            /*  /// i keep this commented area Until we evaluate  current Height pos Implementation
-            switch (heightPosType)
-            {
-                case HeightPosType.Grid:
-                    return noiseGridPos.GetHeightPos(pos);
-                case HeightPosType.Noise:
-                    return noiseHeightPos.GetHeightPos(pos);
-                case HeightPosType.Raycast:
-                    return rayCastHeightPos.GetHeightPos(pos);
-                default:
-                    return pos.y;
-            }
-            */
+ 
         }
 
         public bool ChechPos(Vector3 pos)
         {
             return _heightBase.HeightCheck(pos);
-            /*
-            switch (heightPosType)
-            {
-                case HeightPosType.Grid:
-                    return noiseGridPos.HeightCheck(pos);
-                case HeightPosType.Noise:
-                    return noiseHeightPos.HeightCheck(pos);
-                case HeightPosType.Raycast:
-                    return rayCastHeightPos.HeightCheck(pos);
-                default:
-                    return true;
-            }
-            */
         }
     }
 }
+
+
+/*  /// i keep this commented area Until we evaluate  current Height pos Implementation
+ // Should we have different class for each type of height positioning of should we just throw all this here?
+ switch (heightPosType)
+ {
+     case HeightPosType.Grid:
+         return noiseGridPos.GetHeightPos(pos);
+     case HeightPosType.Noise:
+         return noiseHeightPos.GetHeightPos(pos);
+     case HeightPosType.Raycast:
+         return rayCastHeightPos.GetHeightPos(pos);
+     default:
+         return pos.y;
+ }
+ */

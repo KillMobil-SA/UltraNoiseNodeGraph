@@ -13,6 +13,7 @@ namespace NoiseUltra.Tools.Placement
         [Header("GameObjects Placement Type Settings ")] [SerializeField]
         private GameObject[] items;
 
+       
 
         [SerializeField] private PlacementObjectType placementObjectType = PlacementObjectType.Linear;
         private int linearID;

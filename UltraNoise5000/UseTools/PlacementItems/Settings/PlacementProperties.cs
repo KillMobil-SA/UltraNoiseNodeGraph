@@ -16,6 +16,11 @@ namespace NoiseUltra.Tools.Placement
         {
             random = new Random(seed);
         }
+
+        public virtual void OnEnable()
+        {
+            
+        }
         
         public virtual Vector3 Calculator(Vector3 pos, float thresHold)
         {
