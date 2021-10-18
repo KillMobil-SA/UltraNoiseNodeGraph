@@ -8,7 +8,8 @@ namespace NoiseUltra.Nodes
     /// </summary>
     public abstract class NodeOutput : NodeBase
     {
-        [SerializeField] [Output] private NodeBase output;
+        [SerializeField] [Output] 
+        private NodeBase output;
 
         public override void OnCreateConnection(NodePort from, NodePort to)
         {
@@ -17,7 +18,10 @@ namespace NoiseUltra.Nodes
 
         private void UpdateOutPut()
         {
-            if (!IsConnected(output)) return;
+            if (!IsConnected(output))
+            {
+                return;
+            }
 
             var port = GetPort(output);
             var connectionsCount = port.ConnectionCount;
@@ -26,7 +30,9 @@ namespace NoiseUltra.Nodes
                 var connectedPort = port.GetConnection(i);
                 var node = connectedPort.node as NodeBase;
                 if (node)
+                {
                     node.Draw();
+                }
             }
         }
 

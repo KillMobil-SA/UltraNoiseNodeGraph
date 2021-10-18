@@ -4,16 +4,18 @@ using UnityEngine;
 namespace NoiseUltra.Nodes
 {
     [Serializable]
-    public class Bound
+    public sealed class Bound
     {
         private const float MinRange = 0;
         private const float MaxRange = 1;
 
-        [Range(MinRange, MaxRange)] public float min;
+        [Range(MinRange, MaxRange)] 
+        public float min;
 
-        [Range(MinRange, MaxRange)] public float max;
+        [Range(MinRange, MaxRange)] 
+        public float max;
 
-        public void ResetBounds()
+        public void Reset()
         {
             min = MaxRange;
             max = MinRange;

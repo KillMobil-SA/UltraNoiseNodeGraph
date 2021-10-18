@@ -6,8 +6,9 @@ using Random = UnityEngine.Random;
 namespace NoiseUltra.Generators
 {
     [Serializable]
-    public class Attributes
+    public sealed class Attributes
     {
+        #region Member
         [SerializeField] [OnValueChanged(nameof(DrawPreview))]
         private int seed;
 
@@ -28,10 +29,12 @@ namespace NoiseUltra.Generators
 
         [SerializeField] [OnValueChanged(nameof(DrawPreview))]
         private Vector3 offset;
+        #endregion
 
+        #region Public
         public float FrequencyOver100 => frequency / 100f;
 
-        private Generator Generator { get; set; }
+        private NodeGenerator nodeGenerator { get; set; }
 
         public int Seed => seed;
         public NOISE_TYPE NoiseType => noiseType;
@@ -49,18 +52,21 @@ namespace NoiseUltra.Generators
             seed = Random.Range(0, 999999);
         }
 
-        public void SetGenerator(Generator generator)
+        public void SetGenerator(NodeGenerator nodeGenerator)
         {
-            Generator = generator;
+            this.nodeGenerator = nodeGenerator;
         }
+        #endregion
 
+        #region Private
         private void DrawPreview()
         {
-            if (Generator)
+            if (nodeGenerator)
             {
-                Generator.SetFractalDirty();
-                Generator.Draw();
+                nodeGenerator.SetFractalDirty();
+                nodeGenerator.Draw();
             }
         }
+        #endregion
     }
 }

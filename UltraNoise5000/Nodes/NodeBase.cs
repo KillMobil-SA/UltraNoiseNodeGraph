@@ -10,20 +10,23 @@ namespace NoiseUltra.Nodes
     [NodeWidth(NodeProprieties.NodeWidth)]
     public abstract class NodeBase : Node
     {
+        #region Members
         public PreviewImage previewImage = new PreviewImage();
         public float Resolution => previewImage.Resolution;
+        #endregion
 
+        #region Initialization
         protected override void Init()
         {
-            previewImage.SetNode(this);
-            SetDefaultZoom();
-            if (previewImage.autoPreview)
-            {
-                Draw();
-            }
+            previewImage.Initialize(this);
         }
-        
-        
+        #endregion
+
+        #region Public
+        public abstract float GetSample(float x);
+        public abstract float GetSample(float x, float y);
+        public abstract float GetSample(float x, float y, float z);
+
         [Button]
         public void Draw()
         {
@@ -31,6 +34,20 @@ namespace NoiseUltra.Nodes
             previewImage.Update(GetSample);
         }
 
+        public void SetZoom(int globalZoom)
+        {
+            previewImage.SetZoom(globalZoom);
+            Draw();
+        }
+
+        public override object GetValue(NodePort port)
+        {
+            return this;
+        }
+
+        #endregion
+
+        #region Protected
         protected virtual void OnBeforeDrawPreview()
         {
         }
@@ -38,17 +55,6 @@ namespace NoiseUltra.Nodes
         protected override void OnSelect()
         {
             Draw();
-        }
-
-        public abstract float GetSample(float x);
-        public abstract float GetSample(float x, float y);
-        public abstract float GetSample(float x, float y, float z);
-
-        //-------------------------------------------------------------------
-
-        public override object GetValue(NodePort port)
-        {
-            return this;
         }
 
         protected bool IsConnected(NodeBase node)
@@ -66,20 +72,6 @@ namespace NoiseUltra.Nodes
         {
             return GetInputValue(nodeName, fallback);
         }
-
-        public void SetZoom(int globalZoom)
-        {
-            previewImage.SetZoom(globalZoom);
-            Draw();
-        }
-
-        private void SetDefaultZoom()
-        {
-            var nodeGraph = graph as NoiseNodeGraph;
-            if (nodeGraph == null) 
-                return;
-            var globalZoom = nodeGraph.GlobalZoom;
-            previewImage.SetZoom(globalZoom);
-        }
+        #endregion
     }
 }
