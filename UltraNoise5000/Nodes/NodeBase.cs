@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using XNode;
@@ -31,6 +31,7 @@ namespace NoiseUltra.Nodes
         public abstract float GetSample(float x);
         public abstract float GetSample(float x, float y);
         public abstract float GetSample(float x, float y, float z);
+        public abstract void GetSampleAsync(float x, float y, int index, ref Color[] colors, Action onComplete);
 
         [Button]
         public void Draw()

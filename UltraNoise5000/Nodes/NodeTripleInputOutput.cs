@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace NoiseUltra.Nodes
@@ -67,6 +68,11 @@ namespace NoiseUltra.Nodes
             var sampleB = GetInputB().GetSample(x, y, z);
             var sampleC = GetInputC().GetSample(x, y, z);
             return Clamp(sampleA * strengthA, sampleB * strengthB, sampleC * strengthC);
+        }
+
+        public override void GetSampleAsync(float x, float y, int index, ref Color[] colors, Action onComplete)
+        {
+
         }
         #endregion
 

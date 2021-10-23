@@ -9,6 +9,7 @@ namespace NoiseUltra.Generators
         public static void Start()
         {
             Begin = DateTime.Now;
+            Debug.Log($"Start");
         }
         public static void End(string context)
         {

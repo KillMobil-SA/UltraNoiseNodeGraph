@@ -1,3 +1,4 @@
+using System;
 using NoiseUltra.Nodes;
 using UnityEngine;
 
@@ -25,6 +26,11 @@ namespace NoiseUltra.Generators.Static
         public override float GetSample(float x, float y, float z)
         {
             return 1;
+        }
+
+        public override void GetSampleAsync(float x, float y, int index, ref Color[] colors, Action onComplete)
+        {
+
         }
 
         private float Sign(Vector2 p1, Vector2 p2, Vector2 p3)

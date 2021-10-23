@@ -1,4 +1,5 @@
-﻿using NoiseUltra.Nodes;
+﻿using System;
+using NoiseUltra.Nodes;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -13,12 +14,6 @@ namespace NoiseUltra.Generators.Static
         [SerializeField] private bool hardEdges;
         [SerializeField] private AnimationCurve heightCurve = AnimationCurve.Linear(0, 0, Default, 1);
 
-
-        public override float GetSample(float x)
-        {
-            return 1;
-        }
-
         protected override void Init()
         {
             base.Init();
@@ -29,6 +24,11 @@ namespace NoiseUltra.Generators.Static
         private void RebuildCurve()
         {
             heightCurve = AnimationCurve.Linear(0, 0, radius, 1);
+        }
+
+        public override float GetSample(float x)
+        {
+            return 1;
         }
 
         public override float GetSample(float x, float y)
@@ -65,6 +65,11 @@ namespace NoiseUltra.Generators.Static
             }
 
             return 0;
+        }
+
+        public override void GetSampleAsync(float x, float y, int index, ref Color[] colors, Action onComplete)
+        {
+
         }
     }
 }

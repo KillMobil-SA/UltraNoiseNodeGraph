@@ -1,4 +1,5 @@
-﻿using NoiseUltra.Nodes;
+﻿using System;
+using NoiseUltra.Nodes;
 using UnityEngine;
 
 namespace NoiseUltra.Generators.Static
@@ -23,6 +24,11 @@ namespace NoiseUltra.Generators.Static
         public override float GetSample(float x, float y, float z)
         {
             return Mathf.InverseLerp(start, end, lineType == GrandientLineType.Horizontal ? x : y);
+        }
+
+        public override void GetSampleAsync(float x, float y, int index, ref Color[] colors, Action onComplete)
+        {
+
         }
 
         private enum GrandientLineType

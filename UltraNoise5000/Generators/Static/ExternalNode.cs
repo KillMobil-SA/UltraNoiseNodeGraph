@@ -1,4 +1,5 @@
-﻿using NoiseUltra.Nodes;
+﻿using System;
+using NoiseUltra.Nodes;
 using NoiseUltra.Output;
 using UnityEngine;
 
@@ -27,6 +28,11 @@ namespace NoiseUltra.Generators.Static
         {
             if (!IsValid) return 0;
             return node.GetSample(x, y, z);
+        }
+
+        public override void GetSampleAsync(float x, float y, int index, ref Color[] colors, Action onComplete)
+        {
+
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using NoiseUltra.Nodes;
+﻿using System;
+using NoiseUltra.Nodes;
 using ProceduralNoiseProject;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -32,6 +33,17 @@ namespace NoiseUltra.Generators
         {
             var sample = GetFractal().Sample2D(x, y);
             return sample;
+        }
+
+        public override void GetSampleAsync(float x, float y, int index, ref Color[] colorsAsync, Action onComplete)
+        {
+            var sample = GetFractal().Sample2D(x, y);
+            colorsAsync[index] = new Color(sample, sample, sample);
+            bool isLast = index == colorsAsync.Length - 1;
+            if (isLast)
+            {
+                onComplete();
+            }
         }
 
         public override float GetSample(float x, float y, float z)

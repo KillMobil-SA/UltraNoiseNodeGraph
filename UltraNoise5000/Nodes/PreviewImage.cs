@@ -1,6 +1,9 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using NoiseUltra.Generators;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -24,9 +27,13 @@ namespace NoiseUltra.Nodes
 
         private NodeBase node;
         private Func<float, float, float> function;
+        
         private int imageSize = NodeProprieties.DefaultPreviewSize;
         private float maxPixel;
         private Color[] _colors;
+        private Color[] _colorsAsync;
+        private Task[] _tasks;
+        private bool isCompleted;
         public float Resolution => size;
         #endregion
 
@@ -34,6 +41,11 @@ namespace NoiseUltra.Nodes
         public PreviewImage()
         {
             ResetBounds();
+        }
+
+        ~PreviewImage()
+        {
+            EditorApplication.update -= Update;
         }
 
         public void Initialize(NodeBase nodeBase)
@@ -51,6 +63,8 @@ namespace NoiseUltra.Nodes
                 return;
             }
 
+            EditorApplication.update += Update;
+
             var globalZoom = nodeGraph.GlobalZoom;
             SetZoom(globalZoom);
         }
@@ -61,7 +75,6 @@ namespace NoiseUltra.Nodes
 
         public void Draw()
         {
-            Profiler.Start();
             if (function == null)
             {
                 return;
@@ -74,7 +87,10 @@ namespace NoiseUltra.Nodes
 
             int totalColors = imageSize * imageSize;
             _colors = new Color[totalColors];
+            _colorsAsync = new Color[totalColors];
+            _tasks = new Task[totalColors];
             int index = 0;
+            Profiler.Start();
             for (var x = 0; x < imageSize; ++x)
             {
                 var pixelX = x / maxPixel;
@@ -83,17 +99,30 @@ namespace NoiseUltra.Nodes
                 {
                     var pixelY = y / maxPixel;
                     var py = size * pixelY;
-                    var sample = function(px, py);
-                    var pixelColor = new Color(sample, sample, sample, 1);
-                    _colors[index] = pixelColor;
+                    // Work in progress
+                    //var sample = function(px, py);
+                    //IdentifyBounds(sample);
+                    //var pixelColor = new Color(sample, sample, sample, 1);
+                    //_colors[index] = pixelColor;
+                    int index1 = index;
+                    _tasks[index] = Task.Run(() => node.GetSampleAsync(px, py, index1, ref _colorsAsync, OnComplete));
                     ++index;
-                    IdentifyBounds(sample);
                 }
             }
 
-            sourceTexture.SetPixels(_colors);
+            //sourceTexture.SetPixels(_colors);
+            //sourceTexture.Apply();
+            Profiler.End("Sync");
+            Task.WaitAll(_tasks);
+        }
+
+        private void OnComplete() => isCompleted = true;
+
+        private void Complete()
+        {
+            sourceTexture.SetPixels(_colorsAsync);
             sourceTexture.Apply();
-            Profiler.End(node.name);
+            Profiler.End("Async");
         }
 
         public void DeleteTexture()
@@ -122,6 +151,15 @@ namespace NoiseUltra.Nodes
         public void ResetImageSize()
         {
             imageSize = NodeProprieties.DefaultPreviewSize;
+        }
+
+        public void Update()
+        {
+            if (isCompleted)
+            {
+                Complete();
+                isCompleted = false;
+            }
         }
         #endregion
 
