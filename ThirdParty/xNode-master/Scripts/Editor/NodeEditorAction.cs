@@ -257,7 +257,7 @@ namespace XNodeEditor {
                         // If click node header, select it.
                         if (currentActivity == NodeActivity.HoldNode && !(e.control || e.shift)) {
                             selectedReroutes.Clear();
-                            SelectNode(hoveredNode, false);
+                            //SelectNode(hoveredNode, false);
 
                             // Double click to center node
                             if (isDoubleClick) {
