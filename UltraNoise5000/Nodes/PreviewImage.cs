@@ -26,6 +26,7 @@ namespace NoiseUltra.Nodes
         private Func<float, float, float> function;
         private int imageSize = NodeProprieties.DefaultPreviewSize;
         private float maxPixel;
+        private Color[] _colors;
         public float Resolution => size;
         #endregion
 
@@ -71,21 +72,26 @@ namespace NoiseUltra.Nodes
             CreateTexture();
             bounds.Reset();
 
+            int totalColors = imageSize * imageSize;
+            _colors = new Color[totalColors];
+            int index = 0;
             for (var x = 0; x < imageSize; ++x)
             {
+                var pixelX = x / maxPixel;
+                var px = size * pixelX;
                 for (var y = 0; y < imageSize; ++y)
                 {
-                    var pixelX = x / maxPixel;
                     var pixelY = y / maxPixel;
-                    var px = size * pixelX;
                     var py = size * pixelY;
                     var sample = function(px, py);
                     var pixelColor = new Color(sample, sample, sample, 1);
+                    _colors[index] = pixelColor;
+                    ++index;
                     IdentifyBounds(sample);
-                    sourceTexture.SetPixel(x, y, pixelColor);
                 }
             }
 
+            sourceTexture.SetPixels(_colors);
             sourceTexture.Apply();
             Profiler.End(node.name);
         }
