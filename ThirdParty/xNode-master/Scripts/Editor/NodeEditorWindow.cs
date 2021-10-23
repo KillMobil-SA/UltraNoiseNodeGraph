@@ -184,6 +184,7 @@ namespace XNodeEditor {
             List<Object> selection = new List<Object>(Selection.objects);
             selection.Remove(node);
             Selection.objects = selection.ToArray();
+            node.UnSelectNode();
         }
 
         [OnOpenAsset(0)]

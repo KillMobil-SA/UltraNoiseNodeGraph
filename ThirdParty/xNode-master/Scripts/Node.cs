@@ -250,8 +250,8 @@ namespace XNode {
 #endregion
 
         /// <summary> Called after a connection between two <see cref="NodePort"/>s is created </summary>
-        /// <param name="from">Output</param> <param name="to">Input</param>
-        public virtual void OnCreateConnection(NodePort from, NodePort to) { }
+        /// <param name="source">Output</param> <param name="target">Input</param>
+        public virtual void OnCreateConnection(NodePort source, NodePort target) { }
 
         /// <summary> Called after a connection is removed from this port </summary>
         /// <param name="port">Output or Input</param>
@@ -418,9 +418,19 @@ namespace XNode {
             OnSelect();
         }
 
+        public void UnSelectNode()
+        {
+            OnUnSelect();
+        }
+
         protected virtual void OnSelect()
         {
             
+        }
+
+        protected virtual void OnUnSelect()
+        {
+
         }
     }
 }
