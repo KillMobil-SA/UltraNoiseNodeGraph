@@ -21,11 +21,6 @@ namespace NoiseUltra.Nodes
         #region Initialization
         protected override void Init()
         {
-            if (!isEditMode)
-            {
-                return;
-            }
-
             previewImage.Initialize(this);
         }
         #endregion

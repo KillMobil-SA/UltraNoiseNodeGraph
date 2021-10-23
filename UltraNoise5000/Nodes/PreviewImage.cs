@@ -52,8 +52,6 @@ namespace NoiseUltra.Nodes
 
             var globalZoom = nodeGraph.GlobalZoom;
             SetZoom(globalZoom);
-
-            Draw();
         }
 
         #endregion
