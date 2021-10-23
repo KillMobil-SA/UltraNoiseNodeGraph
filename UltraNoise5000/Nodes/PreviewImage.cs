@@ -59,6 +59,7 @@ namespace NoiseUltra.Nodes
         #endregion
 
         #region Public
+
         public void Draw()
         {
             Profiler.Start();
@@ -88,12 +89,9 @@ namespace NoiseUltra.Nodes
             }
 
             sourceTexture.Apply();
-            if (node)
-            {
-                Profiler.End(node.name);
-            }
+            Profiler.End(node.name);
         }
-        
+
         public void DeleteTexture()
         {
             //Need to profile to be sure about this, but I think
