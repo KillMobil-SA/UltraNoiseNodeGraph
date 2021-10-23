@@ -6,16 +6,22 @@ using UnityEngine;
 
 namespace NoiseUltra.Output
 {
-    [Serializable,NodeTint(NodeProprieties.NodeTintYellow)]
+    [Serializable,NodeTint(NodeColor.Yellow)]
     public class PaintLayer : NodeInputOutput
     {
-        [SerializeField,OnValueChanged(nameof(UpdateNoiseName))] private TerrainLayer terrainLayer;
-        [SerializeField] private bool isAnglePaint;
+        [SerializeField]
+        [OnValueChanged(nameof(UpdateNoiseName))]
+        private TerrainLayer terrainLayer;
+        
+        [SerializeField]
+        private bool isAnglePaint;
 
-        [ShowIf("isAnglePaint")] [SerializeField]
+        [SerializeField]
+        [ShowIf(nameof(isAnglePaint))]
         private float angleDivide = 1;
 
-        [ShowIf("isAnglePaint")] [SerializeField]
+        [SerializeField]
+        [ShowIf(nameof(isAnglePaint))]
         private AnimationCurve clifCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
         public TerrainLayer TerrainLayer => terrainLayer;

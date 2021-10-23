@@ -4,12 +4,13 @@ using UnityEngine;
 namespace NoiseUltra.Nodes
 {
     /// <summary>
-    ///     Class is able to sample and process a Two Input Nodes and a Single Output Node.
+    ///     Samples and processes Two Input Nodes into a single Output Node.
     /// </summary>
     public abstract class NodeDoubleInputOutput : NodeOutput
     {
+        #region Members
         private const float MinStrength = 0;
-        private const float MaxStrength = 1; // I think the max go be bigger than 1 here, no?
+        private const float MaxStrength = 1;
 
         [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(Draw))]
         private float strengthA = MaxStrength;
@@ -17,23 +18,17 @@ namespace NoiseUltra.Nodes
         [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(Draw))]
         private float strengthB = MaxStrength;
 
-        [SerializeField] [Input] private NodeBase inputA;
+        [SerializeField] [Input] 
+        private NodeBase inputA;
 
-        [SerializeField] [Input] private NodeBase inputB;
+        [SerializeField] [Input] 
+        private NodeBase inputB;
+        #endregion
 
         private bool IsValid => GetInputA() != null &&
                                 GetInputB() != null;
 
-        private NodeBase GetInputA()
-        {
-            return GetInputNode(nameof(inputA), inputA);
-        }
-
-        private NodeBase GetInputB()
-        {
-            return GetInputNode(nameof(inputB), inputB);
-        }
-
+        #region Public
         public override float GetSample(float x)
         {
             if (!IsValid)
@@ -63,15 +58,25 @@ namespace NoiseUltra.Nodes
             var sampleB = GetInputB().GetSample(x, y, z);
             return Clamp(sampleA * strengthA, sampleB * strengthB);
         }
+        #endregion
+
+        #region Private
+        private NodeBase GetInputA()
+        {
+            return GetInputNode(nameof(inputA), inputA);
+        }
+
+        private NodeBase GetInputB()
+        {
+            return GetInputNode(nameof(inputB), inputB);
+        }
 
         private float Clamp(float sampleA, float sampleB)
         {
             return Mathf.Clamp01(ExecuteOperation(sampleA, sampleB));
         }
+        #endregion
 
-        /// <summary>
-        ///     Gets the final operation from the sub class.
-        /// </summary>
         protected abstract float ExecuteOperation(float strengthenedA, float strengthenedB);
     }
 }

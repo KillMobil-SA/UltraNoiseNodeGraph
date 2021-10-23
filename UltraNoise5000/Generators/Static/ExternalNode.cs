@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Generators.Static
 {
-    [NodeTint(NodeProprieties.NodeTintYellow)]
+    [NodeTint(NodeColor.Yellow)]
     public class ExternalNode : NodeOutput
     {
         [SerializeField] private ExportNode node;

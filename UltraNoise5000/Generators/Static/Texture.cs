@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Generators.Static
 {
-    [NodeTint(NodeProprieties.NodeTintGreen)]
+    [NodeTint(NodeColor.Green)]
     public class Texture : NodeOutput
     {
         [SerializeField] private Texture2D texture2d;

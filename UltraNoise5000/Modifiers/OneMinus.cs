@@ -2,7 +2,7 @@
 
 namespace NoiseUltra.Modifiers
 {
-    public class OneMinus : NodeModifier
+    public class OneMinus : BaseNodeModifier
     {
         protected override float ApplyModifier(float sample)
         {

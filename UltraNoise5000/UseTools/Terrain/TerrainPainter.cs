@@ -65,7 +65,7 @@ namespace NoiseUltra.Tools.Terrains
                     
                     if (!progress.TryProcess())
                     {
-                        yield return progress.ResetIteraction();
+                        yield return progress.ResetIteration();
                     }
                 }
             }

@@ -4,14 +4,15 @@ using XNode;
 namespace NoiseUltra.Nodes
 {
     /// <summary>
-    ///     Class is able to sample and process a Single Output Node.
+    ///     Class processes a Single Output Node.
     /// </summary>
     public abstract class NodeOutput : NodeBase
     {
-        [SerializeField] [Output] 
+        [Output]
+        [SerializeField]
         private NodeBase output;
 
-        public override void OnCreateConnection(NodePort from, NodePort to)
+        public override void OnCreateConnection(NodePort source, NodePort target)
         {
             Draw();
         }

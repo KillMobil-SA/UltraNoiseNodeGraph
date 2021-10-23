@@ -52,7 +52,7 @@ namespace NoiseUltra
             for (var i = 0; i < meshPoints.Length; i++)
             {
                 worldMeshPoints[i] = transform.localToWorldMatrix.MultiplyPoint3x4(meshPoints[i]);
-                noisePlacement.ChechPos(worldMeshPoints[i]);
+                noisePlacement.IsPositionValid(worldMeshPoints[i]);
                 worldMeshPoints[i] = noisePlacement.Calculator(worldMeshPoints[i], 1);
                 worldMeshPoints[i].y =
                     (@base.GetSample(worldMeshPoints[i].x, worldMeshPoints[i].z) - heightFloatMinus) *

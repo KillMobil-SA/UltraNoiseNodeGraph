@@ -9,25 +9,32 @@ namespace NoiseUltra.Generators
     public sealed class Attributes
     {
         #region Member
-        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
+        [SerializeField]
+        [OnValueChanged(nameof(DrawPreview))]
         private int seed;
 
-        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
+        [SerializeField]
+        [OnValueChanged(nameof(DrawPreview))]
         private NOISE_TYPE noiseType = NOISE_TYPE.PERLIN;
 
-        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
+        [SerializeField]
+        [OnValueChanged(nameof(DrawPreview))]
         private float frequency = 20f;
 
-        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
+        [SerializeField]
+        [OnValueChanged(nameof(DrawPreview))]
         private float amplitude = 1f;
 
-        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
+        [SerializeField]
+        [OnValueChanged(nameof(DrawPreview))]
         private float lacunarity = 2.0f;
 
-        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
+        [SerializeField]
+        [OnValueChanged(nameof(DrawPreview))]
         private int octaves = 4;
 
-        [SerializeField] [OnValueChanged(nameof(DrawPreview))]
+        [SerializeField]
+        [OnValueChanged(nameof(DrawPreview))]
         private Vector3 offset;
         #endregion
 

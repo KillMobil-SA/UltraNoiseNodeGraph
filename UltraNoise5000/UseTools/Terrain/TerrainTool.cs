@@ -7,8 +7,12 @@ namespace NoiseUltra.Tools.Terrains
     [RequireComponent(typeof(Terrain))]
     public abstract class TerrainTool : BaseTool
     {
-        [SerializeField] protected ProgressBar progress = new ProgressBar();
-        [SerializeField] protected bool useWorldPos;
+        [SerializeField]
+        protected ProgressBar progress = new ProgressBar();
+        
+        [SerializeField]
+        protected bool useWorldPos;
+        
         private CoroutineWrapper _routineWrapper;
         protected Terrain terrain;
 
@@ -46,7 +50,6 @@ namespace NoiseUltra.Tools.Terrains
         }
 
         protected abstract IEnumerator Operation();
-        
         protected TerrainData GetTerrainData() => terrain.terrainData;
         protected int GetHeightMapResolution () =>  GetTerrainData().heightmapResolution;
         protected int GetAlphaMapResolution () =>  GetTerrainData().alphamapResolution;

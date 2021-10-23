@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace NoiseUltra.Math
 {
-    public class Log10 : NodeModifier
+    public class Sin : BaseNodeModifier
     {
         protected override float ApplyModifier(float sample)
         {
-            return Mathf.Log10(sample);
+            return Mathf.Sin(sample);
         }
     }
 }

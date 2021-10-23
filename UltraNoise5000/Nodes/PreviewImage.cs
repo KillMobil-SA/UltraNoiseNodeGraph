@@ -1,4 +1,5 @@
 using System;
+using NoiseUltra.Generators;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -9,21 +10,21 @@ namespace NoiseUltra.Nodes
     public sealed class PreviewImage
     {
         #region Members
-        private const int DefaultPreviewSize = 256;
-
-        [SerializeField, ReadOnly]
+        [ReadOnly]
+        [SerializeField]
         private Bound bounds = new Bound();
 
-        [SerializeField, OnValueChanged(nameof(Draw))]
-        private int size = 200;
-
-        [SerializeField, PreviewField(DefaultPreviewSize)]
-        private Texture2D sourceTexture;
+        [OnValueChanged(nameof(Draw))]
+        [SerializeField]
+        private int size = NodeProprieties.DefaultGlobalZoom;
 
         [SerializeField]
-        private bool autoPreview;
-        private int imageSize = 256;
+        [PreviewField(NodeProprieties.DefaultPreviewSize)]
+        private Texture2D sourceTexture;
+
         private NodeBase node;
+        private Func<float, float, float> function;
+        private int imageSize = NodeProprieties.DefaultPreviewSize;
         private float maxPixel;
         public float Resolution => size;
         #endregion
@@ -42,6 +43,7 @@ namespace NoiseUltra.Nodes
             }
 
             node = nodeBase;
+            function = nodeBase.GetSample;
             var nodeGraph = nodeBase.graph as NoiseNodeGraph;
             if (nodeGraph == null)
             {
@@ -51,17 +53,16 @@ namespace NoiseUltra.Nodes
             var globalZoom = nodeGraph.GlobalZoom;
             SetZoom(globalZoom);
 
-            if (autoPreview)
-            {
-                Draw();
-            }
+            Draw();
         }
+
         #endregion
 
         #region Public
-        public void Update(Func<float, float, float> sampleFunction)
+        public void Draw()
         {
-            if (sampleFunction == null)
+            Profiler.Start();
+            if (function == null)
             {
                 return;
             }
@@ -71,15 +72,15 @@ namespace NoiseUltra.Nodes
             CreateTexture();
             bounds.Reset();
 
-            for (var x = 0; x < imageSize; x++)
+            for (var x = 0; x < imageSize; ++x)
             {
-                for (var y = 0; y < imageSize; y++)
+                for (var y = 0; y < imageSize; ++y)
                 {
                     var pixelX = x / maxPixel;
                     var pixelY = y / maxPixel;
                     var px = size * pixelX;
                     var py = size * pixelY;
-                    var sample = sampleFunction(px, py);
+                    var sample = function(px, py);
                     var pixelColor = new Color(sample, sample, sample, 1);
                     IdentifyBounds(sample);
                     sourceTexture.SetPixel(x, y, pixelColor);
@@ -87,6 +88,10 @@ namespace NoiseUltra.Nodes
             }
 
             sourceTexture.Apply();
+            if (node)
+            {
+                Profiler.End(node.name);
+            }
         }
         
         public void DeleteTexture()
@@ -114,18 +119,11 @@ namespace NoiseUltra.Nodes
 
         public void ResetImageSize()
         {
-            imageSize = DefaultPreviewSize;
+            imageSize = NodeProprieties.DefaultPreviewSize;
         }
         #endregion
 
         #region Private
-        private void Draw()
-        {
-            if (node)
-            {
-                node.Draw();
-            }
-        }
 
         private void ResetBounds()
         {

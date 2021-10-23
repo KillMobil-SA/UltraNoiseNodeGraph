@@ -2,7 +2,7 @@
 
 namespace NoiseUltra.Generators.Static
 {
-    [NodeTint(NodeProprieties.NodeTintGreen)]
+    [NodeTint(NodeColor.Green)]
     public class White : NodeOutput
     {
         public override float GetSample(float x)

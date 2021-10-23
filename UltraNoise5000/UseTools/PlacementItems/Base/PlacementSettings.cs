@@ -5,17 +5,30 @@ namespace NoiseUltra.Tools.Placement
 {
     public class PlacementSettings : ScriptableObject
     {
-        [Header("Placement Settings")] [TabGroup("Placement Settings", "Size")] [SerializeField]
+        private const string PlacementSettingsName = "Placement Settings";
+        private const string PositionTabName = "Position";
+        private const string RotationTabName = "Rotation";
+        private const string SizeTabName = "Size";
+        
+
+        [SerializeField]
+        [Header(PlacementSettingsName)]
+        [TabGroup(PlacementSettingsName, SizeTabName)] 
         private ScaleSettings placementScaleSettings = new ScaleSettings();
 
-        [TabGroup("Placement Settings", "Rotation")] [SerializeField]
+        [SerializeField]
+        [TabGroup(PlacementSettingsName, RotationTabName)]
         private RotationSettings placementRotationSettings = new RotationSettings();
 
-        [TabGroup("Placement Settings", "Position")] [SerializeField]
+        [SerializeField]
+        [TabGroup(PlacementSettingsName, PositionTabName)]
         private PositionSettings placementPositionsSettings = new PositionSettings();
 
-        public Color debugColor;
-        public float debugSizeMultiplier = 1;
+        [SerializeField]
+        private Color debugColor;
+
+        [SerializeField]
+        private float debugSizeMultiplier = 1;
 
         private void OnEnable()
         {
@@ -28,9 +41,10 @@ namespace NoiseUltra.Tools.Placement
             placementRotationSettings.InitPropertie();
             placementPositionsSettings.InitPropertie();
         }
-        public bool ChechPos(Vector3 pos)
+
+        public bool IsPositionValid(Vector3 pos)
         {
-            return placementPositionsSettings.ChechPos(pos);
+            return placementPositionsSettings.IsPositionValid(pos);
         }
 
         public Vector3 GetPos(Vector3 pos, float v)

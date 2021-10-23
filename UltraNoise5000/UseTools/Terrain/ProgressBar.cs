@@ -6,9 +6,10 @@ using UnityEngine;
 namespace NoiseUltra.Tools.Terrains
 {
     [Serializable]
-    public class ProgressBar
+    public sealed class ProgressBar
     {
-        [ReadOnly] [ProgressBar(0, nameof(_maxValue))]
+        [ReadOnly]
+        [ProgressBar(0, nameof(_maxValue))]
         public int currentValue;
         private int _iterationsPerFrame = 4096;
         private int _maxValue;
@@ -32,7 +33,7 @@ namespace NoiseUltra.Tools.Terrains
             _iterationsCount++;
         }
 
-        public IEnumerator ResetIteraction()
+        public IEnumerator ResetIteration()
         {
             _iterationsCount = 0;
             yield return null;

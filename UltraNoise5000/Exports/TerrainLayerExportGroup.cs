@@ -7,13 +7,15 @@ namespace NoiseUltra.Output
 {
     public class TerrainLayerExportGroup : ExportNode
     {
-        [SerializeField] private List<PaintLayer> paintLayers;
+        [SerializeField]
+        private List<PaintLayer> paintLayers;
+        public PaintLayer[] GetPaintLayers() => paintLayers.ToArray();
 
-        public override void OnCreateConnection(NodePort from, NodePort to)
+        public override void OnCreateConnection(NodePort source, NodePort target)
         {
-            base.OnCreateConnection(from, to);
+            base.OnCreateConnection(source, target);
             paintLayers ??= new List<PaintLayer>();
-            var node = @from.node as PaintLayer;
+            var node = source.node as PaintLayer;
             if (node == null) 
                 return;
             
@@ -26,22 +28,21 @@ namespace NoiseUltra.Output
         public override void OnRemoveConnection(NodePort port)
         {
             base.OnRemoveConnection(port);
-
-            for (var index = 0; index < paintLayers.Count; index++)
+            var count = paintLayers.Count;
+            for (var index = 0; index < count; ++index)
             {
                 var layer = paintLayers[index];
                 if (!IsConnected(layer))
                     paintLayers.Remove(layer);
             }
         }
-        
-        public PaintLayer[] GetPaintLayers() => paintLayers.ToArray();
 
         public TerrainLayer[] GetTerrainLayers()
         {
             var amount = paintLayers.Count;
             var terrainLayers = new TerrainLayer[amount];
-            for (var index = 0; index < paintLayers.Count; index++)
+            var count = paintLayers.Count;
+            for (var index = 0; index < count; ++index)
             {
                 var layer = paintLayers[index];
                 terrainLayers[index] = layer.TerrainLayer;

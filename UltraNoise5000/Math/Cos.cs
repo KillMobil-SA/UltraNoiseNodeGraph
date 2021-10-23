@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Math
 {
-    public class Cos : NodeModifier
+    public class Cos : BaseNodeModifier
     {
         protected override float ApplyModifier(float sample)
         {

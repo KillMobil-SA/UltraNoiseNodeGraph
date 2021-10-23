@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace NoiseUltra.Tools.Terrains
 {
-    public class CoroutineWrapper
+    public sealed class CoroutineWrapper
     {
-        private MonoBehaviour Handler { get; }
-        private IEnumerator Coroutine { get; }
+        private readonly MonoBehaviour _handler;
+        private readonly IEnumerator _coroutine;
 
 #if UNITY_EDITOR
         private EditorCoroutine _editorRoutine;
@@ -17,14 +17,14 @@ namespace NoiseUltra.Tools.Terrains
 
         public CoroutineWrapper(MonoBehaviour handler, IEnumerator coroutine)
         {
-            Handler = handler;
-            Coroutine = coroutine;
+            _handler = handler;
+            _coroutine = coroutine;
         }
 
         public void StartCoroutine()
         {
 #if UNITY_EDITOR
-            EditorCoroutineUtility.StartCoroutine(Coroutine, Handler);
+            EditorCoroutineUtility.StartCoroutine(_coroutine, _handler);
 #else
             _runtimeRoutine = Handler.StartCoroutine(Coroutine);
 #endif

@@ -4,12 +4,14 @@ using UnityEngine;
 
 namespace NoiseUltra.Modifiers
 {
-    public class Step : NodeModifier
+    public class Step : BaseNodeModifier
     {
         private const int MinSteps = 1;
         private const int MaxSteps = 50;
 
-        [SerializeField] [Range(MinSteps, MaxSteps)] [OnValueChanged(nameof(Draw))]
+        [SerializeField]
+        [Range(MinSteps, MaxSteps)]
+        [OnValueChanged(nameof(Draw))]
         private int steps = MinSteps;
 
         protected override float ApplyModifier(float sample)

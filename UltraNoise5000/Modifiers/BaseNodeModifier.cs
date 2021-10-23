@@ -1,7 +1,12 @@
 ﻿namespace NoiseUltra.Nodes
 {
-    public abstract class NodeModifier : NodeInputOutput
+    /// <summary>
+    ///     Class samples a value and applies a modifier.
+    /// </summary>
+    public abstract class BaseNodeModifier : NodeInputOutput
     {
+        protected abstract float ApplyModifier(float sample);
+
         public override float GetSample(float x)
         {
             var sample = base.GetSample(x);
@@ -19,7 +24,5 @@
             var sample = base.GetSample(x, y, z);
             return ApplyModifier(sample);
         }
-
-        protected abstract float ApplyModifier(float sample);
     }
 }

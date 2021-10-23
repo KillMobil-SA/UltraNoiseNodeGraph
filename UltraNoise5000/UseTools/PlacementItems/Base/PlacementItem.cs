@@ -9,22 +9,21 @@ namespace NoiseUltra.Tools.Placement
     {
         [SerializeField] public bool active;
         [SerializeField, Min(0.1f)] public float spacing = 10;
-        [SerializeField] private  ExportNode exportNode;
+        [SerializeField] private ExportNode exportNode;
         [SerializeField] public PlacementSettings plamentHandler;
 
-        public bool   GenerateObject(PlacementBounds placementBound, Vector3 placementPosition, bool isDebug, Transform parent, bool cordinatesAbs )
+        public bool GenerateObject(PlacementBounds placementBound, Vector3 placementPosition, bool isDebug, Transform parent, bool cordinatesAbs)
         {
             if (exportNode == null || plamentHandler == null)
                 return false;
 
             var pos = placementBound.GetPosVector(placementPosition);
-            
-            var v = GetSample(pos, placementBound ,   cordinatesAbs);
+            var v = GetSample(pos, placementBound, cordinatesAbs);
 
-            if (!PlacementValidation(pos, v)) 
+            if (!IsPositionValid(pos, v))
                 return false;
 
-            if (isDebug) 
+            if (isDebug)
                 plamentHandler.DebugObject(pos, v);
             else
                 plamentHandler.PlaceObject(pos, v, parent);
@@ -32,7 +31,7 @@ namespace NoiseUltra.Tools.Placement
             return true;
         }
 
-        private float GetSample(Vector3 pos, PlacementBounds placementBounds ,  bool cordinatesAbs)
+        private float GetSample(Vector3 pos, PlacementBounds placementBounds, bool cordinatesAbs)
         {
 
             if (cordinatesAbs) pos = new Vector3(Mathf.Abs(pos.x), Mathf.Abs(pos.y), Mathf.Abs(pos.z));
@@ -40,25 +39,25 @@ namespace NoiseUltra.Tools.Placement
             //if (!useWorldPos)
             //pos -= transform.position;
             var is2D = placementBounds.heightIs2D;
-            return  is2D ? GetSample(pos.x, pos.z) : GetSample(pos);
+            return is2D ? GetSample(pos.x, pos.z) : GetSample(pos);
         }
 
         private float GetSample(float x, float z)
         {
             return exportNode.GetSample(x, z);
         }
-        
+
         private float GetSample(Vector3 pos)
         {
             return exportNode.GetSample(pos.x, pos.y, pos.z);
         }
 
-        private bool PlacementValidation(Vector3 pos, float v)
+        private bool IsPositionValid(Vector3 pos, float v)
         {
-            if (v <= 0) 
+            if (v <= 0)
                 return false;
 
-            var heightPlacementCheck = plamentHandler.ChechPos(pos);
+            var heightPlacementCheck = plamentHandler.IsPositionValid(pos);
             return heightPlacementCheck;
         }
     }

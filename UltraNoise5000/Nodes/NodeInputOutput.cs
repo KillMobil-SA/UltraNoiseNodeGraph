@@ -3,46 +3,39 @@
 namespace NoiseUltra.Nodes
 {
     /// <summary>
-    ///     Class is able to sample and process a Single Input Node and a Single Output Node.
+    ///     Samples and processes a Single Input Node into a Single Output Node.
     /// </summary>
     public abstract class NodeInputOutput : NodeOutput
     {
-        [SerializeField] [Input] private NodeBase input;
+        [Input] 
+        [SerializeField]
+        private NodeBase input;
 
-        private bool IsValid => GetInput() != null;
-
+        #region Public
         public override float GetSample(float x)
         {
-            if (!IsValid)
-                return NodeProprieties.Invalid;
-
-            return Clamp(GetInput().GetSample(x));
+            return IsInputValid ? Mathf.Clamp01(GetInput().GetSample(x)) : NodeProprieties.InvalidValue;
         }
 
         public override float GetSample(float x, float y)
         {
-            if (!IsValid)
-                return NodeProprieties.Invalid;
-
-            return Clamp(GetInput().GetSample(x, y));
+            return IsInputValid ? Mathf.Clamp01(GetInput().GetSample(x, y)) : NodeProprieties.InvalidValue;
         }
 
         public override float GetSample(float x, float y, float z)
         {
-            if (!IsValid)
-                return NodeProprieties.Invalid;
+            return IsInputValid ? Mathf.Clamp01(GetInput().GetSample(x, y, z)) : NodeProprieties.InvalidValue;
+        }
+        #endregion
 
-            return Clamp(GetInput().GetSample(x, y, z));
-        }
-        
-        private float Clamp(float sample)
-        {
-            return Mathf.Clamp01(sample);
-        }
+        #region Private
 
         private NodeBase GetInput()
         {
             return GetInputNode(nameof(input), input);
         }
+
+        private bool IsInputValid => GetInput() != null;
+        #endregion
     }
 }

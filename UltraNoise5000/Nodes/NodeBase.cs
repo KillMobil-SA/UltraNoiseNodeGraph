@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using XNode;
 
@@ -7,10 +8,12 @@ namespace NoiseUltra.Nodes
     /// <summary>
     ///     Class handles the image preview and basic node operations.
     /// </summary>
-    [NodeWidth(NodeProprieties.NodeWidth)]
+    [NodeWidth(NodeProprieties.NodeWidthPixels)]
     public abstract class NodeBase : Node
     {
         #region Members
+
+        public bool isEditMode;
         public PreviewImage previewImage = new PreviewImage();
         public float Resolution => previewImage.Resolution;
         #endregion
@@ -18,11 +21,18 @@ namespace NoiseUltra.Nodes
         #region Initialization
         protected override void Init()
         {
+            if (!isEditMode)
+            {
+                return;
+            }
+
             previewImage.Initialize(this);
         }
         #endregion
 
         #region Public
+
+
         public abstract float GetSample(float x);
         public abstract float GetSample(float x, float y);
         public abstract float GetSample(float x, float y, float z);
@@ -30,8 +40,13 @@ namespace NoiseUltra.Nodes
         [Button]
         public void Draw()
         {
+            if (!isEditMode)
+            {
+                return;
+            }
+            
             OnBeforeDrawPreview();
-            previewImage.Update(GetSample);
+            previewImage.Draw();
         }
 
         public void SetZoom(int globalZoom)
@@ -54,7 +69,13 @@ namespace NoiseUltra.Nodes
 
         protected override void OnSelect()
         {
+            isEditMode = true;
             Draw();
+        }
+
+        protected override void OnUnSelect()
+        {
+            isEditMode = false;
         }
 
         protected bool IsConnected(NodeBase node)
