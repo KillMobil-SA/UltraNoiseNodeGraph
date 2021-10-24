@@ -1,8 +1,7 @@
 using System;
-using System.Threading.Tasks;
 using NoiseUltra.Generators;
+using NoiseUltra.Tasks;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -12,6 +11,7 @@ namespace NoiseUltra.Nodes
     public sealed class PreviewImage
     {
         #region Members
+        private TaskGroup m_TaskGroup;
         [ReadOnly]
         [SerializeField]
         private Bound bounds = new Bound();
@@ -30,8 +30,6 @@ namespace NoiseUltra.Nodes
         private int imageSize = NodeProprieties.DefaultPreviewSize;
         private float maxPixel;
         private Color[] _colorsAsync;
-        private Task[] _tasks;
-        private bool isCompleted;
         public float Resolution => size;
         #endregion
 
@@ -39,11 +37,6 @@ namespace NoiseUltra.Nodes
         public PreviewImage()
         {
             ResetBounds();
-        }
-
-        ~PreviewImage()
-        {
-            EditorApplication.update -= Update;
         }
 
         public void Initialize(NodeBase nodeBase)
@@ -54,6 +47,7 @@ namespace NoiseUltra.Nodes
             }
 
             node = nodeBase;
+            m_TaskGroup = new TaskGroup(node, OnCompleteTask);
             function = nodeBase.GetSample;
             var nodeGraph = nodeBase.graph as NoiseNodeGraph;
             if (nodeGraph == null)
@@ -61,7 +55,6 @@ namespace NoiseUltra.Nodes
                 return;
             }
 
-            EditorApplication.update += Update;
             var globalZoom = nodeGraph.GlobalZoom;
             SetZoom(globalZoom);
         }
@@ -84,35 +77,31 @@ namespace NoiseUltra.Nodes
 
             int totalColors = imageSize * imageSize;
             _colorsAsync = new Color[totalColors];
-            _tasks = new Task[totalColors];
             int index = 0;
             Profiler.Start();
-            for (var x = 0; x < imageSize; ++x)
+            for (int x = 0; x < imageSize; ++x)
             {
-                var pixelX = x / maxPixel;
-                var px = size * pixelX;
-                for (var y = 0; y < imageSize; ++y)
+                float pixelX = x / maxPixel;
+                float px = size * pixelX;
+                for (int y = 0; y < imageSize; ++y)
                 {
-                    var pixelY = y / maxPixel;
-                    var py = size * pixelY;
+                    float pixelY = y / maxPixel;
+                    float py = size * pixelY;
                     CreateTask(px, py, index);
                     ++index;
                 }
             }
 
-            Task.WaitAll(_tasks);
+            m_TaskGroup.ExecuteAll();
         }
 
         private void CreateTask(float px, float py, int index)
         {
-            var sampleInfo = new SampleInfoColorAsync(px, py, index, ref _colorsAsync, OnComplete);
-            Action task = () => node.GetSampleAsync(sampleInfo);
-            _tasks[index] = Task.Run(task);
+            SampleInfoColorAsync sampleInfo = new SampleInfoColorAsync(px, py, index, ref _colorsAsync);
+            m_TaskGroup.AddSampleInfo(sampleInfo);
         }
 
-        private void OnComplete() => isCompleted = true;
-
-        private void Complete()
+        private void OnCompleteTask()
         {
             sourceTexture.SetPixels(_colorsAsync);
             sourceTexture.Apply();
@@ -145,16 +134,6 @@ namespace NoiseUltra.Nodes
         public void ResetImageSize()
         {
             imageSize = NodeProprieties.DefaultPreviewSize;
-        }
-        
-        public void Update()
-        {
-            // This is here to handle the completion of internal Unity Components in the Main Thread
-            if (isCompleted)
-            {
-                Complete();
-                isCompleted = false;
-            }
         }
         #endregion
 

@@ -2,39 +2,27 @@ using System;
 
 namespace NoiseUltra.Nodes
 {
-    public abstract class SampleInfoAsync<T>
+    public abstract class SampleInfoAsync<T> : BaseSampleInfo
     {
         private int index;
-        private Action onComplete;
         private float x;
         private float y;
         private T[] values;
-        
-        private void Evaluate()
-        {
-            bool isLast = index == values.Length - 1;
-            if (isLast)
-            {
-                onComplete?.Invoke();
-            }
-        }
 
-        public void Execute(Func<float, float, float> sampleFunction)
+        public override void Execute(Func<float, float, float> sampleFunction)
         {
             var sample = sampleFunction(x, y);
             values[index] = Create(sample);
-            Evaluate();
         }
 
         protected abstract T Create(float sample);
 
-        protected SampleInfoAsync(float x, float y, int index, ref T[] values, Action onComplete)
+        protected SampleInfoAsync(float x, float y, int index, ref T[] values)
         {
             this.x = x;
             this.y = y;
             this.index = index;
             this.values = values;
-            this.onComplete = onComplete;
         }
 
         public override string ToString()
@@ -42,8 +30,7 @@ namespace NoiseUltra.Nodes
             return $"x: {x}|" +
                    $"y: {y}|" +
                    $"index: {index}|" +
-                   $"values: {values}|" +
-                   $"onComplete: {onComplete.Method.Name}";
+                   $"values: {values}|";
         }
     }
 }

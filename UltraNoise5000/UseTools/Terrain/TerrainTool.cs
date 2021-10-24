@@ -25,8 +25,7 @@ namespace NoiseUltra.Tools.Terrains
         [Button]
         public void Apply()
         {
-            if (!IsInitialized)
-                Initialize();
+            Initialize();
             _routineWrapper = new CoroutineWrapper(this, Operation());
             _routineWrapper.StartCoroutine();
         }

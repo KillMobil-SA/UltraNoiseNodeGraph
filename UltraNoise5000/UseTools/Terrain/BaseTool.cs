@@ -1,5 +1,6 @@
 using NoiseUltra.Nodes;
 using NoiseUltra.Output;
+using NoiseUltra.Tasks;
 using UnityEngine;
 
 namespace NoiseUltra.Tools
@@ -8,9 +9,8 @@ namespace NoiseUltra.Tools
     {
         [SerializeField]
         protected ExportNode sourceNode;
-
+        protected TaskGroup taskGroup;
         private bool IsValid => sourceNode != null;
-        protected bool IsInitialized { get; private set; }
 
         private void OnEnable()
         {
@@ -19,9 +19,12 @@ namespace NoiseUltra.Tools
 
         protected virtual void Initialize()
         {
-            if (IsInitialized)
-                return;
-            IsInitialized = true;
+            taskGroup = new TaskGroup(sourceNode, OnCompleteTask);
+        }
+
+        protected virtual void OnCompleteTask()
+        {
+            
         }
 
         protected float GetSample(float sampleX)

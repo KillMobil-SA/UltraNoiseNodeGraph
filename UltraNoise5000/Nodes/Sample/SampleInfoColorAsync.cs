@@ -5,7 +5,7 @@ namespace NoiseUltra.Nodes
 {
     public sealed class SampleInfoColorAsync : SampleInfoAsync<Color>
     {
-        public SampleInfoColorAsync(float x, float y, int index, ref Color[] values, Action onComplete) : base(x, y, index, ref values, onComplete)
+        public SampleInfoColorAsync(float x, float y, int index, ref Color[] values) : base(x, y, index, ref values)
         {
         }
 

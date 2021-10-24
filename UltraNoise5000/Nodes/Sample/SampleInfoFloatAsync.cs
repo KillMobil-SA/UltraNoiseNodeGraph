@@ -4,7 +4,7 @@ namespace NoiseUltra.Nodes
 {
     public sealed class SampleInfoFloatAsync : SampleInfoAsync<float>
     {
-        public SampleInfoFloatAsync(float x, float y, int index, ref float[] values, Action onComplete) : base(x, y, index, ref values, onComplete)
+        public SampleInfoFloatAsync(float x, float y, int index, ref float[] values) : base(x, y, index, ref values)
         {
         }
 

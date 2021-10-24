@@ -32,12 +32,7 @@ namespace NoiseUltra.Nodes
         public abstract float GetSample(float x, float y);
         public abstract float GetSample(float x, float y, float z);
 
-        public virtual void GetSampleAsync<T>(SampleInfoAsync<T> sampleInfo)
-        {
-            sampleInfo.Execute(GetSample);
-        }
-
-        public virtual void GetSampleAsync<T>(SampleInfo2DAsync<T> sampleInfo)
+        public virtual void ExecuteSampleAsync<T>(T sampleInfo) where T : BaseSampleInfo
         {
             sampleInfo.Execute(GetSample);
         }
