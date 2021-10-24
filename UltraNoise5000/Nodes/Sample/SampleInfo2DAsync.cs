@@ -1,18 +1,24 @@
 using System;
+using UnityEngine;
 
 namespace NoiseUltra.Nodes
 {
-    public abstract class SampleInfoAsync<T>
+    public abstract class SampleInfo2DAsync<T>
     {
-        private int index;
+        private int xMax;
+        private int yMax;
+        private int pxIndex;
+        private int pyIndex;
         private Action onComplete;
         private float x;
         private float y;
-        private T[] values;
-        
+        private T[,] values;
+
         private void Evaluate()
         {
-            bool isLast = index == values.Length - 1;
+            bool isLastRow = xMax - 1 == pxIndex;
+            bool isLastColumn = yMax - 1 == pyIndex;
+            bool isLast = isLastColumn && isLastRow;
             if (isLast)
             {
                 onComplete?.Invoke();
@@ -22,17 +28,20 @@ namespace NoiseUltra.Nodes
         public void Execute(Func<float, float, float> sampleFunction)
         {
             var sample = sampleFunction(x, y);
-            values[index] = Create(sample);
+            values[pxIndex, pyIndex] = Create(sample);
             Evaluate();
         }
 
         protected abstract T Create(float sample);
 
-        protected SampleInfoAsync(float x, float y, int index, ref T[] values, Action onComplete)
+        protected SampleInfo2DAsync(float x, float y, int xMax, int yMax, int pxIndex, int pyIndex, ref T[,] values, Action onComplete)
         {
+            this.xMax = xMax;
+            this.yMax = yMax;
             this.x = x;
             this.y = y;
-            this.index = index;
+            this.pxIndex = pxIndex;
+            this.pyIndex = pyIndex;
             this.values = values;
             this.onComplete = onComplete;
         }
@@ -41,7 +50,10 @@ namespace NoiseUltra.Nodes
         {
             return $"x: {x}|" +
                    $"y: {y}|" +
-                   $"index: {index}|" +
+                   $"xMax: {xMax}|" +
+                   $"yMax: {yMax}|" +
+                   $"pxIndex: {pxIndex}|" +
+                   $"pyIndex: {pyIndex}|" +
                    $"values: {values}|" +
                    $"onComplete: {onComplete.Method.Name}";
         }

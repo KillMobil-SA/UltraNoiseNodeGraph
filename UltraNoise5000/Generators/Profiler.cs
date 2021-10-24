@@ -13,7 +13,7 @@ namespace NoiseUltra.Generators
         }
         public static void End(string context)
         {
-            Debug.Log($"Elapsed Time: {(DateTime.Now.Subtract(Begin).Milliseconds)} Milliseconds {context}");
+            Debug.Log($"Elapsed Time: {(DateTime.Now.Subtract(Begin).TotalSeconds)} Seconds {context}");
         }
     }
 }

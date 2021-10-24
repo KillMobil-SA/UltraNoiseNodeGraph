@@ -37,6 +37,11 @@ namespace NoiseUltra.Nodes
             sampleInfo.Execute(GetSample);
         }
 
+        public virtual void GetSampleAsync<T>(SampleInfo2DAsync<T> sampleInfo)
+        {
+            sampleInfo.Execute(GetSample);
+        }
+
         [Button]
         public void Draw()
         {
