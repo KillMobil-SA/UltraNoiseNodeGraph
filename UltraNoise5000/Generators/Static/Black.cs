@@ -21,10 +21,5 @@ namespace NoiseUltra.Generators.Static
         {
             return 0;
         }
-
-        public override void GetSampleAsync(float x, float y, int index, ref Color[] colors, Action onComplete)
-        {
-            
-        }
     }
 }

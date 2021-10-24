@@ -59,11 +59,6 @@ namespace NoiseUltra.Nodes
             var sampleB = GetInputB().GetSample(x, y, z);
             return Clamp(sampleA * strengthA, sampleB * strengthB);
         }
-
-        public override void GetSampleAsync(float x, float y, int index, ref Color[] colors, Action onComplete)
-        {
-
-        }
         #endregion
 
         #region Private

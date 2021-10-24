@@ -28,11 +28,6 @@ namespace NoiseUltra.Generators.Static
             return 1;
         }
 
-        public override void GetSampleAsync(float x, float y, int index, ref Color[] colors, Action onComplete)
-        {
-
-        }
-
         private float Sign(Vector2 p1, Vector2 p2, Vector2 p3)
         {
             return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);

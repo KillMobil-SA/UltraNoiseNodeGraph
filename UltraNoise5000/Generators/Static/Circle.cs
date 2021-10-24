@@ -9,10 +9,18 @@ namespace NoiseUltra.Generators.Static
     public class Circle : NodeOutput
     {
         private const float Default = 100;
-        [SerializeField] private Vector3 center = new Vector2(Default, Default);
-        [SerializeField, OnValueChanged(nameof(RebuildCurve))] private float radius = Default;
-        [SerializeField] private bool hardEdges;
-        [SerializeField] private AnimationCurve heightCurve = AnimationCurve.Linear(0, 0, Default, 1);
+        [SerializeField] 
+        private Vector3 center = new Vector2(Default, Default);
+        
+        [SerializeField] 
+        [OnValueChanged(nameof(RebuildCurve))] 
+        private float radius = Default;
+        
+        [SerializeField] 
+        private bool hardEdges;
+        
+        [SerializeField] 
+        private AnimationCurve heightCurve = AnimationCurve.Linear(0, 0, Default, 1);
 
         protected override void Init()
         {
@@ -34,7 +42,6 @@ namespace NoiseUltra.Generators.Static
         public override float GetSample(float x, float y)
         {
             var distance = Vector2.Distance(center, new Vector2(x, y));
-            
             var isInRange = distance < radius;
             if (hardEdges)
             {
@@ -65,11 +72,6 @@ namespace NoiseUltra.Generators.Static
             }
 
             return 0;
-        }
-
-        public override void GetSampleAsync(float x, float y, int index, ref Color[] colors, Action onComplete)
-        {
-
         }
     }
 }

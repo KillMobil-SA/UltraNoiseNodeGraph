@@ -60,11 +60,6 @@ namespace NoiseUltra.Generators.Static
             return texture2d.GetPixel(px, py).r;
         }
 
-        public override void GetSampleAsync(float x, float y, int index, ref Color[] colors, Action onComplete)
-        {
-
-        }
-
         private bool IsValidPosition(Vector2 scaledPosition)
         {
             return textureRect.Contains(scaledPosition);

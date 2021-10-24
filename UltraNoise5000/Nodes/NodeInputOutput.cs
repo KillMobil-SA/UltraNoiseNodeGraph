@@ -28,10 +28,6 @@ namespace NoiseUltra.Nodes
             return IsInputValid ? Mathf.Clamp01(GetInput().GetSample(x, y, z)) : NodeProprieties.InvalidValue;
         }
 
-        public override void GetSampleAsync(float x, float y, int index, ref Color[] colors, Action onComplete)
-        {
-
-        }
         #endregion
 
         #region Private

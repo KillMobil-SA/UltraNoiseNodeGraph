@@ -31,7 +31,11 @@ namespace NoiseUltra.Nodes
         public abstract float GetSample(float x);
         public abstract float GetSample(float x, float y);
         public abstract float GetSample(float x, float y, float z);
-        public abstract void GetSampleAsync(float x, float y, int index, ref Color[] colors, Action onComplete);
+
+        public virtual void GetSampleAsync<T>(SampleInfoAsync<T> sampleInfo)
+        {
+            sampleInfo.Execute(GetSample);
+        }
 
         [Button]
         public void Draw()

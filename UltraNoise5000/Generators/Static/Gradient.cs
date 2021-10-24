@@ -26,11 +26,6 @@ namespace NoiseUltra.Generators.Static
             return Mathf.InverseLerp(start, end, lineType == GrandientLineType.Horizontal ? x : y);
         }
 
-        public override void GetSampleAsync(float x, float y, int index, ref Color[] colors, Action onComplete)
-        {
-
-        }
-
         private enum GrandientLineType
         {
             Horizontal,

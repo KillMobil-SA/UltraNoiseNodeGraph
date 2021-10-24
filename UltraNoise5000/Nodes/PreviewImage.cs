@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using NoiseUltra.Generators;
 using Sirenix.OdinInspector;
@@ -30,7 +29,6 @@ namespace NoiseUltra.Nodes
         
         private int imageSize = NodeProprieties.DefaultPreviewSize;
         private float maxPixel;
-        private Color[] _colors;
         private Color[] _colorsAsync;
         private Task[] _tasks;
         private bool isCompleted;
@@ -64,7 +62,6 @@ namespace NoiseUltra.Nodes
             }
 
             EditorApplication.update += Update;
-
             var globalZoom = nodeGraph.GlobalZoom;
             SetZoom(globalZoom);
         }
@@ -86,7 +83,6 @@ namespace NoiseUltra.Nodes
             bounds.Reset();
 
             int totalColors = imageSize * imageSize;
-            _colors = new Color[totalColors];
             _colorsAsync = new Color[totalColors];
             _tasks = new Task[totalColors];
             int index = 0;
@@ -99,21 +95,19 @@ namespace NoiseUltra.Nodes
                 {
                     var pixelY = y / maxPixel;
                     var py = size * pixelY;
-                    // Work in progress
-                    //var sample = function(px, py);
-                    //IdentifyBounds(sample);
-                    //var pixelColor = new Color(sample, sample, sample, 1);
-                    //_colors[index] = pixelColor;
-                    int index1 = index;
-                    _tasks[index] = Task.Run(() => node.GetSampleAsync(px, py, index1, ref _colorsAsync, OnComplete));
+                    CreateTask(px, py, index);
                     ++index;
                 }
             }
 
-            //sourceTexture.SetPixels(_colors);
-            //sourceTexture.Apply();
-            Profiler.End("Sync");
             Task.WaitAll(_tasks);
+        }
+
+        private void CreateTask(float px, float py, int index)
+        {
+            var sampleInfo = new SampleInfoColorAsync(px, py, index, ref _colorsAsync, OnComplete);
+            Action task = () => node.GetSampleAsync(sampleInfo);
+            _tasks[index] = Task.Run(task);
         }
 
         private void OnComplete() => isCompleted = true;
@@ -122,7 +116,7 @@ namespace NoiseUltra.Nodes
         {
             sourceTexture.SetPixels(_colorsAsync);
             sourceTexture.Apply();
-            Profiler.End("Async");
+            Profiler.End(string.Empty);
         }
 
         public void DeleteTexture()
@@ -152,9 +146,10 @@ namespace NoiseUltra.Nodes
         {
             imageSize = NodeProprieties.DefaultPreviewSize;
         }
-
+        
         public void Update()
         {
+            // This is here to handle the completion of internal Unity Components in the Main Thread
             if (isCompleted)
             {
                 Complete();
