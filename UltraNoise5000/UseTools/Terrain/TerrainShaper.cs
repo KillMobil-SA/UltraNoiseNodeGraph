@@ -36,7 +36,7 @@ namespace NoiseUltra.Tools.Terrains
                         yPos += position.z;
                     }
 
-                    var sample = new SampleInfoHeightMap(xPos, yPos, resolution, resolution, y, x, ref _heightMap);
+                    var sample = new SampleInfoHeightMap(xPos, yPos, y, x, ref _heightMap);
                     taskGroup.AddSampleInfo(sample);
                 }
             }

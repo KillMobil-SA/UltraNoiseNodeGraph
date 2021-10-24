@@ -87,18 +87,13 @@ namespace NoiseUltra.Nodes
                 {
                     float pixelY = y / maxPixel;
                     float py = size * pixelY;
-                    CreateTask(px, py, index);
+                    SampleInfoColorAsync sampleInfo = new SampleInfoColorAsync(px, py, index, ref _colorsAsync);
+                    m_TaskGroup.AddSampleInfo(sampleInfo);
                     ++index;
                 }
             }
 
             m_TaskGroup.ExecuteAll();
-        }
-
-        private void CreateTask(float px, float py, int index)
-        {
-            SampleInfoColorAsync sampleInfo = new SampleInfoColorAsync(px, py, index, ref _colorsAsync);
-            m_TaskGroup.AddSampleInfo(sampleInfo);
         }
 
         private void OnCompleteTask()
