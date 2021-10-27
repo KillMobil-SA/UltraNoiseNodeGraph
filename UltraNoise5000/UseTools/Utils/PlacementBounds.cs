@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using XNode.Examples.MathNodes;
 
 namespace NoiseUltra.Tools.Placement
 {
@@ -59,6 +60,7 @@ namespace NoiseUltra.Tools.Placement
         {
             get
             {
+                
                 var center = placementCollider.bounds.center;
                 var centerRound = new Vector3(Mathf.Round(center.x / spacing) * spacing, Mathf.Round(center.y),
                     Mathf.Round(center.z / spacing) * spacing);

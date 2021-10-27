@@ -26,15 +26,15 @@ namespace NoiseUltra.Tools.Terrains
             for (var x = 0; x < resolution; x++)
             {
                 var xPos = x * relativeSize;
+                if (useWorldCordinates)
+                    xPos -= position.x;
+                
                 for (var y = 0; y < resolution; y++)
                 {
                     var yPos = y * relativeSize;
-
-                    if (useWorldPos)
-                    {
-                        xPos += position.x;
-                        yPos += position.z;
-                    }
+                    if (useWorldCordinates)
+                        yPos -= position.z;
+                    
 
                     var sample = new SampleInfoHeightMap(xPos, yPos, y, x, ref _heightMap);
                     taskGroup.AddSampleInfo(sample);
@@ -65,19 +65,18 @@ namespace NoiseUltra.Tools.Terrains
         } 
 
         private IEnumerator Operate(int resolution, Vector3 position, float relativeSize)
-        {
+        { 
             for (var x = 0; x < resolution; x++)
             {
                 var xPos = x * relativeSize;
+                if (useWorldCordinates) xPos += position.x;
                 for (var y = 0; y < resolution; y++)
                 {
                     var yPos = y * relativeSize;
             
-                    if (useWorldPos)
-                    {
-                        xPos += position.x;
+                    if (useWorldCordinates) 
                         yPos += position.z;
-                    }
+                    
 
                     _heightMap[y, x] = GetSample(xPos, yPos);
                     
@@ -88,5 +87,7 @@ namespace NoiseUltra.Tools.Terrains
                 }
             }
         }
+        
+        
     }
 }

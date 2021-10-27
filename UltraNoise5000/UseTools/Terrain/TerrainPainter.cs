@@ -29,16 +29,18 @@ namespace NoiseUltra.Tools.Terrains
             for (var pixelX = 0; pixelX < width; pixelX++)// for each x
             {
                 var relativeX = pixelX * relativeSize;
+                if (useWorldCordinates) relativeX += transform.position.x;
                 var relativeAlphaMapX = pixelX * relativeAlphaMapSize;
                 for (var pixelY = 0; pixelY < height; pixelY++) //for each y
                 {
                     var relativeY = pixelY * relativeSize;
+                    if (useWorldCordinates) relativeY += transform.position.z;
                     var relativeAlphaMapY = pixelY * relativeAlphaMapSize;
                     
                     for (var i = 0; i < totalLayers; i++) //for each layer
                     {
                         var layer = paintLayers[i];
-                        var sample = layer.GetSample(relativeX, relativeY , pixelX , pixelY, terrainData, useWorldPos);
+                        var sample = layer.GetSample(relativeX, relativeY , pixelX , pixelY, terrainData, useWorldCordinates);
                         var sampleComplement = 1 - sample;
                         splatWeights[i] = sample;
 

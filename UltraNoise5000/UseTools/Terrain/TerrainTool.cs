@@ -11,7 +11,7 @@ namespace NoiseUltra.Tools.Terrains
         protected ProgressBar progress = new ProgressBar();
         
         [SerializeField]
-        protected bool useWorldPos;
+        protected bool useWorldCordinates;
         
         private CoroutineWrapper _routineWrapper;
         protected Terrain terrain;

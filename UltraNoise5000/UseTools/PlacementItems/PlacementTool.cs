@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -6,14 +7,19 @@ namespace NoiseUltra.Tools.Placement
 {
     public class PlacementTool : MonoBehaviour
     {
+        
+        [SerializeField] 
+        private bool showDebugInfo;
+        
         [SerializeField] 
         private List<PlacementItem> generatorItems = new List<PlacementItem>();
 
         [Header("Modifications")] [SerializeField]
         private bool cordinatesAbs = false;
 
-        [SerializeField] 
-        private bool showDebugInfo;
+        [SerializeField]
+        public bool useWorldCordinates = true;
+        
         
         private PlacementBounds _myPlacementBounds;
 
@@ -77,7 +83,7 @@ namespace NoiseUltra.Tools.Placement
                 {
                     var placementPos = new Vector3(x, y, z);
                     var placedItem = generatorItems[i];
-                    placedItem.GenerateObject(myPlacementBounds, placementPos, isDebug, transform , cordinatesAbs);
+                    placedItem.GenerateObject(myPlacementBounds, placementPos, isDebug, transform ,useWorldCordinates ,  cordinatesAbs);
                 }
             }
         }
@@ -87,5 +93,7 @@ namespace NoiseUltra.Tools.Placement
             for (var i = 0; i < generatorItems.Count; i++)
                 generatorItems[i].plamentHandler.InitializeProperties();
         }
+
+   
     }
 }
