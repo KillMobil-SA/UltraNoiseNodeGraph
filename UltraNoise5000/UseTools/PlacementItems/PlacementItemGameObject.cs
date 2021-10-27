@@ -10,10 +10,8 @@ namespace NoiseUltra.Tools.Placement
     [CreateAssetMenu(fileName = "UltraPlacementItemGameObject", menuName = "KillMobil/UltraNoise/Gameobjects")]
     public class PlacementItemGameObject : PlacementSettings
     {
-        [Header("GameObjects Placement Type Settings ")] [SerializeField]
+        [Header("GameObjects Settings")] [SerializeField]
         private GameObject[] items;
-
-       
 
         [SerializeField] private PlacementObjectType placementObjectType = PlacementObjectType.Linear;
         private int linearID;

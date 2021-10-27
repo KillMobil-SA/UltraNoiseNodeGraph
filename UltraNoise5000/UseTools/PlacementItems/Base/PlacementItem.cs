@@ -1,5 +1,6 @@
 using System;
 using NoiseUltra.Output;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace NoiseUltra.Tools.Placement
@@ -14,7 +15,7 @@ namespace NoiseUltra.Tools.Placement
 
         public bool GenerateObject(PlacementBounds placementBound, Vector3 placementPosition, bool isDebug, Transform parent, bool useWorldCordinates, bool cordinatesAbs)
         {
-            if (exportNode == null || plamentHandler == null)
+            if (plamentHandler.exportNode == null || plamentHandler == null)
                 return false;
 
             var pos = placementBound.GetPosVector(placementPosition);
@@ -39,17 +40,7 @@ namespace NoiseUltra.Tools.Placement
             if (!useWorldCordinates)
             pos -= placementBounds.center;
             var is2D = placementBounds.heightIs2D;
-            return is2D ? GetSample(pos.x, pos.z) : GetSample(pos);
-        }
-
-        private float GetSample(float x, float z)
-        {
-            return exportNode.GetSample(x, z);
-        }
-
-        private float GetSample(Vector3 pos)
-        {
-            return exportNode.GetSample(pos.x, pos.y, pos.z);
+            return is2D ? plamentHandler.GetSample(pos.x, pos.z) : plamentHandler.GetSample(pos);
         }
 
         private bool IsPositionValid(Vector3 pos, float v)
@@ -60,5 +51,11 @@ namespace NoiseUltra.Tools.Placement
             var heightPlacementCheck = plamentHandler.IsPositionValid(pos);
             return heightPlacementCheck;
         }
+
+        [Button]
+        public void UpDateNoiseFile()
+        {
+            plamentHandler.exportNode = exportNode;
+        } 
     }
 }

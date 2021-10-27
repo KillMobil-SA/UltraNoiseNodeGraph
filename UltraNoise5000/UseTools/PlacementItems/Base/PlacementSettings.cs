@@ -1,5 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
+using NoiseUltra.Output;
 
 namespace NoiseUltra.Tools.Placement
 {
@@ -9,6 +10,10 @@ namespace NoiseUltra.Tools.Placement
         private const string PositionTabName = "Position";
         private const string RotationTabName = "Rotation";
         private const string SizeTabName = "Size";
+        
+        
+        [Header("Noise Settings")]
+        public ExportNode exportNode;
         
 
         [SerializeField]
@@ -24,6 +29,8 @@ namespace NoiseUltra.Tools.Placement
         [TabGroup(PlacementSettingsName, PositionTabName)]
         private PositionSettings placementPositionsSettings = new PositionSettings();
 
+        [Header("Debug Settings")]
+            
         [SerializeField]
         private Color debugColor;
 
@@ -33,6 +40,16 @@ namespace NoiseUltra.Tools.Placement
         private void OnEnable()
         {
             placementPositionsSettings.OnEnable();
+        }
+
+        public float GetSample(float x, float z)
+        {
+            return exportNode.GetSample(x, z);
+        }
+
+        public float GetSample(Vector3 pos)
+        {
+            return exportNode.GetSample(pos.x, pos.y, pos.z);
         }
 
         public void InitializeProperties()
