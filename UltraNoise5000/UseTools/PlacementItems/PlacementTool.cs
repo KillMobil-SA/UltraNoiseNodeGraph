@@ -8,17 +8,20 @@ namespace NoiseUltra.Tools.Placement
     public class PlacementTool : MonoBehaviour
     {
         
+        
+        
+        [SerializeField] [TableList()]
+        private List<PlacementItem> generatorItems = new List<PlacementItem>();
+
         [SerializeField] 
         private bool showDebugInfo;
-        
-        [SerializeField] 
-        private List<PlacementItem> generatorItems = new List<PlacementItem>();
+        [SerializeField]
+        public bool useWorldCordinates = true;
 
         [Header("Modifications")] [SerializeField]
         private bool cordinatesAbs = false;
 
-        [SerializeField]
-        public bool useWorldCordinates = true;
+
         
         
         private PlacementBounds _myPlacementBounds;

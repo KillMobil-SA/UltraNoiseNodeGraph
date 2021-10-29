@@ -8,9 +8,9 @@ namespace NoiseUltra.Tools.Placement
     [Serializable]
     public class PlacementItem
     {
-        [SerializeField] public bool active;
-        [SerializeField, Min(0.1f)] public float spacing = 10;
-        [SerializeField] private ExportNode exportNode;
+        
+        [SerializeField ,TableColumnWidth(40 , false)] public bool active;
+        [SerializeField ,TableColumnWidth(60 , false), Min(0.1f)] public float spacing = 10;
         [SerializeField] public PlacementSettings plamentHandler;
 
         public bool GenerateObject(PlacementBounds placementBound, Vector3 placementPosition, bool isDebug, Transform parent, bool useWorldCordinates, bool cordinatesAbs)
@@ -52,10 +52,6 @@ namespace NoiseUltra.Tools.Placement
             return heightPlacementCheck;
         }
 
-        [Button]
-        public void UpDateNoiseFile()
-        {
-            plamentHandler.exportNode = exportNode;
-        } 
+       
     }
 }
