@@ -132,7 +132,7 @@ namespace NoiseUltra.Nodes
         {
             sourceTexture.SetPixels(_colorsAsync);
             sourceTexture.Apply();
-            Profiler.End(string.Empty);
+            Profiler.End();
         }
 
         public void DeleteTexture()
