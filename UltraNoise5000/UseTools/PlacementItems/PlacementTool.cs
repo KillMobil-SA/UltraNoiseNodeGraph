@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
+using NoiseUltra.Generators;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -13,8 +14,7 @@ namespace NoiseUltra.Tools.Placement
         [SerializeField] [TableList()]
         private List<PlacementItem> generatorItems = new List<PlacementItem>();
 
-        [SerializeField] 
-        private bool showDebugInfo;
+        
         [SerializeField]
         public bool useWorldCordinates = true;
 
@@ -22,7 +22,14 @@ namespace NoiseUltra.Tools.Placement
         private bool cordinatesAbs = false;
 
 
-        
+        [Header  ("Live Preview")]
+        [SerializeField,ReadOnly , ShowIf(nameof(showLivePreview))]
+        [GUIColor("@Color.Lerp(Color.green, Color.red, Mathf.InverseLerp(0 ," + nameof(MAXPreviewRenderTime) + ", " + nameof(previewRenderTime)+"))")]
+        [PropertyOrder(1)]
+        private float previewRenderTime;
+
+        private bool showLivePreview;
+        private const float MAXPreviewRenderTime = .5f;
         
         private PlacementBounds _myPlacementBounds;
 
@@ -32,6 +39,7 @@ namespace NoiseUltra.Tools.Placement
         {
             get
             {
+                
                 if (_myPlacementBounds == null)
                     _myPlacementBounds = new PlacementBounds(this, placementAreaCollider);
                 return _myPlacementBounds;
@@ -48,9 +56,10 @@ namespace NoiseUltra.Tools.Placement
             }
         }
 
+        
         private void OnDrawGizmos()
         {
-            if (!showDebugInfo) 
+            if (!showLivePreview) 
                 return;
             PerformPlacement(true);
         }
@@ -60,7 +69,7 @@ namespace NoiseUltra.Tools.Placement
         {
             ClearObjects();
             PerformPlacement(false);
-            showDebugInfo = false;
+            showLivePreview = false;
         }
 
         [Button]
@@ -72,13 +81,20 @@ namespace NoiseUltra.Tools.Placement
         private void PerformPlacement(bool isDebug)
         {
             InitPlacement();
+            float frameStart = Time.realtimeSinceStartup; 
             for (var i = 0; i < generatorItems.Count; i++)
             {
                 if (!generatorItems[i].active) 
                     continue;
                 
                 var spacing = generatorItems[i].spacing;
+                if (spacing == 0)
+                { 
+                    Debug.LogError("Spacing was set to zero!");
+                    return;
+                }
                 myPlacementBounds.SetSpace(spacing);
+                
 
                 for (var x = 0; x < myPlacementBounds.xAmount; x++)
                 for (var y = 0; y < myPlacementBounds.yAmount; y++)
@@ -87,16 +103,45 @@ namespace NoiseUltra.Tools.Placement
                     var placementPos = new Vector3(x, y, z);
                     var placedItem = generatorItems[i];
                     placedItem.GenerateObject(myPlacementBounds, placementPos, isDebug, transform ,useWorldCordinates ,  cordinatesAbs);
+
+                    if (isDebug)
+                    {
+                        float frameEnd = Time.realtimeSinceStartup;
+                        previewRenderTime = frameEnd - frameStart;
+                        if (previewRenderTime > MAXPreviewRenderTime && showLivePreview)
+                        {
+                            Debug.LogError("Cannot Render Preview spacing is set too low");
+                            showLivePreview = false;
+                            return;
+                        }
+                    }
                 }
             }
         }
 
+        
+        
         private void InitPlacement()
         {
             for (var i = 0; i < generatorItems.Count; i++)
                 generatorItems[i].plamentHandler.InitializeProperties();
         }
 
-   
+
+        [Button , HideIf(nameof(showLivePreview))]
+        [PropertyOrder(2)]
+        private void LivePreview()
+        {
+            showLivePreview = true;
+        }
+
+        [Button, ShowIf(nameof(showLivePreview))]
+        [PropertyOrder(2)]
+        private void DisableLivePreview()
+        {
+            showLivePreview = false;
+        }
+
+
     }
 }

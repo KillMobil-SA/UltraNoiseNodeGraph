@@ -91,7 +91,7 @@ namespace NoiseUltra.Tools.Placement
         {
             var placemntPos = GetPos(pos, v);
             var placemntScale = GetScale(pos, v) * debugSizeMultiplier;
-
+            
             Gizmos.color = debugColor;
             Gizmos.DrawCube(placemntPos, placemntScale);
             Gizmos.color = Color.white;
