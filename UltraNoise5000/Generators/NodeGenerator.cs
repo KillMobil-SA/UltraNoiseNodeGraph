@@ -47,7 +47,7 @@ namespace NoiseUltra.Generators
         {
             attributes.RandomizeSeed();
             SetFractalDirty();
-            Draw();
+            DrawAsync();
         }
 
         private FractalNoise GetFractal()

@@ -7,7 +7,7 @@ namespace NoiseUltra.Modifiers
     public class Curve : BaseNodeModifier
     {
         [SerializeField]
-        [OnValueChanged(nameof(Draw))]
+        [OnValueChanged(nameof(DrawAsync))]
         private AnimationCurve resultCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
         protected override float ApplyModifier(float sample)

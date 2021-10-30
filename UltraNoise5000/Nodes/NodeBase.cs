@@ -9,11 +9,9 @@ namespace NoiseUltra.Nodes
     ///     Class handles the image preview and basic node operations.
     /// </summary>
     [NodeWidth(NodeProprieties.NodeWidthPixels)]
-    public abstract class NodeBase : Node
+    public abstract class  NodeBase : Node
     {
         #region Members
-
-        public bool isEditMode;
         public PreviewImage previewImage = new PreviewImage();
         public float Resolution => previewImage.Resolution;
         #endregion
@@ -38,21 +36,23 @@ namespace NoiseUltra.Nodes
         }
 
         [Button]
-        public void Draw()
+        public void DrawAsync()
         {
-            if (!isEditMode)
-            {
-                return;
-            }
-            
             OnBeforeDrawPreview();
-            previewImage.Draw();
+            previewImage.DrawAsync();
+        }
+
+        [Button]
+        public void DrawSync()
+        {
+            OnBeforeDrawPreview();
+            previewImage.DrawSync();
         }
 
         public void SetZoom(int globalZoom)
         {
             previewImage.SetZoom(globalZoom);
-            Draw();
+            DrawAsync();
         }
 
         public override object GetValue(NodePort port)
@@ -69,15 +69,9 @@ namespace NoiseUltra.Nodes
 
         protected override void OnSelect()
         {
-            isEditMode = true;
-            Draw();
+            DrawAsync();
         }
-
-        protected override void OnUnSelect()
-        {
-            isEditMode = false;
-        }
-
+        
         protected bool IsConnected(NodeBase node)
         {
             var port = GetPort(nameof(node));

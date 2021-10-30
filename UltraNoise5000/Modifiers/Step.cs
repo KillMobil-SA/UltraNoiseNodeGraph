@@ -11,7 +11,7 @@ namespace NoiseUltra.Modifiers
 
         [SerializeField]
         [Range(MinSteps, MaxSteps)]
-        [OnValueChanged(nameof(Draw))]
+        [OnValueChanged(nameof(DrawAsync))]
         private int steps = MinSteps;
 
         protected override float ApplyModifier(float sample)

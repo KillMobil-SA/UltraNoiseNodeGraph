@@ -16,7 +16,7 @@ namespace NoiseUltra.Nodes
         [SerializeField]
         private Bound bounds = new Bound();
 
-        [OnValueChanged(nameof(Draw))]
+        [OnValueChanged(nameof(DrawAsync))]
         [SerializeField]
         private int size = NodeProprieties.DefaultGlobalZoom;
 
@@ -63,7 +63,7 @@ namespace NoiseUltra.Nodes
 
         #region Public
 
-        public void Draw()
+        public void DrawAsync()
         {
             if (function == null)
             {
@@ -94,6 +94,38 @@ namespace NoiseUltra.Nodes
             }
 
             m_TaskGroup.ExecuteAll();
+        }
+
+        public void DrawSync()
+        {
+            if (function == null)
+            {
+                return;
+            }
+
+            DeleteTexture();
+            ResetBounds();
+            CreateTexture();
+            bounds.Reset();
+            int totalColors = imageSize * imageSize;
+            _colorsAsync = new Color[totalColors];
+            int index = 0;
+            for (int x = 0; x < imageSize; ++x)
+            {
+                float pixelX = x / maxPixel;
+                float px = size * pixelX;
+                for (int y = 0; y < imageSize; ++y)
+                {
+                    float pixelY = y / maxPixel;
+                    float py = size * pixelY;
+                    float sample = node.GetSample(px, py);
+                    Color color = new Color(sample, sample, sample);
+                    _colorsAsync[index] = color;
+                    ++index;
+                }
+            }
+
+            OnCompleteTask();
         }
 
         private void OnCompleteTask()

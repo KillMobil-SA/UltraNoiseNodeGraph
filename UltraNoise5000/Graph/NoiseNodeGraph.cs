@@ -26,7 +26,9 @@ namespace NoiseUltra
             {
                 var node = nodes[index];
                 if (node is NodeBase item)
-                    item.Draw();
+                {
+                    item.DrawSync();
+                }
             }
         }
 
@@ -38,7 +40,9 @@ namespace NoiseUltra
             {
                 var node = nodes[index];
                 if (node is NodeBase item)
+                {
                     item.SetZoom(globalZoom);
+                }
             }
         }
     }

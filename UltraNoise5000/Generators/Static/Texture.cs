@@ -1,5 +1,4 @@
-﻿using System;
-using NoiseUltra.Nodes;
+﻿using NoiseUltra.Nodes;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -8,13 +7,17 @@ namespace NoiseUltra.Generators.Static
     [NodeTint(NodeColor.Green)]
     public class Texture : NodeOutput
     {
-        [SerializeField] private Texture2D texture2d;
+        [SerializeField]
+        private Texture2D texture2d;
 
-        [SerializeField] private float scale = 1;
+        [SerializeField]
+        private float scale = 1;
 
-        [SerializeField] private Vector2 offSet = new Vector2(0, 0);
+        [SerializeField]
+        private Vector2 offSet = new Vector2(0, 0);
 
-        [SerializeField] private Rect textureRect;
+        [SerializeField]
+        private Rect textureRect;
 
         private bool IsValid => texture2d != null;
 
@@ -22,13 +25,13 @@ namespace NoiseUltra.Generators.Static
         public void UpdateTexture()
         {
             textureRect = new Rect(0, 0, texture2d.width, texture2d.height);
-            Draw();
+            DrawAsync();
         }
 
         protected override void Init()
         {
             base.Init();
-            Draw();
+            DrawAsync();
         }
 
         public override float GetSample(float x)

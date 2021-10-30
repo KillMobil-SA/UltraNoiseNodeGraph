@@ -71,7 +71,7 @@ namespace NoiseUltra.Generators
             if (nodeGenerator)
             {
                 nodeGenerator.SetFractalDirty();
-                nodeGenerator.Draw();
+                nodeGenerator.DrawAsync();
             }
         }
         #endregion

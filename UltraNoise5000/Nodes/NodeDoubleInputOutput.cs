@@ -13,10 +13,10 @@ namespace NoiseUltra.Nodes
         private const float MinStrength = 0;
         private const float MaxStrength = 1;
 
-        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(Draw))]
+        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(DrawAsync))]
         private float strengthA = MaxStrength;
 
-        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(Draw))]
+        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(DrawAsync))]
         private float strengthB = MaxStrength;
 
         [SerializeField] [Input] 

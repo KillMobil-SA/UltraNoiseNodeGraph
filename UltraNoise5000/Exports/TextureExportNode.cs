@@ -38,7 +38,7 @@ namespace NoiseUltra.Output
             var currentPath = AssetDatabase.GetAssetPath(graph);
             var folderPath = currentPath.Replace(graph.name + FileAssetExtension, string.Empty) + SaveFolderPath;
 
-            Draw();
+            DrawAsync();
 
             byte[] bytes = previewImage.GetTexture().EncodeToPNG();
             string filename = string.Format("{0}/{1}{2}", folderPath, name, FilesExtension);

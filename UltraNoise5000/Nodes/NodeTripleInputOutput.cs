@@ -11,17 +11,17 @@ namespace NoiseUltra.Nodes
     {
         [SerializeField] 
         [Range(NodeProprieties.MinValue, NodeProprieties.MaxValue)] 
-        [OnValueChanged(nameof(Draw))]
+        [OnValueChanged(nameof(DrawAsync))]
         private float strengthA = NodeProprieties.MaxValue;
 
         [SerializeField] 
         [Range(NodeProprieties.MinValue, NodeProprieties.MaxValue)] 
-        [OnValueChanged(nameof(Draw))]
+        [OnValueChanged(nameof(DrawAsync))]
         private float strengthB = NodeProprieties.MaxValue;
 
         [SerializeField] 
         [Range(NodeProprieties.MinValue, NodeProprieties.MaxValue)] 
-        [OnValueChanged(nameof(Draw))]
+        [OnValueChanged(nameof(DrawAsync))]
         private float strengthC = NodeProprieties.MaxValue;
 
         [Input] 
