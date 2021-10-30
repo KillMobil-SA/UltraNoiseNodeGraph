@@ -1,5 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using NoiseUltra.Generators;
+using NoiseUltra.Nodes;
 using NoiseUltra.Output;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -8,6 +12,7 @@ namespace NoiseUltra.Tools.Terrains
 {
     public class TerrainPainter : TerrainTool
     {
+        private readonly List<Task> m_Tasks = new List<Task>();
         private TerrainLayerExportGroup ExportGroup => sourceNode as TerrainLayerExportGroup;
         private float[,,] m_SplatmapData;
         private int m_Resolution;
@@ -57,11 +62,23 @@ namespace NoiseUltra.Tools.Terrains
                     for (var layerIndex = 0; layerIndex < m_TotalPaintLayers; ++layerIndex)
                     {
                         var layer = m_PaintLayers[layerIndex];
-                        var sample = layer.GetSample(relativeX, relativeY, pixelX, pixelY, m_TerrainData, useWorldCordinates);
-                        m_SamplesAsync[pixelX, pixelY, layerIndex] = sample;
+                        float angleV = 1;
+                        if (layer.IsAnglePaint)
+                        {
+                            var x01 = pixelX / m_TerrainData.alphamapWidth;
+                            var y01 = pixelY / m_TerrainData.alphamapHeight;
+                            var steepness = m_TerrainData.GetSteepness(x01, y01);
+                            angleV = layer.EvaluateCliff(steepness, m_Resolution);
+                        }
+
+                        var info = new PaintToolSampleInfo(relativeX, relativeY, pixelX, pixelY, layerIndex, ref m_SamplesAsync, angleV);
+                        m_Tasks.Add(Task.Run(() => info.Execute(layer.GetSample)));
                     }
                 }
             }
+
+            Task.WaitAll(m_Tasks.ToArray());
+            m_Tasks.Clear();
         }
 
         private void ExecuteSplatMapBalance()
@@ -72,10 +89,13 @@ namespace NoiseUltra.Tools.Terrains
                 {
                     for (var layerIndex = 0; layerIndex < m_TotalPaintLayers; ++layerIndex)
                     {
-                        var sample = m_SamplesAsync[pixelX, pixelY, layerIndex];
-                        var sampleComplement = 1 - sample;
-                        
+                        float sample = m_SamplesAsync[pixelX, pixelY, layerIndex];
+                        float sampleComplement = 1 - sample;
                         float sum = 0;
+
+                        // #YWR: This whole method is hard to be parallelized because of
+                        // the code below. Each iteration relies on the previous one.
+                        // Which turns everything into a sequence of dependencies.
                         for (var j = layerIndex - 1; j >= 0; --j)
                         {
                             sum += m_SamplesAsync[pixelX, pixelY, j];

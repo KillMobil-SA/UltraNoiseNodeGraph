@@ -15,6 +15,7 @@ namespace NoiseUltra.Output
         
         [SerializeField]
         private bool isAnglePaint;
+        public bool IsAnglePaint => isAnglePaint;
 
         [SerializeField]
         [ShowIf(nameof(isAnglePaint))]
@@ -25,6 +26,12 @@ namespace NoiseUltra.Output
         private AnimationCurve clifCurve = AnimationCurve.Linear(0, 0, 1, 1);
 
         public TerrainLayer TerrainLayer => terrainLayer;
+
+        public float EvaluateCliff(float steepness, float resolution)
+        {
+            float value = steepness * steepness / (resolution / angleDivide);
+            return clifCurve.Evaluate(Mathf.Clamp01(value));
+        }
 
         public float GetSample(float x, float y , float xAlpha , float yAlpha, TerrainData terrainData, bool useWorldPos)
         {
