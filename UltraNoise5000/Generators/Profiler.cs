@@ -9,8 +9,8 @@ namespace NoiseUltra.Generators
         public static void Start()
         {
             begin = DateTime.Now;
-            Debug.Log($"Start");
         }
+
         public static void End(string context)
         {
             Debug.Log($"Elapsed Time: {(DateTime.Now.Subtract(begin).TotalSeconds)} Seconds {context}");
