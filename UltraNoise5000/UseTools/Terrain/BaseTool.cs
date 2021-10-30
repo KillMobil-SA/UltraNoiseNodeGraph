@@ -1,4 +1,3 @@
-using NoiseUltra.Nodes;
 using NoiseUltra.Output;
 using NoiseUltra.Tasks;
 using UnityEngine;
@@ -10,7 +9,6 @@ namespace NoiseUltra.Tools
         [SerializeField]
         protected ExportNode sourceNode;
         protected TaskGroup taskGroup;
-        private bool IsValid => sourceNode != null;
 
         private void OnEnable()
         {
@@ -29,17 +27,17 @@ namespace NoiseUltra.Tools
 
         protected float GetSample(float sampleX)
         {
-            return IsValid ? sourceNode.GetSample(sampleX) : NodeProprieties.InvalidValue;
+            return sourceNode.GetSample(sampleX);
         }
 
         protected float GetSample(float sampleX, float sampleY)
         {
-            return IsValid ? sourceNode.GetSample(sampleX, sampleY) : NodeProprieties.InvalidValue;
+            return sourceNode.GetSample(sampleX, sampleY);
         }
 
         protected float GetSample(float sampleX, float sampleY, float sampleZ)
         {
-            return IsValid ? sourceNode.GetSample(sampleX, sampleY, sampleZ) : NodeProprieties.InvalidValue;
+            return sourceNode.GetSample(sampleX, sampleY, sampleZ);
         }
     }
 }
