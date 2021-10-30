@@ -1,24 +1,18 @@
-using System;
 using System.Collections;
-using System.Threading.Tasks;
 using NoiseUltra.Generators;
 using NoiseUltra.Nodes;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace NoiseUltra.Tools.Terrains
 {
     public class TerrainShaper : TerrainTool
     {
-        private float[,] _heightMap;
+        private float[,] m_HeightMap;
 
-        [Button]
-        private void ApplyAsync()
+        protected override void OnBeforeApplyAsync()
         {
-            Initialize();
-
             var resolution = GetHeightMapResolution();
-            _heightMap = new float[resolution, resolution];
+            m_HeightMap = new float[resolution, resolution];
             progress.SetSize(resolution * resolution);
             var position = transform.position;
             var relativeSize = GetRelativeSize();
@@ -36,30 +30,28 @@ namespace NoiseUltra.Tools.Terrains
                         yPos -= position.z;
                     
 
-                    var sample = new SampleInfoHeightMap(xPos, yPos, y, x, ref _heightMap);
+                    var sample = new SampleInfoHeightMap(xPos, yPos, y, x, ref m_HeightMap);
                     taskGroup.AddSampleInfo(sample);
                 }
             }
-
-            taskGroup.ExecuteAll();
         }
         
         protected override void OnCompleteTask()
         {
             Profiler.End("Terrain Async");
-            GetTerrainData().SetHeights(0, 0, _heightMap);
+            GetTerrainData().SetHeights(0, 0, m_HeightMap);
         }
 
         protected override IEnumerator Operation()
         {
             Profiler.Start();
             var resolution = GetHeightMapResolution();
-            _heightMap = new float[resolution, resolution];
+            m_HeightMap = new float[resolution, resolution];
             progress.SetSize(resolution * resolution);
             var position = transform.position;
             var relativeSize = GetRelativeSize();
             yield return Operate(resolution, position, relativeSize);
-            GetTerrainData().SetHeights(0, 0, _heightMap);
+            GetTerrainData().SetHeights(0, 0, m_HeightMap);
             progress.Reset();
             Profiler.End("Sync Terrain Shape");
         } 
@@ -78,7 +70,7 @@ namespace NoiseUltra.Tools.Terrains
                         yPos += position.z;
                     
 
-                    _heightMap[y, x] = GetSample(xPos, yPos);
+                    m_HeightMap[y, x] = GetSample(xPos, yPos);
                     
                     if (!progress.TryProcess())
                     {

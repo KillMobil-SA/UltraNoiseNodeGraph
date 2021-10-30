@@ -7,27 +7,59 @@ namespace NoiseUltra.Tools.Terrains
     [RequireComponent(typeof(Terrain))]
     public abstract class TerrainTool : BaseTool
     {
+        public struct Cache
+        {
+            public Transform transform;
+            public int heightMapResolution;
+            public int aplhaMapResolution;
+            public TerrainData terrainData;
+            public Vector3 terrainSize;
+            public float relativeSize;
+            public float relativeAlphaSize;
+        }
+
+        private Cache m_Cache;
+
         [SerializeField]
         protected ProgressBar progress = new ProgressBar();
         
         [SerializeField]
         protected bool useWorldCordinates;
         
-        private CoroutineWrapper _routineWrapper;
+        private CoroutineWrapper m_RoutineWrapper;
         protected Terrain terrain;
 
         protected override void Initialize()
         {
             base.Initialize();
             terrain = GetComponent<Terrain>();
+            CreateCache();
+        }
+
+        private void CreateCache()
+        {
+            m_Cache = new Cache()
+            {
+                terrainData = GetTerrainDataInternal(),
+                aplhaMapResolution = GetAlphaMapResolutionInternal(),
+                heightMapResolution = GetHeightMapResolutionInternal(),
+                relativeAlphaSize = GetRelativeAlphaMapSizeInternal(),
+                relativeSize = GetRelativeSizeInternal(),
+                terrainSize = GetTerrainSizeInternal(),
+                transform = terrain.transform
+            };
         }
 
         [Button]
-        public void Apply()
+        public void ApplySync()
         {
             Initialize();
-            _routineWrapper = new CoroutineWrapper(this, Operation());
-            _routineWrapper.StartCoroutine();
+            m_RoutineWrapper = new CoroutineWrapper(this, Operation());
+            m_RoutineWrapper.StartCoroutine();
+        }
+
+        protected virtual void OnBeforeApplyAsync()
+        {
         }
 
         [Button]
@@ -43,19 +75,33 @@ namespace NoiseUltra.Tools.Terrains
         }
 
         [Button]
-        public void Stop()
+        public void StopSync()
         {
-            _routineWrapper.StopCoroutine();
+            m_RoutineWrapper.StopCoroutine();
         }
 
+        [Button]
+        public void ApplyAsync()
+        {
+            Initialize();
+            OnBeforeApplyAsync();
+            taskGroup.ExecuteAll();
+        }
+
+        private TerrainData GetTerrainDataInternal() => terrain.terrainData;
+        private int GetHeightMapResolutionInternal() => GetTerrainDataInternal().heightmapResolution;
+        private int GetAlphaMapResolutionInternal() => GetTerrainDataInternal().alphamapResolution;
+        private Vector3 GetTerrainSizeInternal() => GetTerrainDataInternal().size;
+        private float GetRelativeSizeInternal() => GetTerrainSizeInternal().x / GetHeightMapResolutionInternal();
+        private float GetRelativeAlphaMapSizeInternal() => GetTerrainSizeInternal().x / GetAlphaMapResolutionInternal();
+
+
         protected abstract IEnumerator Operation();
-        protected TerrainData GetTerrainData() => terrain.terrainData;
-        protected int GetHeightMapResolution () =>  GetTerrainData().heightmapResolution;
-        protected int GetAlphaMapResolution () =>  GetTerrainData().alphamapResolution;
-        protected Vector3 GetTerrainSize() => GetTerrainData().size;
-        protected float GetRelativeSize() => GetTerrainSize().x / GetHeightMapResolution();
-        protected float GetRelativeAlphaMapSize() => GetTerrainSize().x / GetAlphaMapResolution();
-        protected Vector3 GetTerrainPosition() => transform.position;
-        protected Transform GetTerrainTransform() => terrain.transform;
+        protected TerrainData GetTerrainData() => m_Cache.terrainData;
+        protected int GetHeightMapResolution() => m_Cache.heightMapResolution;
+        protected int GetAlphaMapResolution() => m_Cache.aplhaMapResolution;
+        protected Vector3 GetTerrainSize() => m_Cache.terrainSize;
+        protected float GetRelativeSize() => m_Cache.relativeSize;
+        protected float GetRelativeAlphaMapSize() => m_Cache.relativeAlphaSize;
     }
 }
