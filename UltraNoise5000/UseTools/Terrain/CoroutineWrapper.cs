@@ -24,7 +24,7 @@ namespace NoiseUltra.Tools.Terrains
         public void StartCoroutine()
         {
 #if UNITY_EDITOR
-            EditorCoroutineUtility.StartCoroutine(_coroutine, _handler);
+            _editorRoutine = EditorCoroutineUtility.StartCoroutine(_coroutine, _handler);
 #else
             _runtimeRoutine = Handler.StartCoroutine(Coroutine);
 #endif
