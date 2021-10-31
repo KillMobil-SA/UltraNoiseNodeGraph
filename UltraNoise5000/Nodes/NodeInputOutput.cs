@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace NoiseUltra.Nodes
 {
@@ -15,17 +14,17 @@ namespace NoiseUltra.Nodes
         #region Public
         public override float GetSample(float x)
         {
-            return IsInputValid ? Mathf.Clamp01(GetInput().GetSample(x)) : NodeProprieties.InvalidValue;
+            return IsInputValid ? Mathf.Clamp01(GetInput().GetSample(x)) : NodeProprieties.INVALID_VALUE;
         }
 
         public override float GetSample(float x, float y)
         {
-            return IsInputValid ? Mathf.Clamp01(GetInput().GetSample(x, y)) : NodeProprieties.InvalidValue;
+            return IsInputValid ? Mathf.Clamp01(GetInput().GetSample(x, y)) : NodeProprieties.INVALID_VALUE;
         }
 
         public override float GetSample(float x, float y, float z)
         {
-            return IsInputValid ? Mathf.Clamp01(GetInput().GetSample(x, y, z)) : NodeProprieties.InvalidValue;
+            return IsInputValid ? Mathf.Clamp01(GetInput().GetSample(x, y, z)) : NodeProprieties.INVALID_VALUE;
         }
 
         #endregion

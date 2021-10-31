@@ -5,24 +5,27 @@ using UnityEngine;
 namespace NoiseUltra.Nodes
 {
     /// <summary>
-    ///     Samples and processes Two Input Nodes into a single Output Node.
+    ///     Samples and processes Two Input Nodes into a single Output Node and multiplies by a strength factor.
     /// </summary>
     public abstract class NodeDoubleInputOutput : NodeOutput
     {
         #region Members
-        private const float MinStrength = 0;
-        private const float MaxStrength = 1;
+        [SerializeField]
+        [Range(NodeProprieties.MIN_VALUE, NodeProprieties.MAX_VALUE)]
+        [OnValueChanged(nameof(DrawAsync))]
+        private float strengthA = NodeProprieties.MAX_VALUE;
 
-        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(DrawAsync))]
-        private float strengthA = MaxStrength;
+        [SerializeField]
+        [Range(NodeProprieties.MIN_VALUE, NodeProprieties.MAX_VALUE)]
+        [OnValueChanged(nameof(DrawAsync))]
+        private float strengthB = NodeProprieties.MAX_VALUE;
 
-        [SerializeField] [Range(MinStrength, MaxStrength)] [OnValueChanged(nameof(DrawAsync))]
-        private float strengthB = MaxStrength;
-
-        [SerializeField] [Input] 
+        [SerializeField]
+        [Input] 
         private NodeBase inputA;
 
-        [SerializeField] [Input] 
+        [SerializeField]
+        [Input] 
         private NodeBase inputB;
         #endregion
 
@@ -33,30 +36,36 @@ namespace NoiseUltra.Nodes
         public override float GetSample(float x)
         {
             if (!IsValid)
+            {
                 return -1;
+            }
 
-            var sampleA = GetInputA().GetSample(x);
-            var sampleB = GetInputB().GetSample(x);
+            float sampleA = GetInputA().GetSample(x);
+            float sampleB = GetInputB().GetSample(x);
             return Clamp(sampleA * strengthA, sampleB * strengthB);
         }
 
         public override float GetSample(float x, float y)
         {
             if (!IsValid)
+            {
                 return -1;
+            }
 
-            var sampleA = GetInputA().GetSample(x, y);
-            var sampleB = GetInputB().GetSample(x, y);
+            float sampleA = GetInputA().GetSample(x, y);
+            float sampleB = GetInputB().GetSample(x, y);
             return Clamp(sampleA * strengthA, sampleB * strengthB);
         }
 
         public override float GetSample(float x, float y, float z)
         {
             if (!IsValid)
+            {
                 return -1;
+            }
 
-            var sampleA = GetInputA().GetSample(x, y, z);
-            var sampleB = GetInputB().GetSample(x, y, z);
+            float sampleA = GetInputA().GetSample(x, y, z);
+            float sampleB = GetInputB().GetSample(x, y, z);
             return Clamp(sampleA * strengthA, sampleB * strengthB);
         }
         #endregion

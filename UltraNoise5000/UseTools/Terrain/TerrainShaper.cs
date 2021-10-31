@@ -9,28 +9,35 @@ namespace NoiseUltra.Tools.Terrains
     {
         private float[,] m_HeightMap;
 
+        #region Async
+
         protected override void OnBeforeApplyAsync()
         {
-            var resolution = GetHeightMapResolution();
+            Profiler.Start();
+            int resolution = GetHeightMapResolution();
             m_HeightMap = new float[resolution, resolution];
             progress.SetSize(resolution * resolution);
-            var position = transform.position;
-            var relativeSize = GetRelativeSize();
-            Profiler.Start();
-            for (var x = 0; x < resolution; x++)
-            {
-                var xPos = x * relativeSize;
-                if (useWorldCordinates)
-                    xPos -= position.x;
-                
-                for (var y = 0; y < resolution; y++)
-                {
-                    var yPos = y * relativeSize;
-                    if (useWorldCordinates)
-                        yPos -= position.z;
-                    
+            Vector3 position = transform.position;
+            float relativeSize = GetRelativeSize();
 
-                    var sample = new SampleInfoFloat2(xPos, yPos, y, x, ref m_HeightMap);
+
+            for (int x = 0; x < resolution; x++)
+            {
+                float xPos = x * relativeSize;
+                if (useWorldCordinates)
+                {
+                    xPos -= position.x;
+                }
+                
+                for (int y = 0; y < resolution; y++)
+                {
+                    float yPos = y * relativeSize;
+                    if (useWorldCordinates)
+                    {
+                        yPos -= position.z;
+                    }
+                    
+                    SampleStepFloat2 sample = new SampleStepFloat2(xPos, yPos, y, x, ref m_HeightMap);
                     void Action() => sourceNode.ExecuteSampleAsync(sample);
                     taskGroup.AddTask(Action);
                 }
@@ -43,33 +50,37 @@ namespace NoiseUltra.Tools.Terrains
             GetTerrainData().SetHeights(0, 0, m_HeightMap);
         }
 
-        protected override IEnumerator Operation()
+        #endregion
+
+        #region Sync
+        protected override IEnumerator ExecuteSync()
         {
             Profiler.Start();
-            var resolution = GetHeightMapResolution();
+            int resolution = GetHeightMapResolution();
             m_HeightMap = new float[resolution, resolution];
             progress.SetSize(resolution * resolution);
-            var position = transform.position;
-            var relativeSize = GetRelativeSize();
-            yield return Operate(resolution, position, relativeSize);
+            Vector3 position = transform.position;
+            float relativeSize = GetRelativeSize();
+            yield return ExecuteSync(resolution, position, relativeSize);
             GetTerrainData().SetHeights(0, 0, m_HeightMap);
             progress.Reset();
             Profiler.End("Sync Terrain Shape");
         } 
 
-        private IEnumerator Operate(int resolution, Vector3 position, float relativeSize)
+        private IEnumerator ExecuteSync(int resolution, Vector3 position, float relativeSize)
         { 
-            for (var x = 0; x < resolution; x++)
+            for (int x = 0; x < resolution; x++)
             {
-                var xPos = x * relativeSize;
+                float xPos = x * relativeSize;
                 if (useWorldCordinates) xPos += position.x;
-                for (var y = 0; y < resolution; y++)
+                for (int y = 0; y < resolution; y++)
                 {
-                    var yPos = y * relativeSize;
-            
-                    if (useWorldCordinates) 
+                    float yPos = y * relativeSize;
+
+                    if (useWorldCordinates)
+                    {
                         yPos += position.z;
-                    
+                    }
 
                     m_HeightMap[y, x] = GetSample(xPos, yPos);
                     
@@ -80,7 +91,6 @@ namespace NoiseUltra.Tools.Terrains
                 }
             }
         }
-        
-        
+        #endregion
     }
 }

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections;
 using NoiseUltra.Generators;
 using NoiseUltra.Nodes;
 using NoiseUltra.Output;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace NoiseUltra.Tools.Terrains
@@ -50,27 +46,27 @@ namespace NoiseUltra.Tools.Terrains
         
         private void ExecuteSampling()
         {
-            for (var pixelX = 0; pixelX < m_Width; ++pixelX)
+            for (int pixelX = 0; pixelX < m_Width; ++pixelX)
             {
-                var relativeX = pixelX * m_RelativeSize;
+                float relativeX = pixelX * m_RelativeSize;
                 if (useWorldCordinates) relativeX += transform.position.x;
-                for (var pixelY = 0; pixelY < m_Height; ++pixelY)
+                for (int pixelY = 0; pixelY < m_Height; ++pixelY)
                 {
-                    var relativeY = pixelY * m_RelativeSize;
+                    float relativeY = pixelY * m_RelativeSize;
                     if (useWorldCordinates) relativeY += transform.position.z;
-                    for (var layerIndex = 0; layerIndex < m_TotalPaintLayers; ++layerIndex)
+                    for (int layerIndex = 0; layerIndex < m_TotalPaintLayers; ++layerIndex)
                     {
-                        var layer = m_PaintLayers[layerIndex];
+                        PaintLayer layer = m_PaintLayers[layerIndex];
                         float angleV = 1;
                         if (layer.IsAnglePaint)
                         {
-                            var x01 = pixelX / m_TerrainData.alphamapWidth;
-                            var y01 = pixelY / m_TerrainData.alphamapHeight;
-                            var steepness = m_TerrainData.GetSteepness(x01, y01);
+                            int x01 = pixelX / m_TerrainData.alphamapWidth;
+                            int y01 = pixelY / m_TerrainData.alphamapHeight;
+                            float steepness = m_TerrainData.GetSteepness(x01, y01);
                             angleV = layer.EvaluateCliff(steepness, m_Resolution);
                         }
 
-                        var info = new PaintToolSampleInfo(relativeX, relativeY, pixelX, pixelY, layerIndex, ref m_SamplesAsync, angleV);
+                        PaintToolSampleStep info = new PaintToolSampleStep(relativeX, relativeY, pixelX, pixelY, layerIndex, ref m_SamplesAsync, angleV);
                         taskGroup.AddTask(() => info.Execute(layer.GetSample));
                     }
                 }
@@ -126,7 +122,7 @@ namespace NoiseUltra.Tools.Terrains
         #endregion
 
         #region Sync
-        protected override IEnumerator Operation()
+        protected override IEnumerator ExecuteSync()
         {
             Profiler.Start();
             m_Resolution = GetHeightMapResolution();

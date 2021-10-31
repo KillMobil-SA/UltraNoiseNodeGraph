@@ -18,6 +18,7 @@ namespace NoiseUltra.Tools.Terrains
             public float relativeAlphaSize;
         }
 
+        private CoroutineWrapper m_RoutineWrapper;
         private Cache m_Cache;
 
         [SerializeField]
@@ -26,7 +27,6 @@ namespace NoiseUltra.Tools.Terrains
         [SerializeField]
         protected bool useWorldCordinates;
         
-        private CoroutineWrapper m_RoutineWrapper;
         protected Terrain terrain;
 
         protected override void Initialize()
@@ -54,24 +54,12 @@ namespace NoiseUltra.Tools.Terrains
         public void ApplySync()
         {
             Initialize();
-            m_RoutineWrapper = new CoroutineWrapper(this, Operation());
+            m_RoutineWrapper = new CoroutineWrapper(this, ExecuteSync());
             m_RoutineWrapper.StartCoroutine();
         }
 
         protected virtual void OnBeforeApplyAsync()
         {
-        }
-
-        [Button]
-        private void MatchSize()
-        {
-            var terrainData = terrain.terrainData;
-            var currentSize = terrainData.size;
-            var sizeX = sourceNode.Resolution;
-            var sizeY = currentSize.y;
-            var sizeZ = sourceNode.Resolution;
-            var size = new Vector3(sizeX, sizeY, sizeZ);
-            terrainData.size = size;
         }
 
         [Button]
@@ -88,20 +76,32 @@ namespace NoiseUltra.Tools.Terrains
             taskGroup.ExecuteAll();
         }
 
+        [Button]
+        private void MatchSize()
+        {
+            TerrainData terrainData = terrain.terrainData;
+            Vector3 currentSize = terrainData.size;
+            float sizeX = sourceNode.Zoom;
+            float sizeY = currentSize.y;
+            float sizeZ = sourceNode.Zoom;
+            Vector3 size = new Vector3(sizeX, sizeY, sizeZ);
+            terrainData.size = size;
+        }
+
+        protected abstract IEnumerator ExecuteSync();
+        protected TerrainData GetTerrainData() => m_Cache.terrainData;
+        protected int GetHeightMapResolution() => m_Cache.heightMapResolution;
+        protected float GetRelativeSize() => m_Cache.relativeSize;
+        
+
+        #region Internal
         private TerrainData GetTerrainDataInternal() => terrain.terrainData;
         private int GetHeightMapResolutionInternal() => GetTerrainDataInternal().heightmapResolution;
         private int GetAlphaMapResolutionInternal() => GetTerrainDataInternal().alphamapResolution;
         private Vector3 GetTerrainSizeInternal() => GetTerrainDataInternal().size;
         private float GetRelativeSizeInternal() => GetTerrainSizeInternal().x / GetHeightMapResolutionInternal();
         private float GetRelativeAlphaMapSizeInternal() => GetTerrainSizeInternal().x / GetAlphaMapResolutionInternal();
+        #endregion
 
-
-        protected abstract IEnumerator Operation();
-        protected TerrainData GetTerrainData() => m_Cache.terrainData;
-        protected int GetHeightMapResolution() => m_Cache.heightMapResolution;
-        protected int GetAlphaMapResolution() => m_Cache.aplhaMapResolution;
-        protected Vector3 GetTerrainSize() => m_Cache.terrainSize;
-        protected float GetRelativeSize() => m_Cache.relativeSize;
-        protected float GetRelativeAlphaMapSize() => m_Cache.relativeAlphaSize;
     }
 }

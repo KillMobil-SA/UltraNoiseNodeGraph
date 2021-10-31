@@ -1,43 +1,43 @@
-﻿using System;
-using NoiseUltra.Nodes;
+﻿using NoiseUltra.Nodes;
 using ProceduralNoiseProject;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace NoiseUltra.Generators
 {
-    [NodeTint(NodeColor.Green)]
+    [NodeTint(NodeColor.GREEN)]
     public class NodeGenerator : NodeOutput
     {
         #region Members
         [SerializeField]
         private Attributes attributes = new Attributes();
-        private FractalNoise _fractal;
+        private FractalNoise m_Fractal;
         
-        private bool IsDirty => _fractal == null;
+        private bool IsDirty => m_Fractal == null;
         #endregion
 
         #region Public
         public void SetFractalDirty()
         {
-            _fractal = null;
+            m_Fractal = null;
         }
 
         public override float GetSample(float x)
         {
-            var sample = GetFractal().Sample1D(x);
+            float sample = GetFractalLazy().Sample1D(x);
             return sample;
         }
 
         public override float GetSample(float x, float y)
         {
-            var sample = GetFractal().Sample2D(x, y);
+            float sample = GetFractalLazy().Sample2D(x, y);
             return sample;
         }
         
         public override float GetSample(float x, float y, float z)
         {
-            return GetFractal().Sample3D(x, y, z);
+            float sample = GetFractalLazy().Sample3D(x, y, z);
+            return sample;
         }
         #endregion
 
@@ -50,9 +50,9 @@ namespace NoiseUltra.Generators
             DrawAsync();
         }
 
-        private FractalNoise GetFractal()
+        private FractalNoise GetFractalLazy()
         {
-            return IsDirty ? CreateFractal() : _fractal;
+            return IsDirty ? CreateFractal() : m_Fractal;
         }
 
         private FractalNoise CreateFractal()

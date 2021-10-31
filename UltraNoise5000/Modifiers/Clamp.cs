@@ -16,9 +16,11 @@ namespace NoiseUltra.Modifiers
 
         protected override float ApplyModifier(float sample)
         {
-            var clamp = Mathf.Clamp(sample, limit.x, limit.y);
-            if (smoothClampValue) 
+            float clamp = Mathf.Clamp(sample, limit.x, limit.y);
+            if (smoothClampValue)
+            {
                 clamp = Mathf.InverseLerp(limit.x, limit.y, clamp);
+            }
 
             return clamp;
         }

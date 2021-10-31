@@ -11,20 +11,21 @@ namespace NoiseUltra
     [CreateAssetMenu(fileName = "Ultra Noise Graph", menuName = "KillMobil/UltraNoise/Noise Graph")]
     public class NoiseNodeGraph : NodeGraph
     {
-        private const string UpdateAllNodesName = "Update All Nodes";
-        private const string UpdateAllZoomsName = "Update All Zooms";
+        private const string UPDATE_ALL_NODES_NAME = "Update All Nodes";
+        private const string UPDATE_ALL_ZOOMS_NAME = "Update All Zooms";
 
         [SerializeField] 
         private int globalZoom = 1024;
         public int GlobalZoom => globalZoom;
         
         [Button]
-        [ContextMenu(UpdateAllNodesName)]
+        [ContextMenu(UPDATE_ALL_NODES_NAME)]
         public void UpdateAllNodes()
         {
-            for (int index = 0; index < nodes.Count; index++)
+            int count = nodes.Count;
+            for (int index = 0; index < count; index++)
             {
-                var node = nodes[index];
+                Node node = nodes[index];
                 if (node is NodeBase item)
                 {
                     item.DrawSync();
@@ -33,10 +34,11 @@ namespace NoiseUltra
         }
 
         [Button]
-        [ContextMenu(UpdateAllZoomsName)]
+        [ContextMenu(UPDATE_ALL_ZOOMS_NAME)]
         public void UpdateAllZooms()
         {
-            for (int index = 0; index < nodes.Count; index++)
+            int count = nodes.Count;
+            for (int index = 0; index < count; index++)
             {
                 var node = nodes[index];
                 if (node is NodeBase item)

@@ -1,10 +1,8 @@
-﻿using System;
-using NoiseUltra.Nodes;
-using UnityEngine;
+﻿using NoiseUltra.Nodes;
 
 namespace NoiseUltra.Generators.Static
 {
-    [NodeTint(NodeColor.Green)]
+    [NodeTint(NodeColor.GREEN)]
     public class White : NodeOutput
     {
         public override float GetSample(float x)

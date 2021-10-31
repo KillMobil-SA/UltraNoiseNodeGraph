@@ -1,10 +1,10 @@
 namespace NoiseUltra.Nodes
 {
-    public sealed class PaintToolSampleInfo : SampleInfo3DAsync<float>
+    public sealed class PaintToolSampleStep : SampleStepFloat3
     {
         private readonly float m_AngleV;
 
-        public PaintToolSampleInfo(float x, float y, int pxIndex, int pyIndex, int pzIndex, ref float[,,] values, float angleV) :
+        public PaintToolSampleStep(float x, float y, int pxIndex, int pyIndex, int pzIndex, ref float[,,] values, float angleV) :
             base(x, y, pxIndex, pyIndex, pzIndex, ref values)
         {
             m_AngleV = angleV;

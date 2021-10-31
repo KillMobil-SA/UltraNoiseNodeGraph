@@ -10,19 +10,19 @@ namespace NoiseUltra.Nodes
     public abstract class NodeTripleInputOutput : NodeOutput
     {
         [SerializeField] 
-        [Range(NodeProprieties.MinValue, NodeProprieties.MaxValue)] 
+        [Range(NodeProprieties.MIN_VALUE, NodeProprieties.MAX_VALUE)] 
         [OnValueChanged(nameof(DrawAsync))]
-        private float strengthA = NodeProprieties.MaxValue;
+        private float strengthA = NodeProprieties.MAX_VALUE;
 
         [SerializeField] 
-        [Range(NodeProprieties.MinValue, NodeProprieties.MaxValue)] 
+        [Range(NodeProprieties.MIN_VALUE, NodeProprieties.MAX_VALUE)] 
         [OnValueChanged(nameof(DrawAsync))]
-        private float strengthB = NodeProprieties.MaxValue;
+        private float strengthB = NodeProprieties.MAX_VALUE;
 
         [SerializeField] 
-        [Range(NodeProprieties.MinValue, NodeProprieties.MaxValue)] 
+        [Range(NodeProprieties.MIN_VALUE, NodeProprieties.MAX_VALUE)] 
         [OnValueChanged(nameof(DrawAsync))]
-        private float strengthC = NodeProprieties.MaxValue;
+        private float strengthC = NodeProprieties.MAX_VALUE;
 
         [Input] 
         [SerializeField] 
@@ -40,7 +40,7 @@ namespace NoiseUltra.Nodes
         public override float GetSample(float x)
         {
             if (!IsValid)
-                return NodeProprieties.InvalidValue;
+                return NodeProprieties.INVALID_VALUE;
 
             var sampleA = GetInputA().GetSample(x);
             var sampleB = GetInputB().GetSample(x);
@@ -51,7 +51,7 @@ namespace NoiseUltra.Nodes
         public override float GetSample(float x, float y)
         {
             if (!IsValid)
-                return NodeProprieties.InvalidValue;
+                return NodeProprieties.INVALID_VALUE;
 
             var sampleA = GetInputA().GetSample(x, y);
             var sampleB = GetInputB().GetSample(x, y);
@@ -62,7 +62,7 @@ namespace NoiseUltra.Nodes
         public override float GetSample(float x, float y, float z)
         {
             if (!IsValid)
-                return NodeProprieties.InvalidValue;
+                return NodeProprieties.INVALID_VALUE;
 
             var sampleA = GetInputA().GetSample(x, y, z);
             var sampleB = GetInputB().GetSample(x, y, z);

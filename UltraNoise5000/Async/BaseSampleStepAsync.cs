@@ -2,12 +2,20 @@ using System;
 
 namespace NoiseUltra.Nodes
 {
-    public abstract class SampleInfoAsync<T> : BaseSampleInfo
+    public abstract class BaseSampleStepAsync<T> : BaseSampleStep
     {
         private readonly int m_Index;
         private readonly float m_X;
         private readonly float m_Y;
         private readonly T[] m_Values;
+
+        protected BaseSampleStepAsync(float x, float y, int index, ref T[] values)
+        {
+            m_X = x;
+            m_Y = y;
+            m_Index = index;
+            m_Values = values;
+        }
 
         public override void Execute(Func<float, float, float> sampleFunction)
         {
@@ -16,14 +24,6 @@ namespace NoiseUltra.Nodes
         }
 
         protected abstract T Create(float sample);
-
-        protected SampleInfoAsync(float x, float y, int index, ref T[] values)
-        {
-            this.m_X = x;
-            this.m_Y = y;
-            this.m_Index = index;
-            this.m_Values = values;
-        }
 
         public override string ToString()
         {

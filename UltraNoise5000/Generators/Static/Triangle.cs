@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Generators.Static
 {
-    [NodeTint(NodeColor.Green)]
+    [NodeTint(NodeColor.GREEN)]
     public class Triangle : NodeOutput
     {
         [SerializeField] private Vector2 p1;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Generators.Static
 {
-    [NodeTint(NodeColor.Green)]
+    [NodeTint(NodeColor.GREEN)]
     public class Circle : NodeOutput
     {
         private const float Default = 100;

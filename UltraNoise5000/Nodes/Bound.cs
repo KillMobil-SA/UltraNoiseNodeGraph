@@ -1,24 +1,41 @@
 using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace NoiseUltra.Nodes
 {
     [Serializable]
-    public sealed class Bound
+    public struct Bound
     {
-        private const float MinRange = 0;
-        private const float MaxRange = 1;
-
-        [Range(MinRange, MaxRange)] 
+        [Range(NodeProprieties.MIN_VALUE, NodeProprieties.MAX_VALUE), ReadOnly] 
         public float min;
 
-        [Range(MinRange, MaxRange)] 
+        [Range(NodeProprieties.MIN_VALUE, NodeProprieties.MAX_VALUE), ReadOnly]
         public float max;
+
+        private readonly PreviewImage m_Preview;
+
+        public Bound(PreviewImage image)
+        {
+            min = NodeProprieties.MAX_VALUE;
+            max = NodeProprieties.MIN_VALUE;
+            m_Preview = image;
+        }
 
         public void Reset()
         {
-            min = MaxRange;
-            max = MinRange;
+            min = NodeProprieties.MAX_VALUE;
+            max = NodeProprieties.MIN_VALUE;
+        }
+
+        [Button]
+        private void IdentifyBounds() => m_Preview.IdentifyBounds();
+
+        public void IdentifyBounds(float sample)
+        {
+            sample = Mathf.Clamp01(sample);
+            max = Mathf.Max(max, sample);
+            min = Mathf.Min(min, sample);
         }
     }
 }

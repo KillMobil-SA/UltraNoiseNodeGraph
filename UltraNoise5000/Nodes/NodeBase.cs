@@ -1,5 +1,4 @@
-﻿using System;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 using XNode;
 
@@ -8,12 +7,13 @@ namespace NoiseUltra.Nodes
     /// <summary>
     ///     Class handles the image preview and basic node operations.
     /// </summary>
-    [NodeWidth(NodeProprieties.NodeWidthPixels)]
-    public abstract class  NodeBase : Node
+    [NodeWidth(NodeProprieties.NODE_WIDTH_PIXELS)]
+    public abstract class NodeBase : Node
     {
         #region Members
-        public PreviewImage previewImage = new PreviewImage();
-        public float Resolution => previewImage.Resolution;
+        [SerializeField]
+        protected PreviewImage previewImage = new PreviewImage();
+        public float Zoom => previewImage.Zoom;
         #endregion
 
         #region Initialization
@@ -30,7 +30,7 @@ namespace NoiseUltra.Nodes
         public abstract float GetSample(float x, float y);
         public abstract float GetSample(float x, float y, float z);
 
-        public virtual void ExecuteSampleAsync<T>(T sampleInfo) where T : BaseSampleInfo
+        public virtual void ExecuteSampleAsync<T>(T sampleInfo) where T : BaseSampleStep
         {
             sampleInfo.Execute(GetSample);
         }
@@ -74,7 +74,7 @@ namespace NoiseUltra.Nodes
         
         protected bool IsConnected(NodeBase node)
         {
-            var port = GetPort(nameof(node));
+            NodePort port = GetPort(nameof(node));
             return port != null && port.IsConnected;
         }
 

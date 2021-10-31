@@ -12,25 +12,24 @@ namespace NoiseUltra.Nodes
     {
         #region Members
         private TaskGroup m_TaskGroup;
-        [ReadOnly]
+
         [SerializeField]
-        private Bound bounds = new Bound();
+        private Bound bounds;
 
         [OnValueChanged(nameof(DrawAsync))]
         [SerializeField]
-        private int size = NodeProprieties.DefaultGlobalZoom;
+        private int size = NodeProprieties.DEFAULT_GLOBAL_ZOOM;
 
         [SerializeField]
-        [PreviewField(NodeProprieties.DefaultPreviewSize)]
+        [PreviewField(NodeProprieties.DEFAULT_PREVIEW_SIZE)]
         private Texture2D sourceTexture;
 
-        private NodeBase node;
-        private Func<float, float, float> function;
-        
-        private int imageSize = NodeProprieties.DefaultPreviewSize;
-        private float maxPixel;
-        private Color[] _colorsAsync;
-        public float Resolution => size;
+        private NodeBase m_Node;
+        private Func<float, float, float> m_SampleFunction;
+        private int m_ImageSize = NodeProprieties.DEFAULT_PREVIEW_SIZE;
+        private float m_MAXPixel;
+        private Color[] m_Pixels;
+        public float Zoom => size;
         #endregion
 
         #region Initialization
@@ -45,17 +44,17 @@ namespace NoiseUltra.Nodes
             {
                 return;
             }
-
-            node = nodeBase;
+            
+            bounds = new Bound(this);
             m_TaskGroup = new TaskGroup(OnCompleteTask);
-            function = nodeBase.GetSample;
-            var nodeGraph = nodeBase.graph as NoiseNodeGraph;
+            m_SampleFunction = nodeBase.GetSample;
+            NoiseNodeGraph nodeGraph = nodeBase.graph as NoiseNodeGraph;
             if (nodeGraph == null)
             {
                 return;
             }
 
-            var globalZoom = nodeGraph.GlobalZoom;
+            int globalZoom = nodeGraph.GlobalZoom;
             SetZoom(globalZoom);
         }
 
@@ -65,7 +64,7 @@ namespace NoiseUltra.Nodes
 
         public void DrawAsync()
         {
-            if (function == null)
+            if (m_SampleFunction == null)
             {
                 return;
             }
@@ -75,20 +74,20 @@ namespace NoiseUltra.Nodes
             CreateTexture();
             bounds.Reset();
 
-            int totalColors = imageSize * imageSize;
-            _colorsAsync = new Color[totalColors];
+            int totalColors = m_ImageSize * m_ImageSize;
+            m_Pixels = new Color[totalColors];
             int index = 0;
             Profiler.Start();
-            for (int x = 0; x < imageSize; ++x)
+            for (int x = 0; x < m_ImageSize; ++x)
             {
-                float pixelX = x / maxPixel;
+                float pixelX = x / m_MAXPixel;
                 float px = size * pixelX;
-                for (int y = 0; y < imageSize; ++y)
+                for (int y = 0; y < m_ImageSize; ++y)
                 {
-                    float pixelY = y / maxPixel;
+                    float pixelY = y / m_MAXPixel;
                     float py = size * pixelY;
-                    SampleInfoColorAsync sampleInfo = new SampleInfoColorAsync(px, py, index, ref _colorsAsync);
-                    void Action() => node.ExecuteSampleAsync(sampleInfo);
+                    SampleStepColor sampleStep = new SampleStepColor(px, py, index, ref m_Pixels);
+                    void Action() => m_Node.ExecuteSampleAsync(sampleStep);
                     m_TaskGroup.AddTask(Action);
                     ++index;
                 }
@@ -99,7 +98,7 @@ namespace NoiseUltra.Nodes
 
         public void DrawSync()
         {
-            if (function == null)
+            if (m_SampleFunction == null)
             {
                 return;
             }
@@ -108,20 +107,20 @@ namespace NoiseUltra.Nodes
             ResetBounds();
             CreateTexture();
             bounds.Reset();
-            int totalColors = imageSize * imageSize;
-            _colorsAsync = new Color[totalColors];
+            int totalColors = m_ImageSize * m_ImageSize;
+            m_Pixels = new Color[totalColors];
             int index = 0;
-            for (int x = 0; x < imageSize; ++x)
+            for (int x = 0; x < m_ImageSize; ++x)
             {
-                float pixelX = x / maxPixel;
+                float pixelX = x / m_MAXPixel;
                 float px = size * pixelX;
-                for (int y = 0; y < imageSize; ++y)
+                for (int y = 0; y < m_ImageSize; ++y)
                 {
-                    float pixelY = y / maxPixel;
+                    float pixelY = y / m_MAXPixel;
                     float py = size * pixelY;
-                    float sample = node.GetSample(px, py);
+                    float sample = m_Node.GetSample(px, py);
                     Color color = new Color(sample, sample, sample);
-                    _colorsAsync[index] = color;
+                    m_Pixels[index] = color;
                     ++index;
                 }
             }
@@ -131,7 +130,7 @@ namespace NoiseUltra.Nodes
 
         private void OnCompleteTask()
         {
-            sourceTexture.SetPixels(_colorsAsync);
+            sourceTexture.SetPixels(m_Pixels);
             sourceTexture.Apply();
             Profiler.End();
         }
@@ -156,34 +155,36 @@ namespace NoiseUltra.Nodes
 
         public void SetImageSize(int newImageSize)
         {
-            imageSize = newImageSize;
+            m_ImageSize = newImageSize;
         }
 
         public void ResetImageSize()
         {
-            imageSize = NodeProprieties.DefaultPreviewSize;
+            m_ImageSize = NodeProprieties.DEFAULT_PREVIEW_SIZE;
         }
         #endregion
 
         #region Private
 
-        private void ResetBounds()
+        public void IdentifyBounds()
         {
-            maxPixel = imageSize - 1;
-            bounds.Reset();
+            int length = m_Pixels.Length;
+            for (int i = 0; i < length; i++)
+            {
+                Color color = m_Pixels[i];
+                bounds.IdentifyBounds(color.r);
+            }
         }
 
-        private float IdentifyBounds(float sample)
+        private void ResetBounds()
         {
-            sample = Mathf.Clamp01(sample);
-            bounds.max = Mathf.Max(bounds.max, sample);
-            bounds.min = Mathf.Min(bounds.min, sample);
-            return sample;
+            m_MAXPixel = m_ImageSize - 1;
+            bounds.Reset();
         }
 
         private void CreateTexture()
         {
-            sourceTexture = new Texture2D(imageSize, imageSize, TextureFormat.RGB24, false, false);
+            sourceTexture = new Texture2D(m_ImageSize, m_ImageSize, TextureFormat.RGB24, false, false);
         }
         #endregion
     }

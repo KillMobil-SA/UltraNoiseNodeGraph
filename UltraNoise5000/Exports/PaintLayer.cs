@@ -1,12 +1,11 @@
 ﻿using System;
 using NoiseUltra.Nodes;
-using NoiseUltra.Tools.Terrains;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace NoiseUltra.Output
 {
-    [Serializable,NodeTint(NodeColor.Yellow)]
+    [Serializable,NodeTint(NodeColor.YELLOW)]
     public class PaintLayer : NodeInputOutput
     {
         [SerializeField]
@@ -36,20 +35,16 @@ namespace NoiseUltra.Output
         public float GetSample(float x, float y , float xAlpha , float yAlpha, TerrainData terrainData, bool useWorldPos)
         {
             float sample = GetSample(x, y);
-            var heightMapResolution = terrainData.heightmapResolution;
 
             if (isAnglePaint)
             {
-                var x01 = xAlpha / terrainData.alphamapWidth;
-                var y01 = yAlpha / terrainData.alphamapHeight;
-                var steepness = terrainData.GetSteepness(x01, y01);
-
-                var angleV =
-                    clifCurve.Evaluate(
-                        Mathf.Clamp01(
-                            steepness * steepness / (heightMapResolution / angleDivide)
-                          )
-                        );
+                int heightMapResolution = terrainData.heightmapResolution;
+                float x01 = xAlpha / terrainData.alphamapWidth;
+                float y01 = yAlpha / terrainData.alphamapHeight;
+                float steepness = terrainData.GetSteepness(x01, y01);
+                float value = steepness * steepness / (heightMapResolution / angleDivide);
+                float clampValue = Mathf.Clamp01(value);
+                float angleV = clifCurve.Evaluate(clampValue);
                 sample *= angleV;
             }
 

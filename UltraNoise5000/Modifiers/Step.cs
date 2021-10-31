@@ -1,4 +1,5 @@
 ﻿using NoiseUltra.Nodes;
+using NoiseUltra.Operations;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -6,17 +7,17 @@ namespace NoiseUltra.Modifiers
 {
     public class Step : BaseNodeModifier
     {
-        private const int MinSteps = 1;
-        private const int MaxSteps = 50;
+        private const int MIN_STEPS = 1;
+        private const int MAX_STEPS = 50;
 
         [SerializeField]
-        [Range(MinSteps, MaxSteps)]
+        [Range(MIN_STEPS, MAX_STEPS)]
         [OnValueChanged(nameof(DrawAsync))]
-        private int steps = MinSteps;
+        private int steps = MIN_STEPS;
 
         protected override float ApplyModifier(float sample)
         {
-            return Mathf.Floor(steps * sample) / steps;
+            return Mathf.Floor(steps * sample) / MathUtils.NaNCheck(steps);
         }
     }
 }

@@ -1,17 +1,16 @@
-﻿using System;
-using NoiseUltra.Nodes;
+﻿using NoiseUltra.Nodes;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEditor;
 
 namespace NoiseUltra.Output
 {
-    [NodeTint(NodeColor.Blue)]
+    [NodeTint(NodeColor.BLUE)]
     public class TextureExportNode : NodeInputOutput
     {
-        private const string SaveFolderPath = "NoiseTextures";
-        private const string FilesExtension = ".png";
-        private const string FileAssetExtension = ".asset";
+        private const string SAVE_FOLDER_PATH = "NoiseTextures";
+        private const string FILES_EXTENSION = ".png";
+        private const string FILE_ASSET_EXTENSION = ".asset";
 
         [SerializeField]
         [OnValueChanged(nameof(UpdateNoiseName))]
@@ -35,20 +34,22 @@ namespace NoiseUltra.Output
         private void ExportTexture()
         {
             previewImage.SetImageSize(textureResolution);
-            var currentPath = AssetDatabase.GetAssetPath(graph);
-            var folderPath = currentPath.Replace(graph.name + FileAssetExtension, string.Empty) + SaveFolderPath;
+            string currentPath = AssetDatabase.GetAssetPath(graph);
+            string folderPath = currentPath.Replace(graph.name + FILE_ASSET_EXTENSION, string.Empty) + SAVE_FOLDER_PATH;
 
-            DrawAsync();
+            DrawSync();
 
             byte[] bytes = previewImage.GetTexture().EncodeToPNG();
-            string filename = string.Format("{0}/{1}{2}", folderPath, name, FilesExtension);
+
+            string filename = string.Format("{0}/{1}{2}", folderPath, name, FILES_EXTENSION);
 
             if (!System.IO.Directory.Exists(folderPath))
+            {
                 System.IO.Directory.CreateDirectory(folderPath);
+            }
 
             System.IO.File.WriteAllBytes(filename, bytes);
             AssetDatabase.Refresh();
-
             previewImage.ResetImageSize();
         }
     }

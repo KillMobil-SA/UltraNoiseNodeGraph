@@ -24,13 +24,13 @@ namespace NoiseUltra.Nodes
                 return;
             }
 
-            var port = GetPort(output);
-            var connectionsCount = port.ConnectionCount;
-            for (var i = 0; i < connectionsCount; i++)
+            NodePort port = GetPort(output);
+            int connectionsCount = port.ConnectionCount;
+            for (int i = 0; i < connectionsCount; ++i)
             {
-                var connectedPort = port.GetConnection(i);
-                var node = connectedPort.node as NodeBase;
-                if (node)
+                NodePort connectedPort = port.GetConnection(i);
+                NodeBase node = connectedPort.node as NodeBase;
+                if (node != null)
                 {
                     node.DrawAsync();
                 }

@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace NoiseUltra.Nodes
 {
-    public sealed class SampleInfoColorAsync : SampleInfoAsync<Color>
+    public sealed class SampleStepColor : BaseSampleStepAsync<Color>
     {
-        public SampleInfoColorAsync(float x, float y, int index, ref Color[] values) : base(x, y, index, ref values)
+        public SampleStepColor(float x, float y, int index, ref Color[] values) : base(x, y, index, ref values)
         {
         }
 

@@ -2,7 +2,10 @@ using System;
 
 namespace NoiseUltra.Nodes
 {
-    public abstract class BaseSampleInfo
+    /// <summary>
+    /// A simple step in the async sample generation.
+    /// </summary>
+    public abstract class BaseSampleStep
     {
         public abstract void Execute(Func<float, float, float> sampleFunction);
     }

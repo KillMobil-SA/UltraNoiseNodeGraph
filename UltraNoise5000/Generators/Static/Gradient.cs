@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Generators.Static
 {
-    [NodeTint(NodeColor.Green)]
+    [NodeTint(NodeColor.GREEN)]
     public class Gradient : NodeOutput
     {
         [SerializeField] private GrandientLineType lineType;
