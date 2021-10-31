@@ -12,7 +12,6 @@ namespace NoiseUltra.Tools.Terrains
 {
     public class TerrainPainter : TerrainTool
     {
-        private readonly List<Task> m_Tasks = new List<Task>();
         private TerrainLayerExportGroup ExportGroup => sourceNode as TerrainLayerExportGroup;
         private float[,,] m_SplatmapData;
         private int m_Resolution;
@@ -25,9 +24,9 @@ namespace NoiseUltra.Tools.Terrains
         private int m_TotalPaintLayers;
         private float[] m_SplatWeights;
         private float[,,] m_SamplesAsync;
-        
-        [Button]
-        private void ExecuteAsync()
+
+        #region Async
+        protected override void OnBeforeApplyAsync()
         {
             Profiler.Start();
             Initialize();
@@ -45,10 +44,10 @@ namespace NoiseUltra.Tools.Terrains
             ExecuteSampling();
             ExecuteSplatMapBalance();
             ExecuteSplatMap();
-            OnComplete();
+            ApplyHeightMap();
             Profiler.End();
         }
-
+        
         private void ExecuteSampling()
         {
             for (var pixelX = 0; pixelX < m_Width; ++pixelX)
@@ -72,13 +71,12 @@ namespace NoiseUltra.Tools.Terrains
                         }
 
                         var info = new PaintToolSampleInfo(relativeX, relativeY, pixelX, pixelY, layerIndex, ref m_SamplesAsync, angleV);
-                        m_Tasks.Add(Task.Run(() => info.Execute(layer.GetSample)));
+                        taskGroup.AddTask(() => info.Execute(layer.GetSample));
                     }
                 }
             }
 
-            Task.WaitAll(m_Tasks.ToArray());
-            m_Tasks.Clear();
+            taskGroup.ExecuteAll();
         }
 
         private void ExecuteSplatMapBalance()
@@ -125,6 +123,9 @@ namespace NoiseUltra.Tools.Terrains
             }
         }
 
+        #endregion
+
+        #region Sync
         protected override IEnumerator Operation()
         {
             Profiler.Start();
@@ -188,13 +189,19 @@ namespace NoiseUltra.Tools.Terrains
                 }
             }
 
-            OnComplete();
+            ApplyHeightMap();
             Profiler.End();
         }
+        #endregion
 
-        private void OnComplete()
+        private void ApplyHeightMap()
         {
             m_TerrainData.SetAlphamaps(0, 0, m_SplatmapData);
+        }
+
+        protected override void OnCompleteTask()
+        {
+            taskGroup.Clear();
         }
 
         private TerrainLayer[] GetTerrainLayers()

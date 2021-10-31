@@ -31,7 +31,8 @@ namespace NoiseUltra.Tools.Terrains
                     
 
                     var sample = new SampleInfoFloat2(xPos, yPos, y, x, ref m_HeightMap);
-                    taskGroup.AddSampleInfo(sample);
+                    void Action() => sourceNode.ExecuteSampleAsync(sample);
+                    taskGroup.AddTask(Action);
                 }
             }
         }

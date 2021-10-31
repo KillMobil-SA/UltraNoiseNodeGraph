@@ -47,7 +47,7 @@ namespace NoiseUltra.Nodes
             }
 
             node = nodeBase;
-            m_TaskGroup = new TaskGroup(node, OnCompleteTask);
+            m_TaskGroup = new TaskGroup(OnCompleteTask);
             function = nodeBase.GetSample;
             var nodeGraph = nodeBase.graph as NoiseNodeGraph;
             if (nodeGraph == null)
@@ -88,7 +88,8 @@ namespace NoiseUltra.Nodes
                     float pixelY = y / maxPixel;
                     float py = size * pixelY;
                     SampleInfoColorAsync sampleInfo = new SampleInfoColorAsync(px, py, index, ref _colorsAsync);
-                    m_TaskGroup.AddSampleInfo(sampleInfo);
+                    void Action() => node.ExecuteSampleAsync(sampleInfo);
+                    m_TaskGroup.AddTask(Action);
                     ++index;
                 }
             }

@@ -1,26 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using NoiseUltra.Nodes;
 
 namespace NoiseUltra.Tasks
 {
     public sealed class TaskGroup
     {
-        private readonly NodeBase m_SourceNode;
         private readonly Action m_OnComplete;
         private readonly List<Task> m_Tasks;
         
-        public TaskGroup(NodeBase node, Action callback)
+        public TaskGroup(Action callback)
         {
             m_OnComplete = callback;
-            m_SourceNode = node;
             m_Tasks = new List<Task>();
         }
 
-        public void AddSampleInfo(BaseSampleInfo sampleInfo)
+        public void AddTask(Action action)
         {
-            Task task = Task.Run(() => m_SourceNode.ExecuteSampleAsync(sampleInfo));
+            if (action == null)
+            {
+                return;
+            }
+
+            Task task = Task.Run(action);
             m_Tasks.Add(task);
         }
 
@@ -29,5 +31,7 @@ namespace NoiseUltra.Tasks
             Task.WaitAll(m_Tasks.ToArray());
             m_OnComplete.Invoke();
         }
+
+        public void Clear() => m_Tasks.Clear();
     }
 }

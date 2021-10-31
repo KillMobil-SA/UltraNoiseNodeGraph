@@ -17,7 +17,7 @@ namespace NoiseUltra.Tools
 
         protected virtual void Initialize()
         {
-            taskGroup = new TaskGroup(sourceNode, OnCompleteTask);
+            taskGroup = new TaskGroup(OnCompleteTask);
         }
 
         protected virtual void OnCompleteTask()
