@@ -11,9 +11,10 @@ using Random = System.Random;
 namespace NoiseUltra.Tools.Placement
 {
     [System.Serializable]
-    public class PlacementVectorRange
+    public abstract class PlacementVectorRange
     {
         
+        #region Constants
         private const string RightGroup = "Right";
         private const string LeftGroup = "Left";
 
@@ -34,21 +35,20 @@ namespace NoiseUltra.Tools.Placement
         
         private const string OtherSetingsVerticalGroupRight = OtherSetingsGroup + "/" + RightGroup;
         private const string OtherSetingsBoxGroupRight = OtherSetingsVerticalGroupRight + "/" + NoiseGroup;
-        
+        #endregion
 
-        
-
+        #region EditorShowConditions
         private bool showMinRangeField => (axisType == AxisType.Unified && rangeType == RangeType.MinMax);
         private bool showMinRangeV3Field => (axisType == AxisType.Separated && rangeType == RangeType.MinMax);
         private bool showRangeField => (axisType == AxisType.Unified);
         private bool showRangeV3Field => (axisType == AxisType.Separated);
-      
+        #endregion
+        
+        #region Members
         [Space]
         [EnumToggleButtons , HideLabel] public AxisType axisType = AxisType.Unified;
         [EnumToggleButtons, HideLabel] public RangeType rangeType = RangeType.MinusPlus;
 
-        
-        
         [HorizontalGroup(RangeSettingsGroup) , VerticalGroup( RangeSettingsVerticalGroup) , BoxGroup(RangeSettingsBoxGroupUnified)]
         [HideLabel ,ShowIf(nameof(showMinRangeField))]
         public float minRange = 0;
@@ -64,32 +64,26 @@ namespace NoiseUltra.Tools.Placement
         [BoxGroup(RangeSettingsBoxGroupSeparated)]
         [HideLabel ,ShowIf(nameof(showRangeV3Field))] 
         public Vector3 rangeV3 = Vector3.zero;
-       
         
         [HorizontalGroup(OtherSetingsGroup , 110 , PaddingRight = 15), VerticalGroup(OtherSetingsVerticalGroup, PaddingTop  = 15 ),BoxGroup(OtherSetingsBoxGroup)]
         [LabelText("Amount") , LabelWidth(50) , Min(0)]
         public float roundAmount;
-        
-     
+
         [VerticalGroup(OtherSetingsVerticalGroupRight ,  PaddingTop  = 15) , BoxGroup(OtherSetingsBoxGroupRight)]
         public bool useExternalNoise;
         [BoxGroup(OtherSetingsBoxGroupRight) , ShowIf(nameof(useExternalNoise))]
         public ExportNode externalSource;
+        #endregion
 
-
-
+        #region Public
 
         public virtual void Init()
         {
             
-        }        
-        
-        public virtual Vector3 GetVectorRange (Vector3 pos, float thresHold)
-        {
-            return Vector3.zero;
         }
         
-        
+        public abstract Vector3 GetVectorRange(Vector3 pos, float thresHold);
+
         public float RoundValue(float value)
         {
             return (roundAmount!= 0) ? Mathf.Round(value / roundAmount) * roundAmount : value;
@@ -99,7 +93,7 @@ namespace NoiseUltra.Tools.Placement
         {
             return (roundAmount!= 0) ? new Vector3(RoundValue(vector3.x), RoundValue(vector3.y), RoundValue(vector3.z)) : vector3;
         }
-        
+        #endregion
         
         
     

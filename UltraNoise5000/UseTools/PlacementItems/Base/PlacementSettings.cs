@@ -14,7 +14,6 @@ namespace NoiseUltra.Tools.Placement
         
         [Header("Noise Settings")]
         public ExportNode exportNode;
-        
 
         [SerializeField]
         [Header(PlacementSettingsName)]

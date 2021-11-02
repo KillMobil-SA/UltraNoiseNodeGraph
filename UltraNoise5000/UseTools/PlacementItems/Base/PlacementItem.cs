@@ -36,7 +36,6 @@ namespace NoiseUltra.Tools.Placement
         {
 
             if (cordinatesAbs) pos = new Vector3(Mathf.Abs(pos.x), Mathf.Abs(pos.y), Mathf.Abs(pos.z));
-            // to enable world relativity later
             if (!useWorldCordinates)
               pos -= placementBounds.center;
             var is2D = placementBounds.heightIs2D;

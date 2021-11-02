@@ -10,6 +10,8 @@ namespace NoiseUltra.Tools.Placement
     {
         public Vector3 randomPositioning;
 
+        #region Members
+
         [Header("Height Calulations Settings")] [OnValueChanged(nameof(UpdateHeightInterFace))] [SerializeField]
         private HeightPosType heightPosType = HeightPosType.Grid;
 
@@ -21,13 +23,26 @@ namespace NoiseUltra.Tools.Placement
 
         [SerializeField] private IHeightBase _heightBase;
         private GridHeightPos noiseGridPos = new GridHeightPos();
+        #endregion
 
-
+        #region Public
+        
         public PositionSettings()
         {
             UpdateHeightInterFace();
         }
+        
+        public override Vector3 Calculator(Vector3 pos, float thresHold)
+        {
+            var sourceHeightCalculation = new Vector3(pos.x, CalculateHeight(pos), pos.z);
+            
+            var valuePosition = placementValueRange.GetVectorRange(pos, thresHold);
+            var randomPosition = placementRandomizedRange.GetVectorRange(pos, thresHold);
 
+            var positionResult = sourceHeightCalculation +  (valuePosition + randomPosition) ;
+            return positionResult;
+        }
+        
         public override void OnEnable()
         {
             UpdateHeightInterFace();
@@ -40,7 +55,15 @@ namespace NoiseUltra.Tools.Placement
             placementRandomizedRange.rangeV3 = randomPositioning;
             placementRandomizedRange.minRangeV3 = -randomPositioning;
         }
+        
+        public bool IsPositionValid(Vector3 pos)
+        {
+            return _heightBase.HeightCheck(pos);
+        }   
+        
+        #endregion
 
+        #region Private
 
         private void UpdateHeightInterFace()
         {
@@ -62,29 +85,16 @@ namespace NoiseUltra.Tools.Placement
             }
         }
 
-        public override Vector3 Calculator(Vector3 pos, float thresHold)
-        {
-            var sourceHeightCalculation = new Vector3(pos.x, CalculateHeight(pos), pos.z);
-            
-            var valuePosition = placementValueRange.GetVectorRange(pos, thresHold);
-            var randomPosition = placementRandomizedRange.GetVectorRange(pos, thresHold);
-
-            var positionResult = sourceHeightCalculation +  (valuePosition + randomPosition) ;
-            return positionResult;
-            
-            
-        }
+        
 
         private float CalculateHeight(Vector3 pos)
         {
             return _heightBase.GetHeightPos(pos);
  
         }
+        #endregion
+        
 
-        public bool IsPositionValid(Vector3 pos)
-        {
-            return _heightBase.HeightCheck(pos);
-        }
     }
 }
 

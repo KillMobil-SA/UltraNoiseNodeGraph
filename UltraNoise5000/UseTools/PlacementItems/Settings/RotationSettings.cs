@@ -42,11 +42,8 @@ namespace NoiseUltra.Tools.Placement
             
             var valueRotation = placementValueRange.GetVectorRange(pos, thresHold);
             var randomRotation = placementRandomizedRange.GetVectorRange(pos, thresHold);
-
             var rotationResult = (valueRotation + randomRotation) ;
             return rotationResult;
-            
-
         }
 
 

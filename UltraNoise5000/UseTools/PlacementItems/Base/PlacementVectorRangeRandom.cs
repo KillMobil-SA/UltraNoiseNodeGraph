@@ -11,11 +11,9 @@ namespace NoiseUltra.Tools.Placement
     [System.Serializable]
     public class PlacementVectorRangeRandom : PlacementVectorRange
     {
-        protected const int MAXRandomSeedValue = 9999;
-        protected const int Divider = 1000;
 
+        #region Public
         [BoxGroup("Random")]
-        
         public int seed;
         [BoxGroup("Random")]
         public bool usePosAsRandomSeed;
@@ -35,24 +33,25 @@ namespace NoiseUltra.Tools.Placement
             
             return ((axisType == AxisType.Unified) ? UnifiedRandomVector () : SeparateRandomVector ());
         }
-        
-        private Vector3 UnifiedRandomVector  () {
-               Vector3 resultVector;
-                if(rangeType == RangeType.MinusPlus)
-                    minRange = -range;
+        #endregion
 
-                float val = RoundValue ((float) random.Next(Mathf.RoundToInt(minRange * Divider), Mathf.RoundToInt(range * Divider)) /
-                                        Divider);
-                
-                resultVector = new Vector3(val, val, val);
-                return resultVector;
+        #region Private
+        private Vector3 UnifiedRandomVector()
+        {
+            Vector3 resultVector;
+            if (rangeType == RangeType.MinusPlus)
+                minRange = -range;
+
+            float val = RoundValue(
+                (float) random.Next(Mathf.RoundToInt(minRange * Divider), Mathf.RoundToInt(range * Divider)) /
+                Divider);
+
+            resultVector = new Vector3(val, val, val);
+            return resultVector;
         }
 
-
         private Vector3 SeparateRandomVector (){
-
-                Vector3 resultVector;
-                if(rangeType == RangeType.MinusPlus)
+            if(rangeType == RangeType.MinusPlus)
                     minRangeV3 = -rangeV3;
 
                 var xPos = (float) random.Next(Mathf.RoundToInt(minRangeV3.x * Divider),
@@ -62,26 +61,26 @@ namespace NoiseUltra.Tools.Placement
                 var zPos = (float) random.Next(Mathf.RoundToInt(minRangeV3.z * Divider),
                     Mathf.RoundToInt(rangeV3.z * Divider)) / Divider;
                 
-                resultVector = RoundValue (new Vector3(xPos, yPos, zPos));
+                var resultVector = RoundValue (new Vector3(xPos, yPos, zPos));
                 return resultVector;
-                
         }
 
         
    
-        public void InitRandomizationSeedPosition(Vector3 pos, float thresHold)
+        private void InitRandomizationSeedPosition(Vector3 pos, float thresHold)
         {
-            float v;
-            if (useExternalNoise)
-                v = externalSource.GetSample(pos.x, pos.y, pos.z);
-            else
-                v = thresHold;
+            float v = useExternalNoise ? externalSource.GetSample(pos.x, pos.y, pos.z) : thresHold;
             
             random = new Random(Mathf.RoundToInt(v * MAXRandomSeedValue));
         }
         
-        
-        private  Random _random;
+        #endregion
+
+        #region Protected
+        protected const int MAXRandomSeedValue = 9999;
+        protected const int Divider = 1000;
+
+        protected Random _random;
         protected Random random
         {
             get
@@ -95,6 +94,8 @@ namespace NoiseUltra.Tools.Placement
             }
             set { _random = value; }
         }
+        
+        #endregion
        
 
 

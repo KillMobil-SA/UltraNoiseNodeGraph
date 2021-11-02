@@ -9,8 +9,6 @@ namespace NoiseUltra.Tools.Placement
     public class PlacementProperties
     {
         // Start is called before the first frame update
-        
-        
         protected const int DemDevide = 1000;
         [InlineProperty () , HideLabel , TitleGroup("Value Range")]
         
@@ -38,18 +36,8 @@ namespace NoiseUltra.Tools.Placement
             return Vector3.zero;
         }
 
-        private  Random _random;
-
-        protected Random random
-        {
-            get
-            {
-                if (_random == null)
-                    _random = new Random(seed);
-                return _random;
-            }
-            set { _random = value; }
-        }
+        
+       
 
 
     }

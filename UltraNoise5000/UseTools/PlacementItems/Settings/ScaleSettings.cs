@@ -8,16 +8,17 @@ namespace NoiseUltra.Tools.Placement
     [Serializable]
     public class ScaleSettings:PlacementProperties
     {
+        #region Member
         [SerializeField] private float size = 1;
         [SerializeField] private bool hasIndividualScale;
         [SerializeField] private ScaleRange dynamicScaleRange;
         [SerializeField] private ScaleRange randomScaleRange;
-
-[Button]
+        #endregion
+        
+        #region Public
+        [Button]
         public override void OnEnable()
         {
- 
-            
             placementValueRange.rangeType = RangeType.MinMax;
             placementRandomizedRange.rangeType = RangeType.MinMax;
                 Debug.Log("OnEnable - >hasIndividualScale:" + hasIndividualScale);
@@ -74,17 +75,7 @@ namespace NoiseUltra.Tools.Placement
             var ScaleResult = (dynamicScale + randomScale) * size;
             return ScaleResult;
         }
-
-
-        private Vector3 RandomScale()
-        {
-            
-            var xRandomScale = randomScaleRange.GetPercSizeFloat((float)random.NextDouble() , 0);
-            var yRandomScale = randomScaleRange.GetPercSizeFloat((float)random.NextDouble() , 1);
-            var zRandomScale = randomScaleRange.GetPercSizeFloat((float)random.NextDouble() , 2);
-            return new Vector3(xRandomScale, yRandomScale, zRandomScale);
-        }
-
+        #endregion
 
         [Serializable]
         public class ScaleRange

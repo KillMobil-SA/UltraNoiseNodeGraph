@@ -12,12 +12,15 @@ namespace NoiseUltra.Tools.Placement
     public class PlacementVectorRangeValue : PlacementVectorRange
     {
 
+        #region Public
         public override Vector3 GetVectorRange(Vector3 pos, float thresHold)
         {
             var value = useExternalNoise ? externalSource.GetSample(pos.x, pos.y, pos.z) : thresHold;
             return (axisType == AxisType.Unified ? UnifiedValueVector(value) : SeparatedValueVector(value));
         }
+        #endregion
         
+        #region Private
         private Vector3 UnifiedValueVector (float value) {
                 Vector3 resultVector;
                 if(rangeType == RangeType.MinusPlus)
@@ -37,7 +40,7 @@ namespace NoiseUltra.Tools.Placement
              resultVector = RoundValue(Vector3.Lerp(minRangeV3, rangeV3, value));
              return resultVector;
         }
-        
+        #endregion
         
     }
 }

@@ -16,7 +16,9 @@ namespace NoiseUltra.Tools.Placement
         [SerializeField] private PlacementObjectType placementObjectType = PlacementObjectType.Linear;
         private int linearID;
 
-        public GameObject GetGameObject(float v)
+
+        #region Private
+        private GameObject GetGameObject(float v)
         {
             var objectID = GetObjectID(v);
             var newPoolObject = items[objectID];
@@ -55,7 +57,10 @@ namespace NoiseUltra.Tools.Placement
             var prefix = name + "_" + pos.x + "_" + pos.y + "_" + pos.z;
             return prefix;
         }
+        
+        #endregion
 
+        #region Public
         public override void PlaceObject(Vector3 pos, float v, Transform parent)
         {
             var placementPos = GetPos(pos, v);
@@ -98,8 +103,9 @@ namespace NoiseUltra.Tools.Placement
 #endif
             }
         }
+        #endregion
 
-
+        //Todo @Sotiris This Sucka needs to get out of here
         private enum PlacementObjectType
         {
             Linear,

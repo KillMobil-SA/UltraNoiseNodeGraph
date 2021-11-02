@@ -8,44 +8,29 @@ namespace NoiseUltra.Tools.Placement
 {
     public class PlacementTool : MonoBehaviour
     {
-        
-        
-        
+
+        #region Members
         [SerializeField] [TableList()]
         private List<PlacementItem> generatorItems = new List<PlacementItem>();
 
-        
         [SerializeField]
-        public bool useWorldCordinates = true;
+        private bool useWorldCordinates = true;
 
         [Header("Modifications")] [SerializeField]
         private bool cordinatesAbs = false;
-
-
-        [Header  ("Live Preview")]
-        [SerializeField,ReadOnly , ShowIf(nameof(showLivePreview))]
-        [GUIColor("@UnityEngine.Color.Lerp(UnityEngine.Color.green, UnityEngine.Color.red, Mathf.InverseLerp(0 ," + nameof(MAXPreviewRenderTime) + ", " + nameof(previewRenderTime)+"))")]
-        [PropertyOrder(1)]
-        private float previewRenderTime;
-
-        private bool showLivePreview;
-        private const float MAXPreviewRenderTime = .5f;
         
         private PlacementBounds _myPlacementBounds;
-
-        private Collider _placementAreaCollider;
-
         private PlacementBounds myPlacementBounds
         {
             get
             {
-                
                 if (_myPlacementBounds == null)
                     _myPlacementBounds = new PlacementBounds(this, placementAreaCollider);
                 return _myPlacementBounds;
             }
         }
-
+        
+        private Collider _placementAreaCollider;
         private Collider placementAreaCollider
         {
             get
@@ -55,15 +40,9 @@ namespace NoiseUltra.Tools.Placement
                 return _placementAreaCollider;
             }
         }
+        #endregion
 
-        
-        private void OnDrawGizmos()
-        {
-            if (!showLivePreview) 
-                return;
-            PerformPlacement(true);
-        }
-
+        #region Public
         [Button]
         public void GenerateObjects()
         {
@@ -77,6 +56,14 @@ namespace NoiseUltra.Tools.Placement
         public void ClearObjects()
         {
             for (var i = 0; i < generatorItems.Count; i++) generatorItems[i].plamentHandler.CleanObjects(transform);
+        }
+        #endregion
+        
+        #region Private
+        private void InitPlacement()
+        {
+            for (var i = 0; i < generatorItems.Count; i++)
+                generatorItems[i].plamentHandler.InitializeProperties();
         }
 
         private void PerformPlacement(bool isLivePreview)
@@ -119,16 +106,25 @@ namespace NoiseUltra.Tools.Placement
                 }
             }
         }
-
         
-        
-        private void InitPlacement()
+        public void OnDrawGizmos()
         {
-            for (var i = 0; i < generatorItems.Count; i++)
-                generatorItems[i].plamentHandler.InitializeProperties();
+            if (!showLivePreview) 
+                return;
+            PerformPlacement(true);
         }
+        #endregion
+        
+        #region LivePreview
 
-
+        [Header  ("Live Preview")]
+        [SerializeField,ReadOnly , ShowIf(nameof(showLivePreview))]
+        [GUIColor("@UnityEngine.Color.Lerp(UnityEngine.Color.green, UnityEngine.Color.red, Mathf.InverseLerp(0 ," + nameof(MAXPreviewRenderTime) + ", " + nameof(previewRenderTime)+"))")]
+        [PropertyOrder(1)]
+        private float previewRenderTime;
+        private bool showLivePreview;
+        private const float MAXPreviewRenderTime = .5f;
+        
         [Button , HideIf(nameof(showLivePreview))]
         [PropertyOrder(2)]
         private void LivePreview()
@@ -142,6 +138,7 @@ namespace NoiseUltra.Tools.Placement
         {
             showLivePreview = false;
         }
+        #endregion
 
 
     }
