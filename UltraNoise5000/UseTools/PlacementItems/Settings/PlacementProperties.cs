@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = System.Random;
 
@@ -8,13 +9,23 @@ namespace NoiseUltra.Tools.Placement
     public class PlacementProperties
     {
         // Start is called before the first frame update
-        public int seed;
+        
         
         protected const int DemDevide = 1000;
+        [InlineProperty () , HideLabel , TitleGroup("Value Range")]
         
-        public virtual void InitPropertie()
+        public PlacementVectorRangeValue placementValueRange;
+        
+        [InlineProperty () , HideLabel , TitleGroup("Random Range") ]
+        
+        public PlacementVectorRangeRandom placementRandomizedRange;
+        
+        
+        [Space(100)]
+        public int seed;
+        public virtual void InitProperties()
         {
-            random = new Random(seed);
+            placementRandomizedRange.Init();
         }
 
         public virtual void OnEnable()

@@ -24,45 +24,29 @@ namespace NoiseUltra.Tools.Placement
         private float rotationRound;
 
         
-  
+        public override void OnEnable()
+        {
+                        
+                placementValueRange.axisType = AxisType.Separated;
+                placementRandomizedRange.axisType = AxisType.Separated;
+                
+                placementValueRange.rangeType = RangeType.MinusPlus;
+                placementRandomizedRange.rangeType = RangeType.MinusPlus;
+                
+                placementRandomizedRange.rangeV3 = randomRotation;
+                placementRandomizedRange.minRangeV3 = -randomRotation;
+        }
+
         public override Vector3 Calculator(Vector3 pos, float thresHold)
         {
-            if (useNoiseRandomizationBase)
-                NoiseRandomization(pos, thresHold);
-
-            var xRot =(float) random.Next(Mathf.RoundToInt(-randomRotation.x * DemDevide), Mathf.RoundToInt(randomRotation.x* DemDevide)) / DemDevide;
-            var yRot =(float) random.Next(Mathf.RoundToInt(-randomRotation.y * DemDevide), Mathf.RoundToInt(randomRotation.y* DemDevide)) / DemDevide;
-            var zRot =(float) random.Next(Mathf.RoundToInt(-randomRotation.z * DemDevide), Mathf.RoundToInt(randomRotation.z* DemDevide)) / DemDevide;
-     
-
-            if (roundRotation)
-            {
-                xRot = RoundRotation(xRot);
-                yRot = RoundRotation(yRot);
-                zRot = RoundRotation(zRot);
-            }
-
-            var rotation = new Vector3(xRot, yRot, zRot);
-            return rotation;
-        }
-
-        private void NoiseRandomization(Vector3 pos, float thresHold)
-        {
-            float v;
-            if (useExternalNoiseSource)
-
-                v = externalSource.GetSample(pos.x, pos.y, pos.z);
-            else
-                v = thresHold;
             
-            random = new Random(Mathf.RoundToInt(v * 9999));
+            var valueRotation = placementValueRange.GetVectorRange(pos, thresHold);
+            var randomRotation = placementRandomizedRange.GetVectorRange(pos, thresHold);
 
-        }
+            var rotationResult = (valueRotation + randomRotation) ;
+            return rotationResult;
+            
 
-        private float RoundRotation(float yRotation)
-        {
-            var amount = Mathf.Round(yRotation / rotationRound);
-            return amount * rotationRound;
         }
 
 

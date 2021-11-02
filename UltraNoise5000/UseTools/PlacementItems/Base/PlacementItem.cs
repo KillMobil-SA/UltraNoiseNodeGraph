@@ -13,7 +13,7 @@ namespace NoiseUltra.Tools.Placement
         [SerializeField ,TableColumnWidth(60 , false), Min(0.1f)] public float spacing = 10;
         [SerializeField] public PlacementSettings plamentHandler;
 
-        public bool GenerateObject(PlacementBounds placementBound, Vector3 placementPosition, bool isDebug, Transform parent, bool useWorldCordinates, bool cordinatesAbs)
+        public bool GenerateObject(PlacementBounds placementBound, Vector3 placementPosition, bool isLivePreview, Transform parent, bool useWorldCordinates, bool cordinatesAbs)
         {
             if (plamentHandler.exportNode == null || plamentHandler == null)
                 return false;
@@ -24,7 +24,7 @@ namespace NoiseUltra.Tools.Placement
             if (!IsPositionValid(pos, v))
                 return false;
 
-            if (isDebug)
+            if (isLivePreview)
                 plamentHandler.DebugObject(pos, v);
             else
                 plamentHandler.PlaceObject(pos, v, parent);
@@ -38,7 +38,7 @@ namespace NoiseUltra.Tools.Placement
             if (cordinatesAbs) pos = new Vector3(Mathf.Abs(pos.x), Mathf.Abs(pos.y), Mathf.Abs(pos.z));
             // to enable world relativity later
             if (!useWorldCordinates)
-            pos -= placementBounds.center;
+              pos -= placementBounds.center;
             var is2D = placementBounds.heightIs2D;
             return is2D ? plamentHandler.GetSample(pos.x, pos.z) : plamentHandler.GetSample(pos);
         }

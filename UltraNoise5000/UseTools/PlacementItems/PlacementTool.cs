@@ -24,7 +24,7 @@ namespace NoiseUltra.Tools.Placement
 
         [Header  ("Live Preview")]
         [SerializeField,ReadOnly , ShowIf(nameof(showLivePreview))]
-        [GUIColor("@Color.Lerp(Color.green, Color.red, Mathf.InverseLerp(0 ," + nameof(MAXPreviewRenderTime) + ", " + nameof(previewRenderTime)+"))")]
+        [GUIColor("@UnityEngine.Color.Lerp(UnityEngine.Color.green, UnityEngine.Color.red, Mathf.InverseLerp(0 ," + nameof(MAXPreviewRenderTime) + ", " + nameof(previewRenderTime)+"))")]
         [PropertyOrder(1)]
         private float previewRenderTime;
 
@@ -70,6 +70,7 @@ namespace NoiseUltra.Tools.Placement
             ClearObjects();
             PerformPlacement(false);
             showLivePreview = false;
+            Color red = UnityEngine.Color.Lerp(Color.black, Color.yellow, 0.5f);
         }
 
         [Button]
@@ -78,7 +79,7 @@ namespace NoiseUltra.Tools.Placement
             for (var i = 0; i < generatorItems.Count; i++) generatorItems[i].plamentHandler.CleanObjects(transform);
         }
 
-        private void PerformPlacement(bool isDebug)
+        private void PerformPlacement(bool isLivePreview)
         {
             InitPlacement();
             float frameStart = Time.realtimeSinceStartup; 
@@ -102,9 +103,9 @@ namespace NoiseUltra.Tools.Placement
                 {
                     var placementPos = new Vector3(x, y, z);
                     var placedItem = generatorItems[i];
-                    placedItem.GenerateObject(myPlacementBounds, placementPos, isDebug, transform ,useWorldCordinates ,  cordinatesAbs);
+                    placedItem.GenerateObject(myPlacementBounds, placementPos, isLivePreview, transform ,useWorldCordinates ,  cordinatesAbs);
 
-                    if (isDebug)
+                    if (isLivePreview)
                     {
                         float frameEnd = Time.realtimeSinceStartup;
                         previewRenderTime = frameEnd - frameStart;

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Random = System.Random;
-
+using Sirenix.OdinInspector;
 
 namespace NoiseUltra.Tools.Placement 
 {
@@ -13,14 +13,47 @@ namespace NoiseUltra.Tools.Placement
         [SerializeField] private ScaleRange dynamicScaleRange;
         [SerializeField] private ScaleRange randomScaleRange;
 
-     
-        
+[Button]
+        public override void OnEnable()
+        {
+ 
+            
+            placementValueRange.rangeType = RangeType.MinMax;
+            placementRandomizedRange.rangeType = RangeType.MinMax;
+                Debug.Log("OnEnable - >hasIndividualScale:" + hasIndividualScale);
+            if (hasIndividualScale)
+            {
+                placementValueRange.axisType = AxisType.Separated;
+                placementRandomizedRange.axisType = AxisType.Separated;
+                
+                
+                placementValueRange.rangeV3 = dynamicScaleRange.maxSizeV3;
+                placementValueRange.minRangeV3 = dynamicScaleRange.minSizeV3;
+                
+                placementRandomizedRange.rangeV3 = randomScaleRange.maxSizeV3;
+                placementRandomizedRange.minRangeV3 = randomScaleRange.minSizeV3;
+            }
+            else
+            {
+                placementValueRange.axisType = AxisType.Unified;
+                placementRandomizedRange.axisType = AxisType.Unified;
+                
+                placementValueRange.range = dynamicScaleRange.maxSizeV3.x;
+                placementValueRange.minRange = dynamicScaleRange.minSizeV3.x;
+                placementRandomizedRange.range = randomScaleRange.maxSizeV3.x;
+                placementRandomizedRange.minRange = randomScaleRange.minSizeV3.x;
+            }
+        }
 
         public override Vector3 Calculator(Vector3 pos, float thresHold)
         {
-            var dynamicScale = Vector3.one;
-            var randomScale = Vector3.one;
+           var dynamicScale = placementValueRange.GetVectorRange(pos, thresHold);
+           var randomScale = placementRandomizedRange.GetVectorRange(pos, thresHold);
 
+           /*
+            var dynamicScale = Vector3.zero;
+            var randomScale = Vector3.zero;
+            
             if (hasIndividualScale)
             {
                 // Dynamic Scale
@@ -36,7 +69,8 @@ namespace NoiseUltra.Tools.Placement
                 //Random Scale 
                 randomScale = randomScaleRange.GetPercSizeVector3((float)random.NextDouble());
             }
-
+            
+            */
             var ScaleResult = (dynamicScale + randomScale) * size;
             return ScaleResult;
         }
@@ -55,8 +89,8 @@ namespace NoiseUltra.Tools.Placement
         [Serializable]
         public class ScaleRange
         {
-            [SerializeField] private Vector3 minSizeV3 = Vector3.one;
-            [SerializeField] private Vector3 maxSizeV3 = Vector3.one;
+            [SerializeField] public  Vector3 minSizeV3 = Vector3.one;
+            [SerializeField] public  Vector3 maxSizeV3 = Vector3.one;
 
             public float GetPercSizeFloat(float v, int axis = 0)
             {
@@ -70,56 +104,3 @@ namespace NoiseUltra.Tools.Placement
         }
     }
 }
-
-
-/*
-[Header ("Size Settings")]
-public float size = 1;
-public bool dynamicSize;
-
-[Space (5)]
-public bool randomfactor;
-public float randomSizeAmount;
-
-[Space (5)]
-public bool hasIndvRandom;
-public Vector3 indvRandomSize;
-public bool hasMinMaxRandomSize;
-[ShowIf ("hasMinMaxRandomSize")]
-public Vector3 indvMinRandomSize;
-
-public Vector3 SizeCalculatorVold (Vector3 pos, float thresHold) {
-
-    float addSizeFactor = size;
-    if (dynamicSize) {
-        //float percSize = 0;//Mathf.InverseLerp(threshold.x, threshold.y, thresHold);
-        float restofSize = (addSizeFactor) * thresHold; // (placementSettings.varFactor.Evaluate(1 - percSize));
-        addSizeFactor = restofSize;
-    }
-
-    if (randomfactor) {
-        addSizeFactor += Random.Range (0, randomSizeAmount * 100) / 100;
-    }
-
-    Vector3 randomScale = Vector3.one;
-    if (hasIndvRandom) {
-
-        float xMinScale = 0;
-        float yMinScale = 0;
-        float zMinScale = 0;
-
-        if (hasMinMaxRandomSize) {
-            xMinScale = indvMinRandomSize.x;
-            yMinScale = indvMinRandomSize.y;
-            zMinScale = indvMinRandomSize.z;
-        }
-
-        float xScale = Random.Range (xMinScale, indvRandomSize.x);
-        float yScale = Random.Range (yMinScale, indvRandomSize.y);
-        float zScale = Random.Range (zMinScale, indvRandomSize.z);
-        randomScale = new Vector3 (xScale, yScale, zScale);
-    }
-
-    return (Vector3.one + randomScale) * addSizeFactor;
-}
-*/

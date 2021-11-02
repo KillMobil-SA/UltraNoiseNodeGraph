@@ -9,7 +9,7 @@ namespace NoiseUltra.Tools.Placement
         private const string PlacementSettingsName = "Placement Settings";
         private const string PositionTabName = "Position";
         private const string RotationTabName = "Rotation";
-        private const string SizeTabName = "Size";
+        private const string SizeTabName = "Scale";
         
         
         [Header("Noise Settings")]
@@ -18,15 +18,15 @@ namespace NoiseUltra.Tools.Placement
 
         [SerializeField]
         [Header(PlacementSettingsName)]
-        [TabGroup(PlacementSettingsName, SizeTabName)] 
+        [TabGroup(PlacementSettingsName, SizeTabName) , InlineProperty () , HideLabel()]   
         private ScaleSettings placementScaleSettings = new ScaleSettings();
 
         [SerializeField]
-        [TabGroup(PlacementSettingsName, RotationTabName)]
+        [TabGroup(PlacementSettingsName, RotationTabName) , InlineProperty () , HideLabel()]
         private RotationSettings placementRotationSettings = new RotationSettings();
 
         [SerializeField]
-        [TabGroup(PlacementSettingsName, PositionTabName)]
+        [TabGroup(PlacementSettingsName, PositionTabName) , InlineProperty () , HideLabel()]
         private PositionSettings placementPositionsSettings = new PositionSettings();
 
         [Header("Debug Settings")]
@@ -39,7 +39,11 @@ namespace NoiseUltra.Tools.Placement
 
         private void OnEnable()
         {
+            Debug.Log("Enabling:" + this.name);
             placementPositionsSettings.OnEnable();
+            placementRotationSettings.OnEnable();
+            placementScaleSettings.OnEnable();
+                
         }
 
         public float GetSample(float x, float z)
@@ -54,9 +58,9 @@ namespace NoiseUltra.Tools.Placement
 
         public void InitializeProperties()
         {
-            placementScaleSettings.InitPropertie();
-            placementRotationSettings.InitPropertie();
-            placementPositionsSettings.InitPropertie();
+            placementScaleSettings.InitProperties();
+            placementRotationSettings.InitProperties();
+            placementPositionsSettings.InitProperties();
         }
 
         public bool IsPositionValid(Vector3 pos)

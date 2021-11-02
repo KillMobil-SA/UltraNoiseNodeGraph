@@ -22,8 +22,7 @@ namespace NoiseUltra.Tools.Placement
         [SerializeField] private IHeightBase _heightBase;
         private GridHeightPos noiseGridPos = new GridHeightPos();
 
-        
-     
+
         public PositionSettings()
         {
             UpdateHeightInterFace();
@@ -32,12 +31,20 @@ namespace NoiseUltra.Tools.Placement
         public override void OnEnable()
         {
             UpdateHeightInterFace();
+            placementValueRange.axisType = AxisType.Separated;
+            placementRandomizedRange.axisType = AxisType.Separated;
+            
+            placementValueRange.rangeType = RangeType.MinusPlus;
+            placementRandomizedRange.rangeType = RangeType.MinusPlus;
+            
+            placementRandomizedRange.rangeV3 = randomPositioning;
+            placementRandomizedRange.minRangeV3 = -randomPositioning;
         }
 
 
         private void UpdateHeightInterFace()
         {
-            _heightBase = noiseGridPos;
+            //_heightBase = noiseGridPos;
             switch (heightPosType)
             {
                 case HeightPosType.Grid:
@@ -59,13 +66,13 @@ namespace NoiseUltra.Tools.Placement
         {
             var sourceHeightCalculation = new Vector3(pos.x, CalculateHeight(pos), pos.z);
             
-            var xPos =(float) random.Next(Mathf.RoundToInt(-randomPositioning.x * DemDevide), Mathf.RoundToInt(randomPositioning.x* DemDevide)) / 1000;
-            var yPos =(float) random.Next(Mathf.RoundToInt(-randomPositioning.y * DemDevide), Mathf.RoundToInt(randomPositioning.y* DemDevide)) / 1000;
-            var zPos =(float) random.Next(Mathf.RoundToInt(-randomPositioning.z * DemDevide), Mathf.RoundToInt(randomPositioning.z* DemDevide)) / 1000;
-            
-            var randomPosition = new Vector3(xPos, yPos, zPos);
+            var valuePosition = placementValueRange.GetVectorRange(pos, thresHold);
+            var randomPosition = placementRandomizedRange.GetVectorRange(pos, thresHold);
 
-            return sourceHeightCalculation + randomPosition;
+            var positionResult = sourceHeightCalculation +  (valuePosition + randomPosition) ;
+            return positionResult;
+            
+            
         }
 
         private float CalculateHeight(Vector3 pos)
