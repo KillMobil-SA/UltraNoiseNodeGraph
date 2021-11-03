@@ -42,12 +42,14 @@ namespace NoiseUltra.Nodes
         {
             if (nodeBase == null)
             {
+                Debug.Log("PreviewImage - Initialize nodeBase: Null");
                 return;
             }
             
             bounds = new Bound(this);
             m_TaskGroup = new TaskGroup(OnCompleteTask);
             m_SampleFunction = nodeBase.GetSample;
+            m_Node = nodeBase;
             NoiseNodeGraph nodeGraph = nodeBase.graph as NoiseNodeGraph;
             if (nodeGraph == null)
             {
