@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -10,10 +11,13 @@ namespace NoiseUltra.Tools.Placement
     [CreateAssetMenu(fileName = "UltraPlacementItemGameObject", menuName = "KillMobil/UltraNoise/Gameobjects")]
     public class PlacementItemGameObject : PlacementSettings
     {
-        [Header("GameObjects Settings")] [SerializeField]
+        [TitleGroup("GameObjects Settings")]
+        [EnumToggleButtons , HideLabel]
+        [SerializeField] private PlacementObjectType placementObjectType = PlacementObjectType.Linear;
+        [AssetsOnly, SerializeField, Space]
         private GameObject[] items;
 
-        [SerializeField] private PlacementObjectType placementObjectType = PlacementObjectType.Linear;
+        
         private int linearID;
 
 
@@ -37,14 +41,13 @@ namespace NoiseUltra.Tools.Placement
                     if (linearID >= items.Length)
                         linearID = 0;
                     break;
-                default:
-                case PlacementObjectType.Random:
-                    returnID = Random.Range(0, items.Length - 1);
-                    break;
-
                 case PlacementObjectType.Value:
                     returnID = Mathf.FloorToInt((items.Length - 1) * v);
                     //Debug.Log(string.Format("returnID {0}", returnID));
+                    break;
+                case PlacementObjectType.Random:
+                default:
+                    returnID = Random.Range(0, items.Length - 1);
                     break;
             }
 

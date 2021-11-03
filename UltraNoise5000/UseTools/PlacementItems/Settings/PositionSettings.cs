@@ -8,18 +8,17 @@ namespace NoiseUltra.Tools.Placement
     [Serializable]
     public class PositionSettings :PlacementProperties
     {
-        public Vector3 randomPositioning;
-
+      
         #region Members
 
-        [Header("Height Calulations Settings")] [OnValueChanged(nameof(UpdateHeightInterFace))] [SerializeField]
+        [TitleGroup("Height Calculation Settings") ,  PropertyOrder(-1)] 
+        [OnValueChanged(nameof(UpdateHeightInterFace))] [SerializeField]
+        [EnumToggleButtons , HideLabel]        
         private HeightPosType heightPosType = HeightPosType.Grid;
-
-        [ShowIf(nameof(heightPosType), HeightPosType.Raycast)] [SerializeField]
+        [BoxGroup("Height") , InlineProperty (), HideLabel , PropertyOrder(-1)]
+        [ShowIf(nameof(heightPosType), HeightPosType.Raycast),SerializeField]
         private RayCastHeightPos rayCastHeightPos = new RayCastHeightPos();
-
-        [ShowIf("heightPosType", HeightPosType.Noise)] [SerializeField]
-        private NoiseHeightPos noiseHeightPos = new NoiseHeightPos();
+        
 
         [SerializeField] private IHeightBase _heightBase;
         private GridHeightPos noiseGridPos = new GridHeightPos();
@@ -46,14 +45,6 @@ namespace NoiseUltra.Tools.Placement
         public override void OnEnable()
         {
             UpdateHeightInterFace();
-            placementValueRange.axisType = AxisType.Separated;
-            placementRandomizedRange.axisType = AxisType.Separated;
-            
-            placementValueRange.rangeType = RangeType.MinusPlus;
-            placementRandomizedRange.rangeType = RangeType.MinusPlus;
-            
-            placementRandomizedRange.rangeV3 = randomPositioning;
-            placementRandomizedRange.minRangeV3 = -randomPositioning;
         }
         
         public bool IsPositionValid(Vector3 pos)
@@ -72,9 +63,6 @@ namespace NoiseUltra.Tools.Placement
             {
                 case HeightPosType.Grid:
                     _heightBase = noiseGridPos;
-                    break;
-                case HeightPosType.Noise:
-                    _heightBase = noiseHeightPos;
                     break;
                 case HeightPosType.Raycast:
                     _heightBase = rayCastHeightPos;

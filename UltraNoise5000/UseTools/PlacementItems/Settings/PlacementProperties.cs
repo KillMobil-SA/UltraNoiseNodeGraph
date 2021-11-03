@@ -10,17 +10,13 @@ namespace NoiseUltra.Tools.Placement
     {
         // Start is called before the first frame update
         protected const int DemDevide = 1000;
-        [InlineProperty () , HideLabel , TitleGroup("Value Range")]
-        
+        [InlineProperty () , HideLabel , TitleGroup("Value Range") ]
         public PlacementVectorRangeValue placementValueRange;
         
         [InlineProperty () , HideLabel , TitleGroup("Random Range") ]
         
         public PlacementVectorRangeRandom placementRandomizedRange;
         
-        
-        [Space(100)]
-        public int seed;
         public virtual void InitProperties()
         {
             placementRandomizedRange.Init();
@@ -28,7 +24,6 @@ namespace NoiseUltra.Tools.Placement
 
         public virtual void OnEnable()
         {
-            
         }
         
         public virtual Vector3 Calculator(Vector3 pos, float thresHold)

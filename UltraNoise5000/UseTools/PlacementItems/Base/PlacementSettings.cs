@@ -28,13 +28,12 @@ namespace NoiseUltra.Tools.Placement
         [TabGroup(PlacementSettingsName, PositionTabName) , InlineProperty () , HideLabel()]
         private PositionSettings placementPositionsSettings = new PositionSettings();
 
-        [Header("Debug Settings")]
-            
-        [SerializeField]
-        private Color debugColor;
+        [BoxGroup("Live Preview Settings")] [SerializeField]
+        private Color livePreviewColor = Color.green;
 
         [SerializeField]
-        private float debugSizeMultiplier = 1;
+        [BoxGroup("Live Preview Settings")]
+        private float livePreviewSizeMultiplier = 1;
 
         private void OnEnable()
         {
@@ -93,9 +92,9 @@ namespace NoiseUltra.Tools.Placement
         public void DebugObject(Vector3 pos, float v)
         {
             var placemntPos = GetPos(pos, v);
-            var placemntScale = GetScale(pos, v) * debugSizeMultiplier;
+            var placemntScale = GetScale(pos, v) * livePreviewSizeMultiplier;
             
-            Gizmos.color = debugColor;
+            Gizmos.color = livePreviewColor;
             Gizmos.DrawCube(placemntPos, placemntScale);
             Gizmos.color = Color.white;
         }
