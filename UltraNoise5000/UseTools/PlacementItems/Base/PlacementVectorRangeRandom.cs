@@ -21,8 +21,11 @@ namespace NoiseUltra.Tools.Placement
         public override void Init()
         {
             if (seed == 0)
+            {
                 seed = UnityEngine.Random.Range(0, MAXRandomSeedValue);
-            Debug.Log("New Random with seed:" + seed);
+                Debug.Log("PlacementVectorRangeRandom  new seed:" + seed);
+            }
+
             random = new Random(seed);
         }
 

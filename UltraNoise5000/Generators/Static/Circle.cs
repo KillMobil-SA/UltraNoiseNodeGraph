@@ -8,7 +8,7 @@ namespace NoiseUltra.Generators.Static
     [NodeTint(NodeColor.GREEN)]
     public class Circle : NodeOutput
     {
-        private const float Default = 100;
+        private const float Default = 0;
         [SerializeField] 
         private Vector3 center = new Vector2(Default, Default);
         
