@@ -37,11 +37,9 @@ namespace NoiseUltra.Tools.Placement
 
         private void OnEnable()
         {
-            Debug.Log("Enabling:" + this.name);
             placementPositionsSettings.OnEnable();
             placementRotationSettings.OnEnable();
             placementScaleSettings.OnEnable();
-                
         }
 
         public float GetSample(float x, float z)

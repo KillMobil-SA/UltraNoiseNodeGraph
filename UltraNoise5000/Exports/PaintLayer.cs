@@ -18,7 +18,7 @@ namespace NoiseUltra.Output
 
         [SerializeField]
         [ShowIf(nameof(isAnglePaint))]
-        private float angleDivide = 1;
+        private float angleDivide = .1f;
 
         [SerializeField]
         [ShowIf(nameof(isAnglePaint))]

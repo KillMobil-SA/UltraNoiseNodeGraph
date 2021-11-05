@@ -6,7 +6,7 @@ using Random = System.Random;
 namespace NoiseUltra.Tools.Placement
 {
     [Serializable]
-    public class PositionSettings :PlacementProperties
+    public class PositionSettings : PlacementProperties
     {
       
         #region Members
@@ -18,8 +18,6 @@ namespace NoiseUltra.Tools.Placement
         [BoxGroup("Height") , InlineProperty (), HideLabel , PropertyOrder(-1)]
         [ShowIf(nameof(heightPosType), HeightPosType.Raycast),SerializeField]
         private RayCastHeightPos rayCastHeightPos = new RayCastHeightPos();
-        
-
         [SerializeField] private IHeightBase _heightBase;
         private GridHeightPos noiseGridPos = new GridHeightPos();
         #endregion

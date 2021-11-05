@@ -49,7 +49,7 @@ namespace NoiseUltra.Tools.Placement
         [EnumToggleButtons , HideLabel] public AxisType axisType = AxisType.Unified;
         [EnumToggleButtons, HideLabel] public RangeType rangeType = RangeType.MinusPlus;
 
-        [HorizontalGroup(RangeSettingsGroup) , VerticalGroup( RangeSettingsVerticalGroup) , BoxGroup(RangeSettingsBoxGroupUnified)]
+        [HorizontalGroup(RangeSettingsGroup) , VerticalGroup(RangeSettingsVerticalGroup) , BoxGroup(RangeSettingsBoxGroupUnified)]
         [HideLabel ,ShowIf(nameof(showMinRangeField))]
         public float minRange = 0;
         
