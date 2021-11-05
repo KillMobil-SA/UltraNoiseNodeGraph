@@ -2,11 +2,38 @@ namespace NoiseUltra.Nodes
 {
     public static class NodeColor
     {
-        public const string GREEN = "#60753c";
-        public const string RED = "#e2468e";
         public const string YELLOW = "#86853C";
-        public const string BLUE = "#4983a4";
-        public const string PURPLE = "#8C4472";
+        
+        public const string MODIFIER = "#8C7569";
+        public const string MATH = "#8C8169";
+        public const string OPERATION = "#8C8C69";
+        public const string UTILITY = "#737373";
+        
+        public const string GENERATOR_NOISE = "#529945";
+        public const string GENERATOR_OTHER = "#45996F";
+        
+        public const string EXPORT_NODE = "#4273A6";
+        public const string EXPORT_TEXTURE = "#4B97A6";
+        
+        public const string PAINTLAYER = "#927590";
+        public const string PAINTEXPORT = "#BA5381";
+    }
+
+    public static class NodeLabels
+    {
+        public const string MinMax = "MinMax";
+        public const string Max = "Max";
+        public const string Min = "Min";
+        public const string Left = "Left";
+        public const string Right = "Right";
+        public const string Separator = "/";
+        
+        
+        public const string MinMaxLEFTGroup = MinMax + Separator + Left;
+        public const string MinMaxLEFTGroupMIN = MinMaxLEFTGroup + Separator + Max;
+        
+        public const string MinMaxRIGHTGroup = MinMax + Separator + Right;
+        public const string MinMaxRIGHTGroupMax = MinMaxRIGHTGroup + Separator + Max;
     }
 
     /// <summary>

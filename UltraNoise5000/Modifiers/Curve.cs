@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Modifiers
 {
+    [NodeTint(NodeColor.MODIFIER)]
     public class Curve : BaseNodeModifier
     {
         [SerializeField]

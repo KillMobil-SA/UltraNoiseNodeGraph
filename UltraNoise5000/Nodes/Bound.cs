@@ -1,16 +1,22 @@
 using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using NoiseUltra.Nodes;
 
 namespace NoiseUltra.Nodes
 {
     [Serializable]
     public struct Bound
     {
-        [Range(NodeProprieties.MIN_VALUE, NodeProprieties.MAX_VALUE), ReadOnly] 
+        //[Range(NodeProprieties.MIN_VALUE, NodeProprieties.MAX_VALUE), ReadOnly] 
+        [HorizontalGroup(NodeLabels.MinMax)]
+        [VerticalGroup(NodeLabels.MinMaxLEFTGroup)]
+        [BoxGroup(NodeLabels.MinMaxLEFTGroupMIN) , HideLabel]
         public float min;
 
-        [Range(NodeProprieties.MIN_VALUE, NodeProprieties.MAX_VALUE), ReadOnly]
+        //[Range(NodeProprieties.MIN_VALUE, NodeProprieties.MAX_VALUE), ReadOnly]
+        [VerticalGroup(NodeLabels.MinMaxRIGHTGroup)]
+        [BoxGroup(NodeLabels.MinMaxRIGHTGroupMax) ,  HideLabel]
         public float max;
 
         private readonly PreviewImage m_Preview;

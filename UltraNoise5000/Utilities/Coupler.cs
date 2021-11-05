@@ -2,7 +2,7 @@
 
 namespace NoiseUltra.Utilities 
 {
-    [NodeTint(NodeColor.PURPLE)]
+    [NodeTint(NodeColor.UTILITY)]
     public class Coupler : BaseNodeModifier
     {
         protected override float ApplyModifier(float sample)

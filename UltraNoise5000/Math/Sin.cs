@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Math
 {
+    [NodeTint(NodeColor.MATH)]
     public class Sin : BaseNodeModifier
     {
         [SerializeField , OnValueChanged(nameof(DrawAsync))]

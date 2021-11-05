@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace NoiseUltra.Generators
 {
-    [NodeTint(NodeColor.GREEN)]
+    [NodeTint(NodeColor.GENERATOR_NOISE)]
     public class NodeGenerator : NodeOutput
     {
         #region Members
-        [SerializeField]
+        [BoxGroup("Noise Settings"),SerializeField , InlineProperty()  , HideLabel]
         private Attributes attributes = new Attributes();
         private FractalNoise m_Fractal;
         

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Output
 {
-    [NodeTint(NodeColor.BLUE)]
+    [NodeTint(NodeColor.EXPORT_NODE)]
     public class ExportNode : NodeInputOutput
     {
         [SerializeField] [OnValueChanged(nameof(UpdateNoiseName))]

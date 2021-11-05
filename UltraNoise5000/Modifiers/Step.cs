@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Modifiers
 {
+    [NodeTint(NodeColor.MODIFIER)]
     public class Step : BaseNodeModifier
     {
         private const int MIN_STEPS = 1;

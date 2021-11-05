@@ -4,6 +4,8 @@ using Sirenix.OdinInspector;
 
 namespace NoiseUltra.Math
 {
+    
+    [NodeTint(NodeColor.MATH)]
     public class Cos : BaseNodeModifier
     {
         [SerializeField , OnValueChanged(nameof(DrawAsync))]

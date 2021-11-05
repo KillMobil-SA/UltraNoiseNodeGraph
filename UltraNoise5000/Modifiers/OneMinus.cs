@@ -2,6 +2,7 @@
 
 namespace NoiseUltra.Modifiers
 {
+    [NodeTint(NodeColor.MODIFIER)]
     public class OneMinus : BaseNodeModifier
     {
         protected override float ApplyModifier(float sample)

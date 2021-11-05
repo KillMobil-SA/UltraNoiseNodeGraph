@@ -1,9 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using XNode;
+using System;
+using NoiseUltra.Nodes;
+using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace NoiseUltra.Output
 {
+    [Serializable,NodeTint(NodeColor.PAINTEXPORT)]
     public class TerrainLayerExportGroup : ExportNode
     {
         [SerializeField]

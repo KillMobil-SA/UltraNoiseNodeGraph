@@ -2,6 +2,7 @@
 
 namespace NoiseUltra.Operations
 {
+    [NodeTint(NodeColor.OPERATION)]
     public class Sub : NodeDoubleInputOutput
     {
         protected override float ExecuteOperation(float strengthenedA, float strengthenedB)

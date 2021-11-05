@@ -13,7 +13,10 @@ namespace NoiseUltra.Nodes
         #region Members
         [SerializeField]
         protected PreviewImage previewImage = new PreviewImage();
+        
+        
         public float Zoom => previewImage.Zoom;
+        
         #endregion
 
         #region Initialization

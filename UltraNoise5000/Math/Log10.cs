@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Math
 {
+    [NodeTint(NodeColor.MATH)]
     public class Log10 : BaseNodeModifier
     {
         protected override float ApplyModifier(float sample)

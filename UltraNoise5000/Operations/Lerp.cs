@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Operations
 {
+    [NodeTint(NodeColor.OPERATION)]
     public class Lerp : NodeDoubleInputOutput
     {
         [SerializeField]

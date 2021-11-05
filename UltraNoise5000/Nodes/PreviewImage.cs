@@ -13,7 +13,7 @@ namespace NoiseUltra.Nodes
         #region Members
         private TaskGroup m_TaskGroup;
 
-        [SerializeField]
+        [SerializeField, InlineProperty, HideLabel]
         private Bound bounds;
 
         [OnValueChanged(nameof(DrawAsync))]

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Output
 {
-    [Serializable,NodeTint(NodeColor.YELLOW)]
+    [Serializable,NodeTint(NodeColor.PAINTLAYER)]
     public class PaintLayer : NodeInputOutput
     {
         [SerializeField]

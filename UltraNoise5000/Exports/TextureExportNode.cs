@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace NoiseUltra.Output
 {
-    [NodeTint(NodeColor.BLUE)]
+    [NodeTint(NodeColor.EXPORT_TEXTURE)]
     public class TextureExportNode : NodeInputOutput
     {
         private const string SAVE_FOLDER_PATH = "NoiseTextures";
