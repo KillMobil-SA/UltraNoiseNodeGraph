@@ -86,6 +86,11 @@ namespace NoiseUltra.Tools.Placement
 
         #region Public
 
+        public virtual void Initialize()
+        {
+            
+        }
+
         public abstract Vector3 GetVectorRange(Vector3 pos, float threshold);
 
         public float RoundValue(float value)

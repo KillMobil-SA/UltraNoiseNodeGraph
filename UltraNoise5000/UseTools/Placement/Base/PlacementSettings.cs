@@ -43,6 +43,13 @@ namespace NoiseUltra.Tools.Placement
         [BoxGroup(LIVE_PREVIEW_SETTINGS_NAME)]
         private float livePreviewSizeMultiplier = 1;
 
+        public void Initialize()
+        {
+             scale.Initialize();
+             rotation.Initialize();
+             position.Initialize();
+        }
+
         private void OnEnable()
         {
             position.OnEnable();

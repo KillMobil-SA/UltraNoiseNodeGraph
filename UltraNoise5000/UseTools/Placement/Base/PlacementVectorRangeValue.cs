@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace NoiseUltra.Tools.Placement
 {
-    [System.Serializable]
+    [Serializable]
     public class PlacementVectorRangeValue : PlacementVectorRange
     {
         public override Vector3 GetVectorRange(Vector3 pos, float threshold)

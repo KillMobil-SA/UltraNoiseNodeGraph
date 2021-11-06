@@ -15,7 +15,7 @@ namespace NoiseUltra.Tools.Placement
         [BoxGroup("Random")]
         public bool usePosAsRandomSeed;
 
-        public PlacementVectorRangeRandom()
+        public override void Initialize()
         {
             if (seed == 0)
             {

@@ -14,7 +14,13 @@ namespace NoiseUltra.Tools.Placement
         [HideLabel]
         [TitleGroup("Random Range")]
         public PlacementVectorRangeRandom placementRandomizedRange = new PlacementVectorRangeRandom();
-        
+
+        public virtual void Initialize()
+        {
+            placementValueRange.Initialize();
+            placementRandomizedRange.Initialize();
+        }
+
         public virtual void OnEnable()
         {
         }

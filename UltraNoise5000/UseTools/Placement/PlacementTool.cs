@@ -77,6 +77,16 @@ namespace NoiseUltra.Tools.Placement
             }
         }
 
+        private void Initialize()
+        {
+            for (var i = 0; i < placementItems.Count; i++)
+            {
+                PlacementItem item = placementItems[i];
+                PlacementSettings itemSettings = item.settings;
+                itemSettings.Initialize();
+            }
+        }
+
         #endregion
 
         #region Private
@@ -84,6 +94,7 @@ namespace NoiseUltra.Tools.Placement
 
         private void PerformPlacement(bool isLivePreview)
         {
+            Initialize();
             float frameStart = Time.realtimeSinceStartup;
             int totalPlacementItems = placementItems.Count;
             for (var i = 0; i < totalPlacementItems; i++)
@@ -103,9 +114,9 @@ namespace NoiseUltra.Tools.Placement
 
                 myPlacementBounds.SetSpace(spacing);
 
-                int xAmount = (int) myPlacementBounds.xAmount;
-                int yAmount = (int) myPlacementBounds.yAmount;
-                int zAmount = (int) myPlacementBounds.zAmount;
+                float xAmount = myPlacementBounds.xAmount;
+                float yAmount = myPlacementBounds.yAmount;
+                float zAmount = myPlacementBounds.zAmount;
 
                 for (var x = 0; x < xAmount; x++)
                 {
