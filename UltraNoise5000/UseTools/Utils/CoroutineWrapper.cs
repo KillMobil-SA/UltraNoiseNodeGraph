@@ -1,42 +1,35 @@
 using System.Collections;
-using Unity.EditorCoroutines.Editor;
 using UnityEngine;
 
-namespace NoiseUltra.Tools.Terrains
+namespace NoiseUltra.Tools
 {
     public sealed class CoroutineWrapper
     {
-        private readonly MonoBehaviour _handler;
-        private readonly IEnumerator _coroutine;
-
-#if UNITY_EDITOR
-        private EditorCoroutine _editorRoutine;
-#else
-        private Coroutine _runtimeRoutine;
-#endif
+        private readonly MonoBehaviour m_Handler;
+        private readonly IEnumerator m_Coroutine;
+        private Coroutine m_RuntimeRoutine;
 
         public CoroutineWrapper(MonoBehaviour handler, IEnumerator coroutine)
         {
-            _handler = handler;
-            _coroutine = coroutine;
+            m_Handler = handler;
+            m_Coroutine = coroutine;
         }
 
         public void StartCoroutine()
         {
-#if UNITY_EDITOR
-            _editorRoutine = EditorCoroutineUtility.StartCoroutine(_coroutine, _handler);
-#else
-            _runtimeRoutine = Handler.StartCoroutine(Coroutine);
-#endif
+            if (m_Handler != null && m_Coroutine != null)
+            {
+                m_RuntimeRoutine = m_Handler.StartCoroutine(m_Coroutine);
+            }
         }
 
         public void StopCoroutine()
         {
-#if UNITY_EDITOR
-            EditorCoroutineUtility.StopCoroutine(_editorRoutine);
-#else
-            Handler.StopCoroutine(_runtimeRoutine);
-#endif
+            if (m_RuntimeRoutine != null)
+            {
+                m_Handler.StopCoroutine(m_RuntimeRoutine);
+                m_RuntimeRoutine = null;
+            }
         }
     }
 }
