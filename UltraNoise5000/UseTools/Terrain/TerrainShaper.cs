@@ -1,14 +1,14 @@
 using System.Collections;
 using NoiseUltra.Generators;
 using NoiseUltra.Nodes;
-using Sirenix.Serialization;
 using UnityEngine;
 
-namespace NoiseUltra.Tools.Terrains
+namespace NoiseUltra.Tools
 {
     public class TerrainShaper : TerrainTool
     {
         private float[,] m_HeightMap;
+
         #region Async
 
         protected override void OnBeforeApplyAsync()
@@ -19,44 +19,38 @@ namespace NoiseUltra.Tools.Terrains
             progress.SetSize(resolution * resolution);
             Vector3 position = transform.position;
             float relativeSize = GetRelativeSize();
-            Debug.Log("-----------");
-            Debug.Log("useWorldCordinates:" + useWorldCordinates);
-            Debug.Log("relativeSize:" + relativeSize);
-            Debug.Log("resolution:" + resolution);
-            Debug.Log("position:" + position);
-            
-            for (int x = 0; x < resolution; x++) {
+
+            for (int x = 0; x < resolution; x++)
+            {
                 float xPos = x * relativeSize;
-              //  Debug.Log("xPos: "  + xPos  + " = "  + x + " * " + relativeSize);
-              if (useWorldCordinates)
-              {
-                  xPos += position.x;
-                  //Debug.Log("xPos: "  + xPos  + " = "  + x + " * " + relativeSize);
-              }
-                
-                for (int y = 0; y < resolution; y++) {
+                if (useWorldCordinates)
+                {
+                    xPos += position.x;
+                }
+
+                for (int y = 0; y < resolution; y++)
+                {
                     float yPos = y * relativeSize;
                     if (useWorldCordinates)
                         yPos += position.z;
 
                     SampleStepFloat2 sample = new SampleStepFloat2(xPos, yPos, y, x, ref m_HeightMap);
-                    
-                   // if(x%2==0 && y%2==0)Debug.Log(xPos + "|" + yPos);
-                    
                     void Action() => sourceNode.ExecuteSampleAsync(sample);
                     taskGroup.AddTask(Action);
                 }
             }
         }
-        
+
         protected override void OnCompleteTask()
         {
             Profiler.End("Terrain Async");
             GetTerrainData().SetHeights(0, 0, m_HeightMap);
         }
+
         #endregion
 
         #region Sync
+
         protected override IEnumerator ExecuteSync()
         {
             Profiler.Start();
@@ -69,41 +63,36 @@ namespace NoiseUltra.Tools.Terrains
             GetTerrainData().SetHeights(0, 0, m_HeightMap);
             progress.Reset();
             Profiler.End("Sync Terrain Shape");
-        } 
+        }
 
         private IEnumerator ExecuteSync(int resolution, Vector3 position, float relativeSize)
-        { 
-            Debug.Log("-----------");
-            Debug.Log("useWorldCordinates:" + useWorldCordinates);
-            Debug.Log("relativeSize:" + relativeSize);
-            Debug.Log("resolution:" + resolution);
-            Debug.Log("position:" + position);
+        {
             for (int x = 0; x < resolution; x++)
             {
                 float xPos = x * relativeSize;
-
                 if (useWorldCordinates)
                 {
                     xPos += position.x;
-                    
                 }
-                
-                for (int y = 0; y < resolution; y++) {
+
+                for (int y = 0; y < resolution; y++)
+                {
                     float yPos = y * relativeSize;
-
                     if (useWorldCordinates)
+                    {
                         yPos += position.z;
+                    }
 
-                    //if(x%2==0 && y%2==0)Debug.Log(xPos + "|" + yPos);
                     m_HeightMap[y, x] = GetSample(xPos, yPos);
-                    
+
                     if (!progress.TryProcess())
+                    {
                         yield return progress.ResetIteration();
-                    
+                    }
                 }
             }
         }
+
         #endregion
-        
     }
 }

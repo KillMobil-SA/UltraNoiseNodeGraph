@@ -1,8 +1,9 @@
 ﻿using System.Collections;
+using NoiseUltra.Tools.Terrains;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace NoiseUltra.Tools.Terrains
+namespace NoiseUltra.Tools
 {
     [RequireComponent(typeof(Terrain))]
     public abstract class TerrainTool : BaseTool
@@ -18,7 +19,7 @@ namespace NoiseUltra.Tools.Terrains
             public float relativeAlphaSize;
         }
 
-        private CoroutineWrapper m_RoutineWrapper;
+        private EditorCoroutineWrapper m_RoutineWrapper;
         private Cache m_Cache;
 
         [SerializeField]
@@ -54,7 +55,7 @@ namespace NoiseUltra.Tools.Terrains
         public void ApplySync()
         {
             Initialize();
-            m_RoutineWrapper = new CoroutineWrapper(this, ExecuteSync());
+            m_RoutineWrapper = new EditorCoroutineWrapper(this, ExecuteSync());
             m_RoutineWrapper.StartCoroutine();
         }
 

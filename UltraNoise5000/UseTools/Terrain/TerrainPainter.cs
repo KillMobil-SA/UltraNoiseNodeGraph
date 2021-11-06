@@ -4,7 +4,7 @@ using NoiseUltra.Nodes;
 using NoiseUltra.Output;
 using UnityEngine;
 
-namespace NoiseUltra.Tools.Terrains
+namespace NoiseUltra.Tools
 {
     public class TerrainPainter : TerrainTool
     {
