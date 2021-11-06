@@ -53,7 +53,7 @@ namespace NoiseUltra
             {
                 worldMeshPoints[i] = transform.localToWorldMatrix.MultiplyPoint3x4(meshPoints[i]);
                 noisePlacement.IsPositionValid(worldMeshPoints[i]);
-                worldMeshPoints[i] = noisePlacement.Calculator(worldMeshPoints[i], 1);
+                worldMeshPoints[i] = noisePlacement.Execute(worldMeshPoints[i], 1);
                 worldMeshPoints[i].y =
                     (@base.GetSample(worldMeshPoints[i].x, worldMeshPoints[i].z) - heightFloatMinus) *
                     heightMultiplayer;

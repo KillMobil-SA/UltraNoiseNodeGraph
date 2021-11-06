@@ -1,76 +1,77 @@
 ﻿using UnityEngine;
-using XNode.Examples.MathNodes;
 
 namespace NoiseUltra.Tools.Placement
 {
-    public class PlacementBounds
+    public sealed class PlacementBounds
     {
-        private readonly Collider placementCollider;
-        private PlacementTool _placementTool;
-        private float spacing;
+        private readonly Collider m_PlacementCollider;
+        private float m_Spacing;
 
-        public PlacementBounds(PlacementTool placementTool, Collider _placementCollider)
+        public PlacementBounds(Collider placementCollider)
         {
-            _placementTool = placementTool;
-            placementCollider = _placementCollider;
+            m_PlacementCollider = placementCollider;
         }
 
         public float xAmount
         {
             get
             {
-                var v = placementCollider.bounds.size.x / spacing;
-                if (v == 0) v = 1;
+                var v = m_PlacementCollider.bounds.size.x / m_Spacing;
+                //TODO: proper comparison between float variables
+                if (v == 0)
+                {
+                    v = 1;
+                }
                 return v;
             }
         }
-
-        public int xAmountInt => Mathf.RoundToInt(xAmount);
-
-
+        
         public float yAmount
         {
             get
             {
-                var v = placementCollider.bounds.size.y / spacing;
-                if (v == 0) v = 1;
+                var v = m_PlacementCollider.bounds.size.y / m_Spacing;
+                //TODO: proper comparison between float variables
+                if (v == 0)
+                {
+                    v = 1;
+                }
                 return v;
             }
         }
-
-        public int yAmountInt => Mathf.RoundToInt(yAmount);
 
         public float zAmount
         {
             get
             {
-                var v = placementCollider.bounds.size.z / spacing;
-                if (v == 0) v = 1;
+                float v = m_PlacementCollider.bounds.size.z / m_Spacing;
+                //TODO: proper comparison between float variables
+                if (v == 0)
+                {
+                    v = 1;
+                }
                 return v;
             }
         }
 
-        public int zAmountInt => Mathf.RoundToInt(zAmount);
-
-
         public bool heightIs2D => yAmount <= 1;
-
-
+        
         public Vector3 center
         {
             get
             {
-                
-                var center = placementCollider.bounds.center;
-                var centerRound = new Vector3(Mathf.Round(center.x / spacing) * spacing, Mathf.Round(center.y),
-                    Mathf.Round(center.z / spacing) * spacing);
+                Vector3 boundsCenter = m_PlacementCollider.bounds.center;
+                float x = Mathf.Round(boundsCenter.x / m_Spacing) * m_Spacing;
+                float y = Mathf.Round(boundsCenter.y);
+                float z = Mathf.Round(boundsCenter.z / m_Spacing) * m_Spacing;
+                Vector3 centerRound = new Vector3(x, y, z);
                 return centerRound;
             }
         }
 
-        public void SetSpace(float _spacing)
+        public void SetSpace(float spacing)
         {
-            spacing = _spacing;
+            m_Spacing = spacing;
         }
 
 
@@ -82,32 +83,25 @@ namespace NoiseUltra.Tools.Placement
 
         public Vector3 GetPosVector(float x, float y, float z)
         {
-            var xPos = x - xAmount / 2;
-            var yPos = y - yAmount / 2;
-            var zPos = z - zAmount / 2;
-            var pos = new Vector3(xPos, yPos, zPos) * spacing + center;
+            float xPos = x - xAmount / 2;
+            float yPos = y - yAmount / 2;
+            float zPos = z - zAmount / 2;
+            Vector3 pos = new Vector3(xPos, yPos, zPos) * m_Spacing + center;
             return pos;
         }
 
 
-        private void ColliderBoundsPrintOut()
+        private void Print()
         {
-            Vector3 m_Center;
-            Vector3 m_Size, m_Min, m_Max;
-
-            //Fetch the center of the Collider volume
-            m_Center = placementCollider.bounds.center;
-            //Fetch the size of the Collider volume
-            m_Size = placementCollider.bounds.size;
-            //Fetch the minimum and maximum bounds of the Collider volume
-            m_Min = placementCollider.bounds.min;
-            m_Max = placementCollider.bounds.max;
-            //Output this data into the console
-            //Output to the console the center and size of the Collider volume
-            Debug.Log("Collider Center : " + m_Center);
-            Debug.Log("Collider Size : " + m_Size);
-            Debug.Log("Collider bound Minimum : " + m_Min);
-            Debug.Log("Collider bound Maximum : " + m_Max);
+            Vector3 center = m_PlacementCollider.bounds.center;
+            Vector3 size = m_PlacementCollider.bounds.size;
+            Vector3 min = m_PlacementCollider.bounds.min;
+            Vector3 max = m_PlacementCollider.bounds.max;
+            string msg = $"Collider Center : {center}" +
+                         $"Collider Size : {size}" +
+                         $"Collider bound Minimum : {min}" +
+                         $"Collider bound Maximum : {max}";
+            Debug.Log(msg);
         }
     }
 }

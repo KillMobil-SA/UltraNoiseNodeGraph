@@ -1,40 +1,45 @@
 ﻿using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using Random = System.Random;
 
 namespace NoiseUltra.Tools.Placement
 {
     [Serializable]
-    public class PositionSettings : PlacementProperties
+    public class PositionSettings : BasePlacementSetting
     {
-      
-        #region Members
+        private const string HEIGHT_NAME = "Height";
+        private const string HEIGHT_CALCULATION_SETTINGS = "Height Calculation Settings";
 
-        [TitleGroup("Height Calculation Settings") ,  PropertyOrder(-1)] 
-        [OnValueChanged(nameof(UpdateHeightInterFace))] [SerializeField]
-        [EnumToggleButtons , HideLabel]        
+        [TitleGroup(HEIGHT_CALCULATION_SETTINGS)]
+        [PropertyOrder(-1)] 
+        [OnValueChanged(nameof(UpdateHeightInterFace))]
+        [SerializeField]
+        [EnumToggleButtons]
+        [HideLabel]        
         private HeightPosType heightPosType = HeightPosType.Grid;
-        [BoxGroup("Height") , InlineProperty (), HideLabel , PropertyOrder(-1)]
-        [ShowIf(nameof(heightPosType), HeightPosType.Raycast),SerializeField]
+        
+        [BoxGroup(HEIGHT_NAME)]
+        [InlineProperty]
+        [HideLabel]
+        [PropertyOrder(-1)]
+        [ShowIf(nameof(heightPosType), HeightPosType.Raycast)]
+        [SerializeField]
         private RayCastHeightPos rayCastHeightPos = new RayCastHeightPos();
-        [SerializeField] private IHeightBase _heightBase;
-        private GridHeightPos noiseGridPos = new GridHeightPos();
-        #endregion
-
-        #region Public
+        
+        private readonly GridHeightPos m_NoiseGridPos = new GridHeightPos();
+        private IHeightBase m_HeightBase;
         
         public PositionSettings()
         {
             UpdateHeightInterFace();
         }
         
-        public override Vector3 Calculator(Vector3 pos, float thresHold)
+        public override Vector3 Execute(Vector3 pos, float threshold)
         {
             
             
-            var valuePosition = placementValueRange.GetVectorRange(pos, thresHold);
-            var randomPosition = placementRandomizedRange.GetVectorRange(pos, thresHold);
+            var valuePosition = placementValueRange.GetVectorRange(pos, threshold);
+            var randomPosition = placementRandomizedRange.GetVectorRange(pos, threshold);
 
             var positionResult = (valuePosition + randomPosition) + pos ;
 
@@ -51,40 +56,30 @@ namespace NoiseUltra.Tools.Placement
         
         public bool IsPositionValid(Vector3 pos)
         {
-            return _heightBase.HeightCheck(pos);
+            return m_HeightBase.HeightCheck(pos);
         }   
         
-        #endregion
-
-        #region Private
-
         private void UpdateHeightInterFace()
         {
-            //_heightBase = noiseGridPos;
             switch (heightPosType)
             {
                 case HeightPosType.Grid:
-                    _heightBase = noiseGridPos;
+                    m_HeightBase = m_NoiseGridPos;
                     break;
                 case HeightPosType.Raycast:
-                    _heightBase = rayCastHeightPos;
+                    m_HeightBase = rayCastHeightPos;
                     break;
                 default:
-                    _heightBase = noiseGridPos;
+                    m_HeightBase = m_NoiseGridPos;
                     break;
             }
         }
 
-        
-
         private float CalculateHeight(Vector3 pos)
         {
-            return _heightBase.GetHeightPos(pos);
+            return m_HeightBase.GetHeightPos(pos);
  
         }
-        #endregion
-        
-
     }
 }
 
