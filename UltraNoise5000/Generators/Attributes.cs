@@ -69,7 +69,7 @@ namespace NoiseUltra.Generators
         #region Private
         private void DrawPreview()
         {
-            if (nodeGenerator)
+            if (nodeGenerator != null)
             {
                 nodeGenerator.SetFractalDirty();
                 nodeGenerator.DrawAsync();

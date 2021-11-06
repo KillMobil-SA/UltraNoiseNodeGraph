@@ -134,6 +134,7 @@ namespace NoiseUltra.Nodes
         {
             sourceTexture.SetPixels(m_Pixels);
             sourceTexture.Apply();
+            IdentifyBounds();
             Profiler.End();
         }
 

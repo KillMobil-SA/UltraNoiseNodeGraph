@@ -34,9 +34,6 @@ namespace NoiseUltra.Nodes
             max = NodeProprieties.MIN_VALUE;
         }
 
-        [Button]
-        private void IdentifyBounds() => m_Preview.IdentifyBounds();
-
         public void IdentifyBounds(float sample)
         {
             sample = Mathf.Clamp01(sample);
