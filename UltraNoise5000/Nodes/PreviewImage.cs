@@ -169,7 +169,7 @@ namespace NoiseUltra.Nodes
 
         #region Private
 
-        public void IdentifyBounds()
+        private void IdentifyBounds()
         {
             int length = m_Pixels.Length;
             for (int i = 0; i < length; i++)
