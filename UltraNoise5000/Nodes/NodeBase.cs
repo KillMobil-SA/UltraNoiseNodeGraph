@@ -1,4 +1,6 @@
-﻿using Sirenix.OdinInspector;
+﻿using System.Collections;
+using NoiseUltra.Tools;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using XNode;
 
@@ -13,8 +15,8 @@ namespace NoiseUltra.Nodes
         #region Members
         [SerializeField]
         protected PreviewImage previewImage = new PreviewImage();
-        
-        
+        private EditorCoroutineWrapper m_EditorCoroutine;
+
         public float Zoom => previewImage.Zoom;
         
         #endregion
@@ -22,6 +24,7 @@ namespace NoiseUltra.Nodes
         #region Initialization
         protected override void Init()
         {
+            m_EditorCoroutine = new EditorCoroutineWrapper( this, DrawAsyncInternal());
             previewImage.Initialize(this);
         }
         #endregion
@@ -41,6 +44,14 @@ namespace NoiseUltra.Nodes
         [Button]
         public void DrawAsync()
         {
+            m_EditorCoroutine.StopCoroutine();
+            m_EditorCoroutine.SetCoroutine(DrawAsyncInternal());
+            m_EditorCoroutine.StartCoroutine();
+        }
+
+        private IEnumerator DrawAsyncInternal()
+        {
+            yield return Wait.WAIT_ONE_SECOND;
             OnBeforeDrawPreview();
             previewImage.DrawAsync();
         }
