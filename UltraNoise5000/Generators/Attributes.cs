@@ -31,6 +31,7 @@ namespace NoiseUltra.Generators
 
         [SerializeField]
         [OnValueChanged(nameof(DrawPreview))]
+        [Range(1, 16)]
         private int octaves = 4;
 
         [SerializeField]
