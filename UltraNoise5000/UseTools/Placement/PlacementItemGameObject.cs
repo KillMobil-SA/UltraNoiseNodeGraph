@@ -8,6 +8,13 @@ using UnityEditor;
 
 namespace NoiseUltra.Tools.Placement
 {
+    public enum PlacementObjectType
+    {
+        Linear,
+        Value,
+        Random
+    }
+
     [CreateAssetMenu(fileName = "UltraPlacementItemGameObject", menuName = "KillMobil/UltraNoise/Gameobjects")]
     public class PlacementItemGameObject : PlacementSettings
     {
@@ -54,7 +61,6 @@ namespace NoiseUltra.Tools.Placement
             return returnID;
         }
 
-
         private string ObjectNamePrefix(Vector3 pos)
         {
             var prefix = name + "_" + pos.x + "_" + pos.y + "_" + pos.z;
@@ -66,17 +72,17 @@ namespace NoiseUltra.Tools.Placement
         #region Public
         public override void PlaceObject(Vector3 pos, float v, Transform parent)
         {
-            var placementPos = GetPos(pos, v);
-            var placementScale = GetScale(pos, v);
-            var placementRot = GetRot(pos, v);
-            var sourceGO = GetGameObject(v);
-            GameObject newObject;
+            Vector3 placementPos = GetPos(pos, v);
+            Vector3 placementScale = GetScale(pos, v);
+            Vector3 placementRot = GetRot(pos, v);
+            GameObject sourceGO = GetGameObject(v);
+            GameObject newObject = null;
 
 #if UNITY_EDITOR
             newObject = PrefabUtility.InstantiatePrefab(sourceGO, parent) as GameObject;
 #else
-        newObject = Instantiate (placementItem.GetGameObject (v)) as GameObject;
-        newObject.transform.parent = parent;
+            newObject = Instantiate (placementItem.GetGameObject (v)) as GameObject;
+            newObject.transform.parent = parent;
 #endif
 
             newObject.SetActive(true);
@@ -89,14 +95,16 @@ namespace NoiseUltra.Tools.Placement
 
         public override void CleanObjects(Transform parent)
         {
-            var transforms = parent.GetComponentsInChildren<Transform>();
-
-            var reformList = new List<Transform>();
-            for (var i = 0; i < transforms.Length; i++)
+            Transform[] transforms = parent.GetComponentsInChildren<Transform>();
+            List<Transform> reformList = new List<Transform>();
+            for (int i = 0; i < transforms.Length; i++)
+            {
                 if (transforms[i].parent == parent)
+                {
                     reformList.Add(transforms[i]);
-
-
+                }
+            }
+            
             for (var i = 0; i < reformList.Count; i++)
             {
 #if UNITY_EDITOR
@@ -107,13 +115,5 @@ namespace NoiseUltra.Tools.Placement
             }
         }
         #endregion
-
-        //Todo @Sotiris This Sucka needs to get out of here
-        private enum PlacementObjectType
-        {
-            Linear,
-            Value,
-            Random
-        }
     }
 }

@@ -45,11 +45,15 @@ namespace NoiseUltra.Tools.Placement
 
         #region Members
 
+        private PlacementTool m_PlacementTool;
+
         [Space] [EnumToggleButtons] [HideLabel]
+        [OnValueChanged(nameof(UpdateTool))]
         public AxisType axisType = AxisType.Unified;
 
         [EnumToggleButtons]
-        [HideLabel] 
+        [HideLabel]
+        [OnValueChanged(nameof(UpdateTool))]
         public RangeType rangeType = RangeType.MinusPlus;
 
         [HorizontalGroup(RANGE_SETTINGS_GROUP)]
@@ -57,15 +61,19 @@ namespace NoiseUltra.Tools.Placement
         [BoxGroup(RANGE_SETTINGS_BOX_GROUP_UNIFIED)]
         [HideLabel]
         [ShowIf(nameof(showMinRangeField))]
+        [OnValueChanged(nameof(UpdateTool))]
         public float minRange = 0;
 
         [BoxGroup(RANGE_SETTINGS_BOX_GROUP_UNIFIED)] [ShowIf(nameof(showRangeField))] [HideLabel]
+        [OnValueChanged(nameof(UpdateTool))]
         public float range = 0;
 
         [BoxGroup(RANGE_SETTINGS_BOX_GROUP_SEPARATED)] [ShowIf(nameof(showMinRangeV3Field))] [HideLabel]
+        [OnValueChanged(nameof(UpdateTool))]
         public Vector3 minRangeV3 = Vector3.zero;
 
         [BoxGroup(RANGE_SETTINGS_BOX_GROUP_SEPARATED)] [ShowIf(nameof(showRangeV3Field))] [HideLabel]
+        [OnValueChanged(nameof(UpdateTool))]
         public Vector3 rangeV3 = Vector3.zero;
 
         [HorizontalGroup(OTHER_SETTINGS_GROUP, 110, PaddingRight = 15)]
@@ -74,21 +82,24 @@ namespace NoiseUltra.Tools.Placement
         [LabelText(AMOUNT_NAME)]
         [LabelWidth(50)]
         [Min(0)]
+        [OnValueChanged(nameof(UpdateTool))]
         public float roundAmount;
 
         [VerticalGroup(OTHER_SETTINGS_VERTICAL_GROUP_RIGHT, PaddingTop = 15), BoxGroup(OTHER_SETTINGS_BOX_GROUP_RIGHT)]
+        [OnValueChanged(nameof(UpdateTool))]
         public bool useExternalNoise;
 
         [BoxGroup(OTHER_SETTINGS_BOX_GROUP_RIGHT), ShowIf(nameof(useExternalNoise))]
+        [OnValueChanged(nameof(UpdateTool))]
         public ExportNode externalSource;
 
         #endregion
 
         #region Public
 
-        public virtual void Initialize()
+        public virtual void Initialize(PlacementTool placementTool)
         {
-            
+            m_PlacementTool = placementTool;
         }
 
         public abstract Vector3 GetVectorRange(Vector3 pos, float threshold);
@@ -106,5 +117,13 @@ namespace NoiseUltra.Tools.Placement
         }
 
         #endregion
+
+        protected void UpdateTool()
+        {
+            if (m_PlacementTool != null)
+            {
+                m_PlacementTool.PerformPlacement();
+            }
+        }
     }
 }

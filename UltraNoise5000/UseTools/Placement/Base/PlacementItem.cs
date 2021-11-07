@@ -18,8 +18,7 @@ namespace NoiseUltra.Tools.Placement
 
         public PlacementSettings settings;
 
-        public bool GenerateObject(PlacementBounds placementBound, Vector3 placementPosition, bool isLivePreview,
-            Transform parent, bool useWorldCoordinates, bool useAbsoluteCoordinates)
+        public bool GenerateObject(PlacementBounds placementBound, Vector3 placementPosition, bool isLivePreview, Transform parent, bool useWorldCoordinates, bool useAbsoluteCoordinates)
         {
             if (settings.exportNode == null || settings == null)
             {
@@ -27,9 +26,21 @@ namespace NoiseUltra.Tools.Placement
             }
             
             Vector3 pos = placementBound.GetPosVector(placementPosition);
-            float sample = GetSample(pos, placementBound, useWorldCoordinates, useAbsoluteCoordinates);
 
-            if (!IsPositionValid(pos, sample))
+            if (useAbsoluteCoordinates)
+            {
+                pos = new Vector3(Mathf.Abs(pos.x), Mathf.Abs(pos.y), Mathf.Abs(pos.z));
+            }
+
+            if (!useWorldCoordinates)
+            {
+                pos -= placementBound.center;
+            }
+
+            bool is2D = placementBound.heightIs2D;
+            float sample = is2D ? settings.GetSample(pos.x, pos.z) : settings.GetSample(pos);
+
+            if (!settings.IsPositionValid(pos))
             {
                 return false;
             }
@@ -40,34 +51,6 @@ namespace NoiseUltra.Tools.Placement
                 settings.PlaceObject(pos, sample, parent);
 
             return true;
-        }
-
-        private float GetSample(Vector3 pos, PlacementBounds placementBounds, bool useWorldCordinates,
-            bool cordinatesAbs)
-        {
-
-            if (cordinatesAbs)
-            {
-                pos = new Vector3(Mathf.Abs(pos.x), Mathf.Abs(pos.y), Mathf.Abs(pos.z));
-            }
-
-            if (!useWorldCordinates)
-            {
-                pos -= placementBounds.center;
-            }
-
-            bool is2D = placementBounds.heightIs2D;
-            return is2D ? settings.GetSample(pos.x, pos.z) : settings.GetSample(pos);
-        }
-
-        private bool IsPositionValid(Vector3 pos, float v)
-        {
-            if (v <= 0)
-            {
-                return false;
-            }
-
-            return settings.IsPositionValid(pos);
         }
     }
 }

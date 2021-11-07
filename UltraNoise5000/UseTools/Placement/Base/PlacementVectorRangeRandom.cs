@@ -10,13 +10,16 @@ namespace NoiseUltra.Tools.Placement
         #region Public
 
         [BoxGroup("Random")]
+        [OnValueChanged(nameof(UpdateTool))]
         public int seed;
         
         [BoxGroup("Random")]
+        [OnValueChanged(nameof(UpdateTool))]
         public bool usePosAsRandomSeed;
 
-        public override void Initialize()
+        public override void Initialize(PlacementTool placementTool)
         {
+            base.Initialize(placementTool);
             if (seed == 0)
             {
                 seed = UnityEngine.Random.Range(0, MAXRandomSeedValue);
@@ -86,6 +89,7 @@ namespace NoiseUltra.Tools.Placement
         protected const int MAXRandomSeedValue = 9999;
         protected const int Divider = 1000;
 
+        [OnValueChanged(nameof(UpdateTool))]
         protected Random _random;
 
         protected Random random

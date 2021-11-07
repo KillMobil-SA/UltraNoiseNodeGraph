@@ -1,6 +1,8 @@
-﻿using Sirenix.OdinInspector;
+﻿using NoiseUltra.Nodes;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using NoiseUltra.Output;
+using Vector3 = UnityEngine.Vector3;
 
 namespace NoiseUltra.Tools.Placement
 {
@@ -43,11 +45,14 @@ namespace NoiseUltra.Tools.Placement
         [BoxGroup(LIVE_PREVIEW_SETTINGS_NAME)]
         private float livePreviewSizeMultiplier = 1;
 
-        public void Initialize()
+        private PlacementTool m_PlacementTool;
+
+        public void Initialize(PlacementTool placementTool)
         {
-             scale.Initialize();
-             rotation.Initialize();
-             position.Initialize();
+            m_PlacementTool = placementTool;
+            scale.Initialize(m_PlacementTool);
+            rotation.Initialize(m_PlacementTool);
+            position.Initialize(m_PlacementTool);
         }
 
         private void OnEnable()
@@ -66,7 +71,7 @@ namespace NoiseUltra.Tools.Placement
         {
             return exportNode.GetSample(pos.x, pos.y, pos.z);
         }
-        
+
         public bool IsPositionValid(Vector3 pos)
         {
             return position.IsPositionValid(pos);
@@ -103,6 +108,14 @@ namespace NoiseUltra.Tools.Placement
             Gizmos.color = livePreviewColor;
             Gizmos.DrawCube(currentPosition, currentScale);
             Gizmos.color = Color.white;
+        }
+
+        public void Update()
+        {
+            if (m_PlacementTool != null)
+            {
+                m_PlacementTool.PerformPlacement();
+            }
         }
     }
 }

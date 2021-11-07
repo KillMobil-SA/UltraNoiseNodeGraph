@@ -26,6 +26,9 @@ namespace NoiseUltra.Tools.Placement
 
         private PlacementBounds m_MyPlacementBounds;
 
+        private Vector3[] m_Positions;
+        private Vector3[] m_Scale;
+
         private PlacementBounds myPlacementBounds
         {
             get
@@ -62,7 +65,7 @@ namespace NoiseUltra.Tools.Placement
         public void GenerateObjects()
         {
             ClearObjects();
-            PerformPlacement(false);
+            PerformPlacement();
             m_ShowLivePreview = false;
         }
 
@@ -83,7 +86,7 @@ namespace NoiseUltra.Tools.Placement
             {
                 PlacementItem item = placementItems[i];
                 PlacementSettings itemSettings = item.settings;
-                itemSettings.Initialize();
+                itemSettings.Initialize(this);
             }
         }
 
@@ -92,10 +95,9 @@ namespace NoiseUltra.Tools.Placement
         #region Private
 
 
-        private void PerformPlacement(bool isLivePreview)
+        public void PerformPlacement()
         {
             Initialize();
-            float frameStart = Time.realtimeSinceStartup;
             int totalPlacementItems = placementItems.Count;
             for (var i = 0; i < totalPlacementItems; i++)
             {
@@ -118,6 +120,9 @@ namespace NoiseUltra.Tools.Placement
                 float yAmount = myPlacementBounds.yAmount;
                 float zAmount = myPlacementBounds.zAmount;
 
+                int index = 0;
+                m_Positions = new Vector3[(int)(xAmount * zAmount)];
+                m_Scale = new Vector3[(int)(xAmount * zAmount)];
                 for (var x = 0; x < xAmount; x++)
                 {
                     for (var y = 0; y < yAmount; y++)
@@ -125,21 +130,37 @@ namespace NoiseUltra.Tools.Placement
                         for (var z = 0; z < zAmount; z++)
                         {
                             Vector3 placementPos = new Vector3(x, y, z);
-                            PlacementItem placedItem = placementItems[i];
-                            placedItem.GenerateObject(myPlacementBounds, placementPos, isLivePreview, transform,
-                                useWorldCoordinates, useAbsoluteCoordinates);
+                            PlacementSettings settings = item.settings;
 
-                            if (isLivePreview)
+                            if (settings.exportNode == null || settings == null)
                             {
-                                float frameEnd = Time.realtimeSinceStartup;
-                                previewRenderTime = frameEnd - frameStart;
-                                if (previewRenderTime > MAX_PREVIEW_RENDER_TIME && m_ShowLivePreview)
-                                {
-                                    Debug.LogError("Cannot Render Preview spacing is set too low");
-                                    m_ShowLivePreview = false;
-                                    return;
-                                }
+                                continue;
                             }
+
+                            Vector3 pos = myPlacementBounds.GetPosVector(placementPos);
+
+                            if (useAbsoluteCoordinates)
+                            {
+                                pos = new Vector3(Mathf.Abs(pos.x), Mathf.Abs(pos.y), Mathf.Abs(pos.z));
+                            }
+
+                            if (!useWorldCoordinates)
+                            {
+                                pos -= myPlacementBounds.center;
+                            }
+
+                            bool is2D = myPlacementBounds.heightIs2D;
+                            float sample = is2D ? settings.GetSample(pos.x, pos.z) : settings.GetSample(pos);
+                            
+                            if (!settings.IsPositionValid(pos))
+                            {
+                                continue;
+                            }
+
+                            m_Positions[index] = settings.GetPos(pos, sample);
+                            m_Scale[index] = settings.GetScale(pos, sample);
+
+                            index++;
                         }
                     }
                 }
@@ -153,13 +174,20 @@ namespace NoiseUltra.Tools.Placement
                 return;
             }
 
-            PerformPlacement(true);
+            int count = m_Positions.Length;
+            for (int j = 0; j < count; ++j)
+            {
+                var pos = m_Positions[j];
+                var scale = m_Scale[j];
+
+                Gizmos.DrawCube(pos, scale);
+            }
         }
 
         #endregion
 
         #region LivePreview
-        private const float MAX_PREVIEW_RENDER_TIME = .5f;
+        private const float MAX_PREVIEW_RENDER_TIME = 1.5f;
 
         [Header(LIVE_PREVIEW_NAME)]
         [SerializeField]
@@ -175,6 +203,7 @@ namespace NoiseUltra.Tools.Placement
         [PropertyOrder(2)]
         private void LivePreview()
         {
+            PerformPlacement();
             m_ShowLivePreview = true;
         }
 
