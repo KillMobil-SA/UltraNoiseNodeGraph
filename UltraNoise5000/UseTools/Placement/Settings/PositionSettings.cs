@@ -16,7 +16,6 @@ namespace NoiseUltra.Tools.Placement
         [SerializeField]
         [EnumToggleButtons]
         [HideLabel]
-        [OnValueChanged(nameof(UpdateTool))]
         private HeightPosType heightPosType = HeightPosType.Grid;
         
         [BoxGroup(HEIGHT_NAME)]
@@ -25,7 +24,6 @@ namespace NoiseUltra.Tools.Placement
         [PropertyOrder(-1)]
         [ShowIf(nameof(heightPosType), HeightPosType.Raycast)]
         [SerializeField]
-        [OnValueChanged(nameof(UpdateTool))]
         private RayCastHeightPos rayCastHeightPos = new RayCastHeightPos();
         
         private readonly GridHeightPos m_NoiseGridPos = new GridHeightPos();

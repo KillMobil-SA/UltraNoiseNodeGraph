@@ -74,6 +74,11 @@ namespace NoiseUltra.Tools.Placement
         {
             Vector3 placementPos = GetPos(pos, v);
             Vector3 placementScale = GetScale(pos, v);
+            if (placementScale.magnitude <= 0)
+            {
+                return;
+            }
+            
             Vector3 placementRot = GetRot(pos, v);
             GameObject sourceGO = GetGameObject(v);
             GameObject newObject = null;

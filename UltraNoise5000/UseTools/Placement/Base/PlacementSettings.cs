@@ -37,22 +37,21 @@ namespace NoiseUltra.Tools.Placement
         [HideLabel]
         private PositionSettings position = new PositionSettings();
 
+        private Vector3[] m_Positions;
+        private Vector3[] m_Scale;
+
         [BoxGroup(LIVE_PREVIEW_SETTINGS_NAME)]
-        [SerializeField]
-        private Color livePreviewColor = Color.green;
+        public Color livePreviewColor = Color.green;
 
         [SerializeField]
         [BoxGroup(LIVE_PREVIEW_SETTINGS_NAME)]
-        private float livePreviewSizeMultiplier = 1;
+        public float livePreviewSizeMultiplier = 1;
 
-        private PlacementTool m_PlacementTool;
-
-        public void Initialize(PlacementTool placementTool)
+        public void Initialize()
         {
-            m_PlacementTool = placementTool;
-            scale.Initialize(m_PlacementTool);
-            rotation.Initialize(m_PlacementTool);
-            position.Initialize(m_PlacementTool);
+            scale.Initialize();
+            rotation.Initialize();
+            position.Initialize();
         }
 
         private void OnEnable()
@@ -98,24 +97,29 @@ namespace NoiseUltra.Tools.Placement
 
         public virtual void CleanObjects(Transform parent)
         {
+
         }
 
-        public void DebugObject(Vector3 pos, float v)
+        public void DebugObject(int index)
         {
-            Vector3 currentPosition = GetPos(pos, v);
-            Vector3 currentScale = GetScale(pos, v) * livePreviewSizeMultiplier;
-
-            Gizmos.color = livePreviewColor;
-            Gizmos.DrawCube(currentPosition, currentScale);
-            Gizmos.color = Color.white;
-        }
-
-        public void Update()
-        {
-            if (m_PlacementTool != null)
+            if (index < m_Positions.Length - 1 && index < m_Scale.Length - 1)
             {
-                m_PlacementTool.PerformPlacement();
+                Gizmos.color = livePreviewColor;
+                Vector3 currentPosition = m_Positions[index];
+                Vector3 currentScale = m_Scale[index];
+                Gizmos.DrawCube(currentPosition, currentScale);
+                Gizmos.color = Color.white;
             }
+        }
+
+        public void SetPositions(ref Vector3[] positions)
+        {
+            m_Positions = positions;
+        }
+
+        public void SetScale(ref Vector3[] scales)
+        {
+            m_Scale = scales;
         }
     }
 }

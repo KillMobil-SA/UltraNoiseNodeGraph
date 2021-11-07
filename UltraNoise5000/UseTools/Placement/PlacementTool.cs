@@ -86,7 +86,7 @@ namespace NoiseUltra.Tools.Placement
             {
                 PlacementItem item = placementItems[i];
                 PlacementSettings itemSettings = item.settings;
-                itemSettings.Initialize(this);
+                itemSettings.Initialize();
             }
         }
 
@@ -116,13 +116,38 @@ namespace NoiseUltra.Tools.Placement
 
                 myPlacementBounds.SetSpace(spacing);
 
-                float xAmount = myPlacementBounds.xAmount;
-                float yAmount = myPlacementBounds.yAmount;
-                float zAmount = myPlacementBounds.zAmount;
+                int xAmount = (int) myPlacementBounds.xAmount;
+                int yAmount = (int) myPlacementBounds.yAmount;
+                int zAmount = (int) myPlacementBounds.zAmount;
+
+                if (xAmount < 1)
+                {
+                    xAmount = 1;
+                }
+
+                if (yAmount < 1)
+                {
+                    yAmount = 1;
+                }
+
+                if (zAmount < 1)
+                {
+                    zAmount = 1;
+                }
 
                 int index = 0;
-                m_Positions = new Vector3[(int)(xAmount * zAmount)];
-                m_Scale = new Vector3[(int)(xAmount * zAmount)];
+                m_Positions = new Vector3[xAmount * yAmount * zAmount];
+                m_Scale = new Vector3[xAmount * yAmount * zAmount];
+
+                PlacementSettings settings = item.settings;
+                if (settings.exportNode == null || settings == null)
+                {
+                    continue;
+                }
+
+                settings.SetPositions(ref m_Positions);
+                settings.SetScale(ref m_Scale);
+
                 for (var x = 0; x < xAmount; x++)
                 {
                     for (var y = 0; y < yAmount; y++)
@@ -130,13 +155,6 @@ namespace NoiseUltra.Tools.Placement
                         for (var z = 0; z < zAmount; z++)
                         {
                             Vector3 placementPos = new Vector3(x, y, z);
-                            PlacementSettings settings = item.settings;
-
-                            if (settings.exportNode == null || settings == null)
-                            {
-                                continue;
-                            }
-
                             Vector3 pos = myPlacementBounds.GetPosVector(placementPos);
 
                             if (useAbsoluteCoordinates)
@@ -157,8 +175,15 @@ namespace NoiseUltra.Tools.Placement
                                 continue;
                             }
 
-                            m_Positions[index] = settings.GetPos(pos, sample);
-                            m_Scale[index] = settings.GetScale(pos, sample);
+                            if (m_ShowLivePreview)
+                            {
+                                m_Positions[index] = settings.GetPos(pos, sample);
+                                m_Scale[index] = settings.GetScale(pos, sample) * settings.livePreviewSizeMultiplier; 
+                            }
+                            else
+                            {
+                                settings.PlaceObject(pos, sample, transform);
+                            }
 
                             index++;
                         }
@@ -174,47 +199,49 @@ namespace NoiseUltra.Tools.Placement
                 return;
             }
 
-            int count = m_Positions.Length;
-            for (int j = 0; j < count; ++j)
+            int countPos = m_Positions.Length;
+            int countSettings = placementItems.Count;
+            for (int i = 0; i < countSettings; ++i)
             {
-                var pos = m_Positions[j];
-                var scale = m_Scale[j];
-
-                Gizmos.DrawCube(pos, scale);
+                PlacementItem item = placementItems[i];
+                for (int index = 0; index < countPos; ++index)
+                {
+                    item.settings.DebugObject(index);
+                }
             }
+            
         }
 
         #endregion
 
         #region LivePreview
-        private const float MAX_PREVIEW_RENDER_TIME = 1.5f;
-
-        [Header(LIVE_PREVIEW_NAME)]
-        [SerializeField]
-        [ReadOnly]
-        [ShowIf(nameof(m_ShowLivePreview))]
-        [GUIColor(GUI_COLOR_PREVIEW + nameof(MAX_PREVIEW_RENDER_TIME) + ", " + nameof(previewRenderTime) + "))")]
-        [PropertyOrder(1)]
-        private float previewRenderTime;
         private bool m_ShowLivePreview;
 
         [Button]
         [HideIf(nameof(m_ShowLivePreview))]
         [PropertyOrder(2)]
-        private void LivePreview()
+        private void EnableGizmosPreview()
         {
-            PerformPlacement();
             m_ShowLivePreview = true;
+            PerformPlacement();
         }
 
         [Button]
         [ShowIf(nameof(m_ShowLivePreview))]
         [PropertyOrder(2)]
-        private void DisableLivePreview()
+        private void RefreshGizmosPreview()
+        {
+            m_ShowLivePreview = true;
+            PerformPlacement();
+        }
+
+        [Button]
+        [ShowIf(nameof(m_ShowLivePreview))]
+        [PropertyOrder(2)]
+        private void DisableGizmosPreview()
         {
             m_ShowLivePreview = false;
         }
-
         #endregion
     }
 }
