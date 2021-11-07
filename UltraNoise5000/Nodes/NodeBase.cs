@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using XNode;
 
+
 namespace NoiseUltra.Nodes
 {
     /// <summary>
@@ -55,7 +56,8 @@ namespace NoiseUltra.Nodes
             OnBeforeDrawPreview();
             previewImage.DrawAsync();
         }
-
+        
+ 
         [Button]
         public void DrawSync()
         {
@@ -83,7 +85,7 @@ namespace NoiseUltra.Nodes
 
         protected override void OnSelect()
         {
-            DrawAsync();
+            //DrawAsync();
         }
         
         protected bool IsConnected(NodeBase node)

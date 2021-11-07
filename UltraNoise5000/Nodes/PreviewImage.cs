@@ -146,6 +146,7 @@ namespace NoiseUltra.Nodes
             sourceTexture = null;
         }
 
+        
         public Texture2D GetTexture()
         {
             return sourceTexture;

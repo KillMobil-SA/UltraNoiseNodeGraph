@@ -4,6 +4,6 @@ namespace NoiseUltra.Tools
 {
     public static class Wait
     {
-        public static readonly WaitForSeconds WAIT_ONE_SECOND = new WaitForSeconds(1);
+        public static WaitForSecondsRealtime WAIT_ONE_SECOND => ( new WaitForSecondsRealtime(1));
     }
 }

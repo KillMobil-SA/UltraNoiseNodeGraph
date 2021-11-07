@@ -14,7 +14,9 @@ namespace NoiseUltra.Nodes
 
         public override void OnCreateConnection(NodePort source, NodePort target)
         {
-            DrawAsync();
+            if (this != target.node)
+                DrawAsync();
+            
         }
 
         private void UpdateOutPut()
@@ -32,6 +34,7 @@ namespace NoiseUltra.Nodes
                 NodeBase node = connectedPort.node as NodeBase;
                 if (node != null)
                 {
+                    Debug.Log("UpdateOutPut Draw: " + node.name);
                     node.DrawAsync();
                 }
             }

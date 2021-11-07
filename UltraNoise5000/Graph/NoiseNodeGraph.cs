@@ -28,7 +28,7 @@ namespace NoiseUltra
                 Node node = nodes[index];
                 if (node is NodeBase item)
                 {
-                    item.DrawSync();
+                    item.DrawAsync();
                 }
             }
         }
