@@ -15,18 +15,34 @@ namespace NoiseUltra.Nodes
     {
         #region Members
         [SerializeField]
-        protected PreviewImage previewImage = new PreviewImage();
-        private EditorCoroutineWrapper m_EditorCoroutine;
+        //protected PreviewImage previewImage;//= new PreviewImage();
+        private PreviewImage _previewImage;
+        protected PreviewImage previewImage
+        {
+            get
+            {
+                if (!enabledIsDirty) return _previewImage;
+                enabledIsDirty = false;
+                _previewImage.Initialize(this);
+                return _previewImage;
+            }
+        }
 
-        public float Zoom => previewImage.Zoom;
+        private bool enabledIsDirty = true;
+
+        private EditorCoroutineWrapper _m_EditorCoroutine;
+        private EditorCoroutineWrapper m_EditorCoroutine =>
+            _m_EditorCoroutine ??= new EditorCoroutineWrapper(this, DrawAsyncInternal());
+
         
+        
+        public float Zoom => previewImage.Zoom;
         #endregion
 
         #region Initialization
         protected override void Init()
         {
-            m_EditorCoroutine = new EditorCoroutineWrapper( this, DrawAsyncInternal());
-            previewImage.Initialize(this);
+            enabledIsDirty = true;
         }
         #endregion
 

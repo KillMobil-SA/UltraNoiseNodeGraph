@@ -27,13 +27,7 @@ namespace NoiseUltra.Generators.Static
             textureRect = new Rect(0, 0, texture2d.width, texture2d.height);
             DrawAsync();
         }
-
-        protected override void Init()
-        {
-            base.Init();
-            DrawAsync();
-        }
-
+        
         public override float GetSample(float x)
         {
             return 0;
