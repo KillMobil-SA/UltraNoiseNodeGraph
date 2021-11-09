@@ -32,12 +32,12 @@ namespace NoiseUltra.Nodes
         private int size = NodeProprieties.DEFAULT_GLOBAL_ZOOM;
 
         [SerializeField , ShowIf(nameof(showPreviewImage))]
-        [PreviewField(NodeProprieties.DEFAULT_PREVIEW_SIZE)]
+        [HideLabel,PreviewField(NodeProprieties.DEFAULT_PREVIEW_SIZE)]
         private Texture2D sourceTexture;
 
         private NodeBase m_Node;
         private Func<float, float, float> m_SampleFunction;
-        private int m_ImageSize = NodeProprieties.DEFAULT_PREVIEW_SIZE;
+        private int m_ImageSize = NodeProprieties.DEFAULT_TEXTURE_SIZE;
         private float m_MAXPixel;
         private Color[] m_Pixels;
         public float Zoom => size;
@@ -85,14 +85,19 @@ namespace NoiseUltra.Nodes
             }
 
             DeleteTexture();
+            SetImageSize(NodeProprieties.DEFAULT_TEXTURE_SIZE);
             ResetBounds();
             CreateTexture();
             bounds.Reset();
 
+            
+            
             int totalColors = m_ImageSize * m_ImageSize;
             m_Pixels = new Color[totalColors];
             int index = 0;
             Profiler.Start();
+            
+            
             for (int x = 0; x < m_ImageSize; ++x)
             {
                 float pixelX = x / m_MAXPixel;
@@ -119,12 +124,17 @@ namespace NoiseUltra.Nodes
             }
 
             DeleteTexture();
+            SetImageSize(NodeProprieties.DEFAULT_TEXTURE_SIZE);
+
             ResetBounds();
             CreateTexture();
             bounds.Reset();
+            
             int totalColors = m_ImageSize * m_ImageSize;
             m_Pixels = new Color[totalColors];
             int index = 0;
+            Profiler.Start();
+
             for (int x = 0; x < m_ImageSize; ++x)
             {
                 float pixelX = x / m_MAXPixel;
@@ -177,7 +187,7 @@ namespace NoiseUltra.Nodes
 
         public void ResetImageSize()
         {
-            m_ImageSize = NodeProprieties.DEFAULT_PREVIEW_SIZE;
+            m_ImageSize = NodeProprieties.DEFAULT_TEXTURE_SIZE;
         }
         #endregion
 

@@ -43,6 +43,7 @@ namespace NoiseUltra.Nodes
     {
         public const int DEFAULT_GLOBAL_ZOOM = 200;
         public const int DEFAULT_PREVIEW_SIZE = 256;
+        public const int DEFAULT_TEXTURE_SIZE = 128;
         public const int NODE_WIDTH_PIXELS = 286;
 
         public const float MIN_VALUE = 0;
