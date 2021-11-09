@@ -11,16 +11,27 @@ namespace NoiseUltra.Nodes
     public sealed class PreviewImage
     {
         #region Members
+        
+        [SerializeField , HideInInspector]
+        private bool showPreviewImage = false;
+        [Button, PropertyOrder(-1)]
+        private void TogglePreview()
+        {
+            showPreviewImage = !showPreviewImage;
+        }
+
+        
+        
         private TaskGroup m_TaskGroup;
 
-        [SerializeField, InlineProperty, HideLabel]
+        [SerializeField, InlineProperty, HideLabel , ShowIf (nameof(showPreviewImage))]
         private Bound bounds;
 
-        [OnValueChanged(nameof(DrawAsync))]
+        [OnValueChanged(nameof(DrawAsync)) , ShowIf(nameof(showPreviewImage))]
         [SerializeField]
         private int size = NodeProprieties.DEFAULT_GLOBAL_ZOOM;
 
-        [SerializeField]
+        [SerializeField , ShowIf(nameof(showPreviewImage))]
         [PreviewField(NodeProprieties.DEFAULT_PREVIEW_SIZE)]
         private Texture2D sourceTexture;
 
@@ -68,7 +79,7 @@ namespace NoiseUltra.Nodes
 
         public void DrawAsync()
         {
-            if (m_SampleFunction == null)
+            if (m_SampleFunction == null || !showPreviewImage)
             {
                 return;
             }

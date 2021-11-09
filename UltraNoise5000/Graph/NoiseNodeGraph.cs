@@ -17,7 +17,12 @@ namespace NoiseUltra
         [SerializeField] 
         private int globalZoom = 1024;
         public int GlobalZoom => globalZoom;
-        
+
+        public override void OnOpen()
+        {
+            UpdateAllNodes();
+        }
+
         [Button]
         [ContextMenu(UPDATE_ALL_NODES_NAME)]
         public void UpdateAllNodes()

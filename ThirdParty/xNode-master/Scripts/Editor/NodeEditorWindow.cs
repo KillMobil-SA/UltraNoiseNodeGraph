@@ -189,7 +189,7 @@ namespace XNodeEditor {
 
         [OnOpenAsset(0)]
         public static bool OnOpen(int instanceID, int line) {
-            XNode.NodeGraph nodeGraph = EditorUtility.InstanceIDToObject(instanceID) as XNode.NodeGraph;
+           XNode.NodeGraph nodeGraph = EditorUtility.InstanceIDToObject(instanceID) as XNode.NodeGraph;
             if (nodeGraph != null) {
                 Open(nodeGraph);
                 return true;
@@ -200,7 +200,7 @@ namespace XNodeEditor {
         /// <summary>Open the provided graph in the NodeEditor</summary>
         public static NodeEditorWindow Open(XNode.NodeGraph graph) {
             if (!graph) return null;
-
+            graph.OnOpen();
             NodeEditorWindow w = GetWindow(typeof(NodeEditorWindow), false, "xNode", true) as NodeEditorWindow;
             w.wantsMouseMove = true;
             w.graph = graph;

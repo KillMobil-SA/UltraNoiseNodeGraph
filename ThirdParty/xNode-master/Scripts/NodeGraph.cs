@@ -53,6 +53,11 @@ namespace XNode {
             nodes.Clear();
         }
 
+        public virtual void OnOpen()
+        {
+            
+        }
+
         /// <summary> Create a new deep copy of this graph </summary>
         public virtual XNode.NodeGraph Copy() {
             // Instantiate a new nodegraph instance

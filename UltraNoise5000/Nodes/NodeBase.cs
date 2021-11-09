@@ -14,7 +14,7 @@ namespace NoiseUltra.Nodes
     public abstract class NodeBase : Node
     {
         #region Members
-        [SerializeField]
+        [SerializeField , InlineProperty , HideLabel]
         //protected PreviewImage previewImage;//= new PreviewImage();
         private PreviewImage _previewImage;
         protected PreviewImage previewImage
