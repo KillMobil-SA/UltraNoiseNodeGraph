@@ -17,7 +17,7 @@ namespace NoiseUltra.Nodes
         [SerializeField]
         protected PreviewImage previewImage = new PreviewImage();
         private EditorCoroutineWrapper m_EditorCoroutine;
-
+        private static readonly WaitForSecondsRealtime WAIT_075_SECONDS_REALTIME = Wait.CreateWaitRealtime(0.75f);
         public float Zoom => previewImage.Zoom;
         
         #endregion
@@ -46,13 +46,14 @@ namespace NoiseUltra.Nodes
         public void DrawAsync()
         {
             m_EditorCoroutine.StopCoroutine();
+            WAIT_075_SECONDS_REALTIME.Reset();
             m_EditorCoroutine.SetCoroutine(DrawAsyncInternal());
             m_EditorCoroutine.StartCoroutine();
         }
 
         private IEnumerator DrawAsyncInternal()
         {
-            yield return Wait.WAIT_ONE_SECOND;
+            yield return WAIT_075_SECONDS_REALTIME;
             OnBeforeDrawPreview();
             previewImage.DrawAsync();
         }
@@ -83,11 +84,6 @@ namespace NoiseUltra.Nodes
         {
         }
 
-        protected override void OnSelect()
-        {
-            //DrawAsync();
-        }
-        
         protected bool IsConnected(NodeBase node)
         {
             NodePort port = GetPort(nameof(node));
