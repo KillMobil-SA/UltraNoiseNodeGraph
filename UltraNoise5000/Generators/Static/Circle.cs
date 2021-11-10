@@ -21,12 +21,7 @@ namespace NoiseUltra.Generators.Static
         
         [SerializeField] 
         private AnimationCurve heightCurve = AnimationCurve.Linear(0, 0, Default, 1);
-
-        protected override void Init()
-        {
-            base.Init();
-            RebuildCurve();
-        }
+        
 
         [Button]
         private void RebuildCurve()

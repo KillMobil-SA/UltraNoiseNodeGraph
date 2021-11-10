@@ -14,25 +14,44 @@ namespace NoiseUltra.Nodes
     public abstract class NodeBase : Node
     {
         #region Members
-        [SerializeField]
-        protected PreviewImage previewImage = new PreviewImage();
-        private EditorCoroutineWrapper m_EditorCoroutine;
-        private static readonly WaitForSecondsRealtime WAIT_075_SECONDS_REALTIME = Wait.CreateWaitRealtime(0.75f);
+        private static readonly WaitForSecondsRealtime DRAW_DELAY = Wait.CreateWaitRealtime(0.75f);
+        [SerializeField, InlineProperty, HideLabel]
+        private PreviewImage _previewImage;
+        protected PreviewImage previewImage
+        {
+            get
+            {
+                if (m_IsPreviewDirty)
+                {
+                    CreatePreviewImage();
+                }
+
+                return _previewImage;
+            }
+        }
+
+        private bool m_IsPreviewDirty = true;
+
+        private EditorCoroutineWrapper m_DrawEditorAsyncRoutine;
+        private EditorCoroutineWrapper drawEditorAsyncRoutine
+        {
+            get
+            {
+                return m_DrawEditorAsyncRoutine ??= new EditorCoroutineWrapper(this, DrawAsyncInternal());
+            }
+        }
+
         public float Zoom => previewImage.Zoom;
-        
         #endregion
 
-        #region Initialization
+        //#YWR: Do not include complex code in this initialization. It tends to slow down the editor
+        //the more nodes you have within the project. Go for lazy instantiation or dirty flag instead.
         protected override void Init()
         {
-            m_EditorCoroutine = new EditorCoroutineWrapper( this, DrawAsyncInternal());
-            previewImage.Initialize(this);
+            m_IsPreviewDirty = true;
         }
-        #endregion
 
         #region Public
-
-
         public abstract float GetSample(float x);
         public abstract float GetSample(float x, float y);
         public abstract float GetSample(float x, float y, float z);
@@ -45,20 +64,12 @@ namespace NoiseUltra.Nodes
         [Button]
         public void DrawAsync()
         {
-            m_EditorCoroutine.StopCoroutine();
-            WAIT_075_SECONDS_REALTIME.Reset();
-            m_EditorCoroutine.SetCoroutine(DrawAsyncInternal());
-            m_EditorCoroutine.StartCoroutine();
+            drawEditorAsyncRoutine.StopCoroutine();
+            DRAW_DELAY.Reset();
+            drawEditorAsyncRoutine.SetCoroutine(DrawAsyncInternal());
+            drawEditorAsyncRoutine.StartCoroutine();
         }
 
-        private IEnumerator DrawAsyncInternal()
-        {
-            yield return WAIT_075_SECONDS_REALTIME;
-            OnBeforeDrawPreview();
-            previewImage.DrawAsync();
-        }
-        
- 
         [Button]
         public void DrawSync()
         {
@@ -76,7 +87,21 @@ namespace NoiseUltra.Nodes
         {
             return this;
         }
+        #endregion
 
+        #region private
+        private IEnumerator DrawAsyncInternal()
+        {
+            yield return DRAW_DELAY;
+            OnBeforeDrawPreview();
+            previewImage.DrawAsync();
+        }
+
+        private void CreatePreviewImage()
+        {
+            _previewImage.Initialize(this);
+            m_IsPreviewDirty = false;
+        }
         #endregion
 
         #region Protected
