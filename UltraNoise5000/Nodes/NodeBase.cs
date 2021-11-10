@@ -14,37 +14,48 @@ namespace NoiseUltra.Nodes
     public abstract class NodeBase : Node
     {
         #region Members
-        [SerializeField , InlineProperty , HideLabel]
-        //protected PreviewImage previewImage;//= new PreviewImage();
+        [SerializeField, InlineProperty, HideLabel]
         private PreviewImage _previewImage;
         protected PreviewImage previewImage
         {
             get
             {
-                if (!enabledIsDirty) return _previewImage;
-                enabledIsDirty = false;
-                _previewImage.Initialize(this);
+                if (m_IsPreviewDirty)
+                {
+                    CreatePreviewImage();
+                }
+
                 return _previewImage;
             }
         }
 
-        private bool enabledIsDirty = true;
+        private void CreatePreviewImage()
+        {
+            _previewImage.Initialize(this);
+            m_IsPreviewDirty = false;
+        }
 
-        private EditorCoroutineWrapper _m_EditorCoroutine;
-        private EditorCoroutineWrapper m_EditorCoroutine =>
-            _m_EditorCoroutine ??= new EditorCoroutineWrapper(this, DrawAsyncInternal());
+        private bool m_IsPreviewDirty = true;
 
-        
-        
+        private EditorCoroutineWrapper m_DrawEditorAsyncRoutine;
+        private EditorCoroutineWrapper drawEditorAsyncRoutine
+        {
+            get
+            {
+                return m_DrawEditorAsyncRoutine ??= new EditorCoroutineWrapper(this, DrawAsyncInternal());
+            }
+        }
+
+
         public float Zoom => previewImage.Zoom;
         #endregion
 
-        #region Initialization
+        //#YWR: Do not include complex code in this initialization. It tends to slow down the editor
+        //the more nodes you have within the project. Go for lazy instantiation or dirty flag instead.
         protected override void Init()
         {
-            enabledIsDirty = true;
+            
         }
-        #endregion
 
         #region Public
 
@@ -61,9 +72,9 @@ namespace NoiseUltra.Nodes
         [Button]
         public void DrawAsync()
         {
-            m_EditorCoroutine.StopCoroutine();
-            m_EditorCoroutine.SetCoroutine(DrawAsyncInternal());
-            m_EditorCoroutine.StartCoroutine();
+            drawEditorAsyncRoutine.StopCoroutine();
+            drawEditorAsyncRoutine.SetCoroutine(DrawAsyncInternal());
+            drawEditorAsyncRoutine.StartCoroutine();
         }
 
         private IEnumerator DrawAsyncInternal()
@@ -99,11 +110,6 @@ namespace NoiseUltra.Nodes
         {
         }
 
-        protected override void OnSelect()
-        {
-            //DrawAsync();
-        }
-        
         protected bool IsConnected(NodeBase node)
         {
             NodePort port = GetPort(nameof(node));
