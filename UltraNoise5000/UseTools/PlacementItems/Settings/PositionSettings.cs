@@ -31,13 +31,17 @@ namespace NoiseUltra.Tools.Placement
         
         public override Vector3 Calculator(Vector3 pos, float thresHold)
         {
-            var sourceHeightCalculation = new Vector3(pos.x, CalculateHeight(pos), pos.z);
+            
             
             var valuePosition = placementValueRange.GetVectorRange(pos, thresHold);
             var randomPosition = placementRandomizedRange.GetVectorRange(pos, thresHold);
 
-            var positionResult = sourceHeightCalculation +  (valuePosition + randomPosition) ;
-            return positionResult;
+            var positionResult = (valuePosition + randomPosition) + pos ;
+
+            
+            var sourceHeightCalculation = new Vector3(positionResult.x, CalculateHeight(positionResult), positionResult.z);
+            
+            return sourceHeightCalculation;
         }
         
         public override void OnEnable()
