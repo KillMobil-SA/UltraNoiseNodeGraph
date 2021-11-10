@@ -85,7 +85,7 @@ namespace NoiseUltra.Nodes
             }
 
             DeleteTexture();
-            SetImageSize(NodeProprieties.DEFAULT_TEXTURE_SIZE);
+            //SetImageSize(NodeProprieties.DEFAULT_TEXTURE_SIZE);
             ResetBounds();
             CreateTexture();
             bounds.Reset();
@@ -124,7 +124,7 @@ namespace NoiseUltra.Nodes
             }
 
             DeleteTexture();
-            SetImageSize(NodeProprieties.DEFAULT_TEXTURE_SIZE);
+            //SetImageSize(NodeProprieties.DEFAULT_TEXTURE_SIZE);
 
             ResetBounds();
             CreateTexture();
