@@ -8,7 +8,7 @@ namespace NoiseUltra.Tools.Placement
         [InlineProperty]
         [HideLabel]
         [TitleGroup("Value Range")]
-        public PlacementVectorRangeValue placementValueRange;
+        public PlacementVectorRangeValue placementValueRange = new PlacementVectorRangeValue();
 
         [InlineProperty]
         [HideLabel]

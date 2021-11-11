@@ -102,6 +102,11 @@ namespace NoiseUltra.Tools.Placement
 
         public void DebugObject(int index)
         {
+            if (m_Positions == null || m_Scale == null)
+            {
+                return;
+            }
+
             if (index < m_Positions.Length - 1 && index < m_Scale.Length - 1)
             {
                 Gizmos.color = livePreviewColor;
