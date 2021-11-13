@@ -1,4 +1,5 @@
 using NoiseUltra.Nodes;
+using NoiseUltra.Operations;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -18,8 +19,8 @@ namespace NoiseUltra.Modifiers
 
         public float SinCalculation(float sample)
         {
-            var f = sample * 2 * Mathf.PI ;
-            var resultValue = 0.5f *(1 + Mathf.Sin(f));
+            float f = sample * MathUtils.PI_TIMES_2;
+            float resultValue = 0.5f *(1 + Mathf.Sin(f));
             return resultValue;
         }
     }

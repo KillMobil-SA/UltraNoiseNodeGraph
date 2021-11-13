@@ -1,4 +1,5 @@
 using NoiseUltra.Nodes;
+using NoiseUltra.Operations;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
@@ -16,9 +17,10 @@ namespace NoiseUltra.Modifiers
 
         private float CosCalculation(float sample)
         {
-            var f = sample * 2f * Mathf.PI;
-            var resultValue =  0.5f * (1f - Mathf.Cos(f)); 
+            float f = sample * MathUtils.PI_TIMES_2;
+            float resultValue =  0.5f * (1f - Mathf.Cos(f)); 
             return resultValue;
         }
+
     }
 }

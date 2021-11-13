@@ -10,7 +10,7 @@ namespace NoiseUltra.Modifiers
         private float strenght;
         protected override float ApplyModifier(float sample)
         {
-            return Mathf.Tan(sample*strenght);
+            return Mathf.Tan(sample * strenght);
         }
     }
 }
