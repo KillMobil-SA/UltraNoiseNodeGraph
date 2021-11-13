@@ -5,7 +5,6 @@ namespace NoiseUltra.Nodes
         public const string YELLOW = "#86853C";
         
         public const string MODIFIER = "#8C7569";
-        public const string MATH = "#8C8169";
         public const string OPERATION = "#8C8C69";
         public const string UTILITY = "#737373";
         

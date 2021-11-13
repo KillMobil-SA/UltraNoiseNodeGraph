@@ -1,9 +1,9 @@
 using NoiseUltra.Nodes;
 using UnityEngine;
 using Sirenix.OdinInspector;
-namespace NoiseUltra.Math
+namespace NoiseUltra.Modifiers
 {
-    [NodeTint(NodeColor.MATH)]
+    [NodeTint(NodeColor.MODIFIER)]
     public class Tan : BaseNodeModifier
     {
         [SerializeField , OnValueChanged(nameof(DrawAsync))]
