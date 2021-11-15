@@ -24,19 +24,40 @@ namespace NoiseUltra.Tools.Placement
         [InlineProperty]
         [HideLabel]
         private ScaleSettings scale = new ScaleSettings();
-
+        [SerializeField]
+        [Header(PLACEMENT_SETTINGS_NAME)]
+        [TabGroup(PLACEMENT_SETTINGS_NAME, SIZE_TAB_NAME + "_OLD")]
+        [InlineProperty]
+        [HideLabel]
+        private ScaleSettings placementScaleSettings = new ScaleSettings();
+        
+        
         [SerializeField]
         [TabGroup(PLACEMENT_SETTINGS_NAME, ROTATION_TAB_NAME)]
         [InlineProperty]
         [HideLabel]
         private RotationSettings rotation = new RotationSettings();
-
+        [SerializeField]
+        [TabGroup(PLACEMENT_SETTINGS_NAME, ROTATION_TAB_NAME + "+_OLD")]
+        [InlineProperty]
+        [HideLabel]
+        private RotationSettings placementRotationSettings = new RotationSettings();
+        
+        
         [SerializeField]
         [TabGroup(PLACEMENT_SETTINGS_NAME, POSITION_TAB_NAME)]
         [InlineProperty]
         [HideLabel]
         private PositionSettings position = new PositionSettings();
-
+        
+        [SerializeField]
+        [TabGroup(PLACEMENT_SETTINGS_NAME, POSITION_TAB_NAME + "_OLD")]
+        [InlineProperty]
+        [HideLabel]
+        private PositionSettings placementPositionsSettings = new PositionSettings();
+        
+        
+        
         private Vector3[] m_Positions;
         private Vector3[] m_Scale;
 
@@ -59,6 +80,18 @@ namespace NoiseUltra.Tools.Placement
             position.OnEnable();
             rotation.OnEnable();
             scale.OnEnable();
+
+            UpdateBrokenSO();
+        }
+
+
+        [Button]
+        private void UpdateBrokenSO()
+        {
+            Debug.Log("UpdateBrokenSO ()");
+            scale = placementScaleSettings;
+            rotation = placementRotationSettings;
+            position = placementPositionsSettings;
         }
 
         public float GetSample(float x, float z)

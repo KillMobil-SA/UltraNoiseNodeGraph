@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -16,7 +17,21 @@ namespace NoiseUltra.Tools.Placement
         [TableList]
         [SerializeField]
         private List<PlacementItem> placementItems = new List<PlacementItem>();
+        [TableList]
+        [SerializeField]
+        private List<PlacementItem> generatorItems = new List<PlacementItem>();
+        
+        
+        [Button]
+        private void UpdateBrokenStuff()
+        {
+            placementItems = generatorItems;
+            for (int i = 0; i < placementItems.Count; i++)
+                placementItems[i].UpdateBrokenSO();
+        }
 
+
+    
         [SerializeField]
         private bool useWorldCoordinates = true;
 
@@ -212,6 +227,7 @@ namespace NoiseUltra.Tools.Placement
             
         }
 
+ 
         #endregion
 
         #region LivePreview

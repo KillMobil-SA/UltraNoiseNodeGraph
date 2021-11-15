@@ -17,5 +17,11 @@ namespace NoiseUltra.Tools.Placement
         public float spacing = 10;
 
         public PlacementSettings settings;
+        public PlacementSettings plamentHandler;
+
+        public void UpdateBrokenSO()
+        {
+            settings = plamentHandler;
+        }
     }
 }

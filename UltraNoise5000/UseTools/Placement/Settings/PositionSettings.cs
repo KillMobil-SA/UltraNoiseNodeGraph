@@ -36,7 +36,7 @@ namespace NoiseUltra.Tools.Placement
         
         public override Vector3 Execute(Vector3 pos, float threshold)
         {
-            
+            Debug.Log("heightPosType:" + m_HeightBase);
             
             var valuePosition = placementValueRange.GetVectorRange(pos, threshold);
             var randomPosition = placementRandomizedRange.GetVectorRange(pos, threshold);
@@ -61,6 +61,7 @@ namespace NoiseUltra.Tools.Placement
         
         private void UpdateHeightInterFace()
         {
+            Debug.Log("UpdateHeightInterFace()");
             switch (heightPosType)
             {
                 case HeightPosType.Grid:
