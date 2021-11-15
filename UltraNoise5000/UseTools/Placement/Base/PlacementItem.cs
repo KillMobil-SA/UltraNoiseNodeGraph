@@ -7,21 +7,12 @@ namespace NoiseUltra.Tools.Placement
     [Serializable]
     public sealed class PlacementItem
     {
-        [SerializeField]
-        [TableColumnWidth(40, false)]
+        [SerializeField] [TableColumnWidth(40, false)]
         public bool active;
 
-        [SerializeField]
-        [TableColumnWidth(60, false)]
-        [Min(0.1f)]
+        [SerializeField] [TableColumnWidth(60, false)] [Min(0.1f)]
         public float spacing = 10;
 
         public PlacementSettings settings;
-        public PlacementSettings plamentHandler;
-
-        public void UpdateBrokenSO()
-        {
-            settings = plamentHandler;
-        }
     }
 }

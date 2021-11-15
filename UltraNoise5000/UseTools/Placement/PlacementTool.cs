@@ -17,19 +17,7 @@ namespace NoiseUltra.Tools.Placement
         [TableList]
         [SerializeField]
         private List<PlacementItem> placementItems = new List<PlacementItem>();
-        [TableList]
-        [SerializeField]
-        private List<PlacementItem> generatorItems = new List<PlacementItem>();
-        
-        
-        [Button]
-        private void UpdateBrokenStuff()
-        {
-            placementItems = generatorItems;
-            for (int i = 0; i < placementItems.Count; i++)
-                placementItems[i].UpdateBrokenSO();
-        }
-
+   
 
     
         [SerializeField]
@@ -79,9 +67,10 @@ namespace NoiseUltra.Tools.Placement
         [Button]
         public void GenerateObjects()
         {
+            m_ShowLivePreview = false;
             ClearObjects();
             PerformPlacement();
-            m_ShowLivePreview = false;
+            
         }
 
         [Button]
@@ -184,6 +173,8 @@ namespace NoiseUltra.Tools.Placement
 
                             bool is2D = myPlacementBounds.heightIs2D;
                             float sample = is2D ? settings.GetSample(pos.x, pos.z) : settings.GetSample(pos);
+
+                            if (sample == 0) continue;
                             
                             if (!settings.IsPositionValid(pos))
                             {

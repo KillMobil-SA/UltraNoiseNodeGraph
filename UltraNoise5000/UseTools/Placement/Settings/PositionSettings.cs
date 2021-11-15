@@ -26,7 +26,7 @@ namespace NoiseUltra.Tools.Placement
         [SerializeField]
         private RayCastHeightPos rayCastHeightPos = new RayCastHeightPos();
         
-        private readonly GridHeightPos m_NoiseGridPos = new GridHeightPos();
+        private GridHeightPos m_NoiseGridPos = new GridHeightPos();
         private IHeightBase m_HeightBase;
         
         public PositionSettings()
@@ -52,6 +52,7 @@ namespace NoiseUltra.Tools.Placement
         public override void OnEnable()
         {
             UpdateHeightInterFace();
+            
         }
         
         public bool IsPositionValid(Vector3 pos)
@@ -59,6 +60,7 @@ namespace NoiseUltra.Tools.Placement
             return m_HeightBase.HeightCheck(pos);
         }   
         
+        [Button]
         private void UpdateHeightInterFace()
         {
             Debug.Log("UpdateHeightInterFace()");
@@ -74,6 +76,7 @@ namespace NoiseUltra.Tools.Placement
                     m_HeightBase = m_NoiseGridPos;
                     break;
             }
+            Debug.Log("heightPosType:" + m_HeightBase);
         }
 
         private float CalculateHeight(Vector3 pos)
