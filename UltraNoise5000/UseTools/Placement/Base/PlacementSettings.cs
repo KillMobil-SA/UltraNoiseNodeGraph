@@ -30,8 +30,6 @@ namespace NoiseUltra.Tools.Placement
         [InlineProperty]
         [HideLabel]
         private RotationSettings rotation = new RotationSettings();
-
-        
         
         [SerializeField]
         [TabGroup(PLACEMENT_SETTINGS_NAME, POSITION_TAB_NAME)]
