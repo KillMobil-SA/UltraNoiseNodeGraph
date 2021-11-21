@@ -15,6 +15,16 @@ namespace NoiseUltra.Tools.Placement
         [TitleGroup("Random Range")]
         public PlacementVectorRangeRandom placementRandomizedRange = new PlacementVectorRangeRandom();
 
+        public BasePlacementSetting(float initialRangeValue, float initialRangeRandom)
+        {
+            placementValueRange.minRange = initialRangeValue;
+            placementValueRange.range = initialRangeValue;
+            
+            placementRandomizedRange.minRange = initialRangeRandom;
+            placementRandomizedRange.range = initialRangeRandom;
+        }
+
+  
         public virtual void Initialize()
         {
             placementValueRange.Initialize();

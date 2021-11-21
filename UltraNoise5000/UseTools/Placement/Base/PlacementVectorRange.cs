@@ -52,7 +52,7 @@ namespace NoiseUltra.Tools.Placement
 
         [EnumToggleButtons]
         [HideLabel]
-        public RangeType rangeType = RangeType.MinusPlus;
+        public RangeType rangeType = RangeType.MinMax;
 
         [HorizontalGroup(RANGE_SETTINGS_GROUP)]
         [VerticalGroup(RANGE_SETTINGS_VERTICAL_GROUP)]

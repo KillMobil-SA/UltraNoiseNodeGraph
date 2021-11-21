@@ -16,5 +16,9 @@ namespace NoiseUltra.Tools.Placement
             Vector3 result = (dynamicScale + randomScale) * size;
             return result;
         }
+
+        public ScaleSettings(float initialRangeValue, float initialRangeRandom) : base(initialRangeValue, initialRangeRandom)
+        {
+        }
     }
 }

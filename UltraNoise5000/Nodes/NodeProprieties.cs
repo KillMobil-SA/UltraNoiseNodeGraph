@@ -29,7 +29,7 @@ namespace NoiseUltra.Nodes
         
         
         public const string MinMaxLEFTGroup = MinMax + Separator + Left;
-        public const string MinMaxLEFTGroupMIN = MinMaxLEFTGroup + Separator + Max;
+        public const string MinMaxLEFTGroupMIN = MinMaxLEFTGroup + Separator + Min;
         
         public const string MinMaxRIGHTGroup = MinMax + Separator + Right;
         public const string MinMaxRIGHTGroupMax = MinMaxRIGHTGroup + Separator + Max;
