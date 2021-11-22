@@ -51,7 +51,7 @@ namespace NoiseUltra.Tools
             };
         }
 
-        [Button]
+        [Button ("Render")]
         public void ApplySync()
         {
             Initialize();
@@ -63,13 +63,13 @@ namespace NoiseUltra.Tools
         {
         }
 
-        [Button]
+        //[Button]
         public void StopSync()
         {
             m_RoutineWrapper.StopCoroutine();
         }
 
-        [Button]
+        [Button ("Preview")]
         public void ApplyAsync()
         {
             Initialize();
