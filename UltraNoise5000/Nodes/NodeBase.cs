@@ -120,15 +120,7 @@ namespace NoiseUltra.Nodes
             return port != null && port.IsConnected;
         }
 
-        protected bool isInputConnected(NodeBase node)
-        {
-            NodePort inputPort = GetPort("input");
-            List<NodePort> connectionList = inputPort.GetConnections();
-            for (int i = 0; i < connectionList.Count; i++)
-                if (node == connectionList[i].node) return true;
-            
-            return false;
-        }
+    
 
         protected NodePort GetPort(NodeBase node)
         {
