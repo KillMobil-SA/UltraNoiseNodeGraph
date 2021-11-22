@@ -50,6 +50,9 @@ namespace NoiseUltra.Nodes
         {
             m_IsPreviewDirty = true;
         }
+        
+        
+        
 
         #region Public
         public abstract float GetSample(float x);
@@ -61,7 +64,9 @@ namespace NoiseUltra.Nodes
             sampleInfo.Execute(GetSample);
         }
 
-        [Button]
+        private bool showPreview => previewImage.showPreviewImage;
+        
+        [Button ("Draw Preview") , ShowIf(nameof(showPreview))]
         public void DrawAsync()
         {
             drawEditorAsyncRoutine.StopCoroutine();
@@ -70,8 +75,8 @@ namespace NoiseUltra.Nodes
             drawEditorAsyncRoutine.StartCoroutine();
         }
 
-        [Button]
-        public void DrawSync()
+        
+        protected void DrawSync()
         {
             OnBeforeDrawPreview();
             previewImage.DrawSync();

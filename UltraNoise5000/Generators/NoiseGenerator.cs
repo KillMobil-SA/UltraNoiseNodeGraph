@@ -6,7 +6,7 @@ using UnityEngine;
 namespace NoiseUltra.Generators
 {
     [NodeTint(NodeColor.GENERATOR_NOISE)]
-    public class NodeGenerator : NodeOutput
+    public class NoiseGenerator : NodeOutput
     {
         #region Members
         [BoxGroup("Noise Settings"),SerializeField , InlineProperty()  , HideLabel]

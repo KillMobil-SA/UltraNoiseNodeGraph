@@ -13,7 +13,7 @@ namespace NoiseUltra.Nodes
         #region Members
         
         [SerializeField , HideInInspector]
-        private bool showPreviewImage = false;
+        public bool showPreviewImage = false;
         [Button, PropertyOrder(-1)]
         private void TogglePreview()
         {

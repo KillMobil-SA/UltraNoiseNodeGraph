@@ -42,7 +42,7 @@ namespace NoiseUltra.Generators
         #region Public
         public float FrequencyOver100 => frequency / 100f;
 
-        private NodeGenerator nodeGenerator { get; set; }
+        private NoiseGenerator NoiseGenerator { get; set; }
 
         public int Seed => seed;
         public NOISE_TYPE NoiseType => noiseType;
@@ -60,19 +60,19 @@ namespace NoiseUltra.Generators
             seed = Random.Range(0, 999999);
         }
 
-        public void SetGenerator(NodeGenerator nodeGenerator)
+        public void SetGenerator(NoiseGenerator noiseGenerator)
         {
-            this.nodeGenerator = nodeGenerator;
+            this.NoiseGenerator = noiseGenerator;
         }
         #endregion
 
         #region Private
         private void DrawPreview()
         {
-            if (nodeGenerator != null)
+            if (NoiseGenerator != null)
             {
-                nodeGenerator.SetFractalDirty();
-                nodeGenerator.DrawAsync();
+                NoiseGenerator.SetFractalDirty();
+                NoiseGenerator.DrawAsync();
             }
         }
         #endregion

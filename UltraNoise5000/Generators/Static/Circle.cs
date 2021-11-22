@@ -12,22 +12,12 @@ namespace NoiseUltra.Generators.Static
         [SerializeField] 
         private Vector3 center = new Vector2(Default, Default);
         
-        [SerializeField] 
-        [OnValueChanged(nameof(RebuildCurve))] 
+        [SerializeField]
         private float radius = Default;
         
         [SerializeField] 
         private bool hardEdges;
         
-        [SerializeField] 
-        private AnimationCurve heightCurve = AnimationCurve.Linear(0, 0, Default, 1);
-        
-
-        [Button]
-        private void RebuildCurve()
-        {
-            heightCurve = AnimationCurve.Linear(0, 0, radius, 1);
-        }
 
         public override float GetSample(float x)
         {
@@ -38,17 +28,11 @@ namespace NoiseUltra.Generators.Static
         {
             var distance = Vector2.Distance(center, new Vector2(x, y));
             var isInRange = distance < radius;
+            
             if (hardEdges)
-            {
                 return isInRange ? 1 : 0;
-            }
-
-            if (isInRange)
-            {
-                return 1 - heightCurve.Evaluate(distance);
-            }
-
-            return 0;
+            
+            return 1 -  Mathf.InverseLerp(0 , radius , distance);
         }
 
         public override float GetSample(float x, float y, float z)
@@ -57,16 +41,9 @@ namespace NoiseUltra.Generators.Static
             var isInRange = distance < radius;
 
             if (hardEdges)
-            {
                 return isInRange ? 1 : 0;
-            }
-
-            if (distance < radius)
-            {
-                return 1 - heightCurve.Evaluate(distance);
-            }
-
-            return 0;
+            
+            return 1-  Mathf.InverseLerp(0 , radius , distance);
         }
     }
 }
