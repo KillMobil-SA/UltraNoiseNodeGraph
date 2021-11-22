@@ -8,7 +8,7 @@ namespace NoiseUltra.Tools
 {
     public class TerrainPainter : TerrainTool
     {
-        private TerrainLayerExportGroup ExportGroup => sourceNode as TerrainLayerExportGroup;
+        private PaintLayerExportGroup ExportGroup => sourceNode as PaintLayerExportGroup;
         private float[,,] m_SplatmapData;
         private int m_Resolution;
         private TerrainData m_TerrainData;
@@ -127,13 +127,13 @@ namespace NoiseUltra.Tools
             Profiler.Start();
             m_Resolution = GetHeightMapResolution();
             m_TerrainData = GetTerrainData();
+            m_RelativeSize = GetRelativeSize();
+            m_PaintLayers = GetPaintLayers();
+            m_TerrainData.terrainLayers = GetTerrainLayers();
             m_Width = m_TerrainData.alphamapWidth;
             m_Height = m_TerrainData.alphamapHeight;
             m_AlphaLayers = m_TerrainData.alphamapLayers;
-            m_TerrainData.terrainLayers = GetTerrainLayers();
             m_SplatmapData = new float[m_Width, m_Height, m_AlphaLayers];
-            m_RelativeSize = GetRelativeSize();
-            m_PaintLayers = GetPaintLayers();
             m_TotalPaintLayers = m_PaintLayers.Length;
             m_SplatWeights = new float[m_AlphaLayers];
             progress.SetSize(m_Resolution * m_Resolution);
