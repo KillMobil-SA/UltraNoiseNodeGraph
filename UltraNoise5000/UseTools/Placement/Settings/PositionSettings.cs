@@ -29,7 +29,7 @@ namespace NoiseUltra.Tools.Placement
         private GridHeightPos m_NoiseGridPos = new GridHeightPos();
         private IHeightBase m_HeightBase;
         
-        public PositionSettings()
+        public PositionSettings(float initialRangeValue, float initialRangeRandom) : base(initialRangeValue, initialRangeRandom)
         {
             UpdateHeightInterFace();
         }

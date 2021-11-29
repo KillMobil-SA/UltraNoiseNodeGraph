@@ -23,19 +23,19 @@ namespace NoiseUltra.Tools.Placement
         [TabGroup(PLACEMENT_SETTINGS_NAME, SIZE_TAB_NAME)]
         [InlineProperty]
         [HideLabel]
-        private ScaleSettings scale = new ScaleSettings();
+        private ScaleSettings scale = new ScaleSettings(1,0);
         
         [SerializeField]
         [TabGroup(PLACEMENT_SETTINGS_NAME, ROTATION_TAB_NAME)]
         [InlineProperty]
         [HideLabel]
-        private RotationSettings rotation = new RotationSettings();
+        private RotationSettings rotation = new RotationSettings(0,0);
         
         [SerializeField]
         [TabGroup(PLACEMENT_SETTINGS_NAME, POSITION_TAB_NAME)]
         [InlineProperty]
         [HideLabel]
-        private PositionSettings position = new PositionSettings();
+        private PositionSettings position = new PositionSettings(0,0);
         
         
         private Vector3[] m_Positions;

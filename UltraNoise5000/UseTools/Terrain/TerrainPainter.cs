@@ -66,7 +66,8 @@ namespace NoiseUltra.Tools
                             angleV = layer.EvaluateCliff(steepness, m_Resolution);
                         }
 
-                        PaintToolSampleStep info = new PaintToolSampleStep(relativeX, relativeY, pixelX, pixelY, layerIndex, ref m_SamplesAsync, angleV);
+                        PaintToolSampleStep info =
+                            new PaintToolSampleStep(relativeX, relativeY, pixelX, pixelY, layerIndex, ref m_SamplesAsync, angleV);
                         taskGroup.AddTask(() => info.Execute(layer.GetSample));
                     }
                 }
