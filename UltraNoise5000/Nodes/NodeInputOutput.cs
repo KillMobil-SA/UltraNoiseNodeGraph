@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using XNode;
 
 namespace NoiseUltra.Nodes
 {
@@ -27,6 +29,16 @@ namespace NoiseUltra.Nodes
             return IsInputValid ? Mathf.Clamp01(GetInput().GetSample(x, y, z)) : NodeProprieties.INVALID_VALUE;
         }
 
+        protected bool isInputConnected(NodeBase node)
+        {
+            NodePort inputPort = GetPort("input");
+            List<NodePort> connectionList = inputPort.GetConnections();
+            for (int i = 0; i < connectionList.Count; i++)
+                if (node == connectionList[i].node) return true;
+            
+            return false;
+        }
+        
         #endregion
 
         #region Private

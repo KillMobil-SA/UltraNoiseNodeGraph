@@ -4,12 +4,13 @@ using XNode;
 using System;
 using NoiseUltra.Nodes;
 using Sirenix.OdinInspector;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace NoiseUltra.Output
 {
     [Serializable,NodeTint(NodeColor.PAINTEXPORT)]
-    public class TerrainLayerExportGroup : ExportNode
+    public class PaintLayerExportGroup : ExportNode
     {
         [SerializeField]
         private List<PaintLayer> paintLayers;
@@ -34,6 +35,7 @@ namespace NoiseUltra.Output
         public override void OnRemoveConnection(NodePort port)
         {
             base.OnRemoveConnection(port);
+            
             int count = paintLayers.Count;
             for (int index = 0; index < count; ++index)
             {
@@ -45,6 +47,33 @@ namespace NoiseUltra.Output
             }
         }
 
+    [Button]
+        private void UpdateList()
+        {
+            int count = paintLayers.Count;
+         
+            //Check the connection and remove any remaining Items
+            for (int index = count - 1; index >= 0; index--)
+            {
+                PaintLayer layer = paintLayers[index];
+                if (!isInputConnected(layer))
+                    paintLayers.Remove(layer);
+            }
+            
+            NodePort inputPort = GetPort("input");
+            List<NodePort> connectionList = inputPort.GetConnections();
+            for (int i = 0; i < connectionList.Count; i++)
+            {
+                PaintLayer node = connectionList[i].node as PaintLayer;
+                if (node == null)
+                    continue;
+
+                if (!paintLayers.Contains(node))
+                    paintLayers.Add(node);
+            }
+
+        }
+        
         public TerrainLayer[] GetTerrainLayers()
         {
             int amount = paintLayers.Count;
