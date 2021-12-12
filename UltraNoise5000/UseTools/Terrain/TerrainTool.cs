@@ -19,7 +19,7 @@ namespace NoiseUltra.Tools
             public float relativeAlphaSize;
         }
 
-        private EditorCoroutineWrapper m_RoutineWrapper;
+        private CoroutineWrapper m_RoutineWrapper;
         private Cache m_Cache;
 
         [SerializeField]
@@ -55,7 +55,7 @@ namespace NoiseUltra.Tools
         public void ApplySync()
         {
             Initialize();
-            m_RoutineWrapper = new EditorCoroutineWrapper(this, ExecuteSync());
+            m_RoutineWrapper = new CoroutineWrapper(this, ExecuteSync());
             m_RoutineWrapper.StartCoroutine();
         }
 

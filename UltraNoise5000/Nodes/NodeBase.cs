@@ -33,12 +33,12 @@ namespace NoiseUltra.Nodes
 
         private bool m_IsPreviewDirty = true;
 
-        private EditorCoroutineWrapper m_DrawEditorAsyncRoutine;
-        private EditorCoroutineWrapper drawEditorAsyncRoutine
+        private CoroutineWrapper m_DrawEditorAsyncRoutine;
+        private CoroutineWrapper drawEditorAsyncRoutine
         {
             get
             {
-                return m_DrawEditorAsyncRoutine ??= new EditorCoroutineWrapper(this, DrawAsyncInternal());
+                return m_DrawEditorAsyncRoutine ??= new CoroutineWrapper(this, DrawAsyncInternal());
             }
         }
 

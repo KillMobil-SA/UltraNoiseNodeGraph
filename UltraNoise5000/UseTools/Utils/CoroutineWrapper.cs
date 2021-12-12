@@ -1,35 +1,85 @@
 using System.Collections;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using Unity.EditorCoroutines.Editor;
+#endif
+
 namespace NoiseUltra.Tools
 {
     public sealed class CoroutineWrapper
     {
-        private readonly MonoBehaviour m_Handler;
-        private readonly IEnumerator m_Coroutine;
+        private object m_Handler;
+        private EditorCoroutine m_Routine;
         private Coroutine m_RuntimeRoutine;
-
-        public CoroutineWrapper(MonoBehaviour handler, IEnumerator coroutine)
+        private IEnumerator m_Coroutine;
+        private bool IsPlaying => Application.isPlaying;
+        
+        public CoroutineWrapper(object handler, IEnumerator coroutine)
         {
-            m_Handler = handler;
             m_Coroutine = coroutine;
+            m_Handler = handler;
         }
 
         public void StartCoroutine()
         {
-            if (m_Handler != null && m_Coroutine != null)
+            if (!IsPlaying)
             {
-                m_RuntimeRoutine = m_Handler.StartCoroutine(m_Coroutine);
+#if UNITY_EDITOR
+                if (m_Coroutine != null && m_Handler != null)
+                {
+                    m_Routine = EditorCoroutineUtility.StartCoroutine(m_Coroutine, m_Handler);
+                }
+#endif
+            }
+            else
+            {
+                if (m_Handler == null || m_Coroutine == null)
+                {
+                    return;
+                }
+
+                MonoBehaviour handler = m_Handler as MonoBehaviour;
+                if (handler != null)
+                {
+                    m_RuntimeRoutine = handler.StartCoroutine(m_Coroutine);
+                }
             }
         }
 
         public void StopCoroutine()
         {
-            if (m_RuntimeRoutine != null)
+            if (IsPlaying)
             {
-                m_Handler.StopCoroutine(m_RuntimeRoutine);
+                if (m_RuntimeRoutine == null)
+                {
+                    return;
+                }
+
+                MonoBehaviour handler = m_Handler as MonoBehaviour;
+                if (handler != null)
+                {
+                    handler.StopCoroutine(m_RuntimeRoutine);
+                }
                 m_RuntimeRoutine = null;
             }
+            else
+            {
+#if UNITY_EDITOR
+                if (m_Routine == null)
+                {
+                    return;
+                }
+
+                EditorCoroutineUtility.StopCoroutine(m_Routine);
+                m_Routine = null;
+#endif
+            }
+        }
+        
+        public void SetCoroutine(IEnumerator coroutine)
+        {
+            m_Coroutine = coroutine;
         }
     }
 }
