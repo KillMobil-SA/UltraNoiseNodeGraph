@@ -34,6 +34,7 @@ namespace NoiseUltra.Tools.Placement
 
         private PlacementBounds myPlacementBounds
         {
+            
             get
             {
                 if (m_MyPlacementBounds == null)
@@ -82,6 +83,7 @@ namespace NoiseUltra.Tools.Placement
                 PlacementSettings itemSettings = item.settings;
                 itemSettings.CleanObjects(transform);
             }
+            
         }
 
         private void Initialize()

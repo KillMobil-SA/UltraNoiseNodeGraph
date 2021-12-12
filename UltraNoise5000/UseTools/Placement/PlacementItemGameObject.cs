@@ -86,7 +86,7 @@ namespace NoiseUltra.Tools.Placement
 #if UNITY_EDITOR
             newObject = PrefabUtility.InstantiatePrefab(sourceGO, parent) as GameObject;
 #else
-            newObject = Instantiate (placementItem.GetGameObject (v)) as GameObject;
+            newObject = Instantiate (sourceGO) as GameObject;
             newObject.transform.parent = parent;
 #endif
 

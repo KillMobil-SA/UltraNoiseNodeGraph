@@ -1,7 +1,9 @@
 ﻿using NoiseUltra.Nodes;
 using Sirenix.OdinInspector;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 namespace NoiseUltra.Output
 {
@@ -33,24 +35,26 @@ namespace NoiseUltra.Output
         [Button]
         private void ExportTexture()
         {
-            previewImage.SetImageSize(textureResolution);
-            string currentPath = AssetDatabase.GetAssetPath(graph);
-            string folderPath = currentPath.Replace(graph.name + FILE_ASSET_EXTENSION, string.Empty) + SAVE_FOLDER_PATH;
+        #if UNITY_EDITOR
+                    previewImage.SetImageSize(textureResolution);
+                    string currentPath = AssetDatabase.GetAssetPath(graph);
+                    string folderPath = currentPath.Replace(graph.name + FILE_ASSET_EXTENSION, string.Empty) + SAVE_FOLDER_PATH;
 
-            DrawSync();
+                    DrawSync();
 
-            byte[] bytes = previewImage.GetTexture().EncodeToPNG();
+                    byte[] bytes = previewImage.GetTexture().EncodeToPNG();
 
-            string filename = string.Format("{0}/{1}{2}", folderPath, name, FILES_EXTENSION);
+                    string filename = string.Format("{0}/{1}{2}", folderPath, name, FILES_EXTENSION);
 
-            if (!System.IO.Directory.Exists(folderPath))
-            {
-                System.IO.Directory.CreateDirectory(folderPath);
-            }
+                    if (!System.IO.Directory.Exists(folderPath))
+                    {
+                        System.IO.Directory.CreateDirectory(folderPath);
+                    }
 
-            System.IO.File.WriteAllBytes(filename, bytes);
-            AssetDatabase.Refresh();
-            previewImage.ResetImageSize();
+                    System.IO.File.WriteAllBytes(filename, bytes);
+                    AssetDatabase.Refresh();
+                    previewImage.ResetImageSize();
+        #endif
         }
     }
 }
