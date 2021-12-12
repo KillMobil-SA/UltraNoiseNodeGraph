@@ -60,12 +60,11 @@ namespace NoiseUltra.Tools
                         float angleV = 1;
                         if (layer.IsAnglePaint)
                         {
-                            int x01 = pixelX / m_TerrainData.alphamapWidth;
-                            int y01 = pixelY / m_TerrainData.alphamapHeight;
+                            float x01 = pixelX / (float) m_TerrainData.alphamapWidth;
+                            float y01 = pixelY / (float) m_TerrainData.alphamapHeight;
                             float steepness = m_TerrainData.GetSteepness(x01, y01);
                             angleV = layer.EvaluateCliff(steepness, m_Resolution);
                         }
-
                         PaintToolSampleStep info =
                             new PaintToolSampleStep(relativeX, relativeY, pixelX, pixelY, layerIndex, ref m_SamplesAsync, angleV);
                         taskGroup.AddTask(() => info.Execute(layer.GetSample));
