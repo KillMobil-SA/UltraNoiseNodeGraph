@@ -19,8 +19,6 @@ namespace NoiseUltra.Nodes
         {
             showPreviewImage = !showPreviewImage;
         }
-
-        
         
         private TaskGroup m_TaskGroup;
 
