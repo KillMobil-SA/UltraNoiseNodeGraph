@@ -87,13 +87,10 @@ namespace NoiseUltra.Nodes
             CreateTexture();
             bounds.Reset();
 
-            
-            
             int totalColors = m_ImageSize * m_ImageSize;
             m_Pixels = new Color[totalColors];
             int index = 0;
             Profiler.Start();
-            
             
             for (int x = 0; x < m_ImageSize; ++x)
             {
@@ -164,7 +161,6 @@ namespace NoiseUltra.Nodes
             Object.DestroyImmediate(sourceTexture);
             sourceTexture = null;
         }
-
         
         public Texture2D GetTexture()
         {
