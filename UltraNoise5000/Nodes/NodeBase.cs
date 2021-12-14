@@ -50,10 +50,7 @@ namespace NoiseUltra.Nodes
         protected override void Init()
         {
             m_IsPreviewDirty = true;
-        }
-        
-        
-        
+        }   
 
         #region Public
         public abstract float GetSample(float x);
@@ -117,15 +114,12 @@ namespace NoiseUltra.Nodes
 
         protected bool IsConnected(NodeBase node)
         {
-            ///There is a logic flaw here
+            ///#Zoto: There is a logic flaw here
             ///We are trying to identify if a Node is connected
-            /// While here you are checking ports.
-            
+            ///While here you are checking ports.
             NodePort port = GetPort(nameof(node));
             return port != null && port.IsConnected;
         }
-
-    
 
         protected NodePort GetPort(NodeBase node)
         {
