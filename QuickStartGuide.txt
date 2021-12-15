@@ -1,0 +1,30 @@
+﻿Quick start guide for UltraNoise
+
+
+1. Add Editor Coroutines from package manager
+   1. Open the package manager from “Window/package manager”
+   2. From the Unity registry select the package “Editor Coroutines” and install
+2. Add Odin inspector
+   1. If you don't own Odin inspector get it here: https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041
+   2. Open the package manager from “Window/package manager”
+   3. From your personal asset Select odin inspector and install the package.
+
+
+And you should be ready to go!
+
+
+To create your first noise from the create menu select:
+“Create/KillMobil/UltraNoise/Noise Graph”
+
+
+From the project preferences you can adjust xNode settings like the node connection line etc.
+
+
+Examples and learning resources can be found here:
+https://github.com/KillMobil-SA/UltraNoiseExamples
+
+
+All the best from 
+https://twitter.com/kllmbl
+&
+https://twitter.com/ycarowr
