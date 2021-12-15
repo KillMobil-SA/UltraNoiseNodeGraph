@@ -10,9 +10,12 @@ namespace NoiseUltra.Tools
     public sealed class CoroutineWrapper
     {
         private object m_Handler;
+#if UNITY_EDITOR
         private EditorCoroutine m_Routine;
+#endif
         private Coroutine m_RuntimeRoutine;
         private IEnumerator m_Coroutine;
+
         private bool IsPlaying => Application.isPlaying;
         
         public CoroutineWrapper(object handler, IEnumerator coroutine)

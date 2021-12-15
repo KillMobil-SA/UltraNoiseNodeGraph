@@ -28,10 +28,11 @@ namespace NoiseUltra.Tools
             Initialize();
             m_Resolution = GetHeightMapResolution();
             m_TerrainData = terrain.terrainData;
+            m_TerrainData.terrainLayers = GetTerrainLayers();
             m_Width = m_TerrainData.alphamapWidth;
             m_Height = m_TerrainData.alphamapHeight;
             m_AlphaLayers = m_TerrainData.alphamapLayers;
-            m_TerrainData.terrainLayers = GetTerrainLayers();
+            
             m_SplatmapData = new float[m_Width, m_Height, m_AlphaLayers];
             m_RelativeSize = GetRelativeSize();
             m_PaintLayers = GetPaintLayers();
