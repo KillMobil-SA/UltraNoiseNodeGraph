@@ -21,8 +21,10 @@ namespace NoiseUltra
         [OnValueChanged(nameof(AutoDraw))]
         public Vector3 noiseOffsetAmount = new Vector3(0,1000,10000);
         [OnValueChanged(nameof(AutoDraw))]
-        public float noiseModifier;
+        public float noiseModifier = -0.5f;
 
+        public bool enableSphereMode;
+        
         public bool autoDraw = false;
         
 
@@ -33,7 +35,7 @@ namespace NoiseUltra
 
 
 
-        [Button]
+
         public void BackUpMeshPoints()
         {
 #if UNITY_EDITOR
@@ -44,12 +46,7 @@ namespace NoiseUltra
             meshPoints = new Vector3[originalMeshPoints.Length];
         }
 
-        [Button]
-        public void ApplyBackUp()
-        {
-            myMesh.vertices = originalMeshPoints;
-            myMesh.RecalculateNormals();
-        }
+   
 
 
         [Button]
@@ -65,22 +62,37 @@ namespace NoiseUltra
                 if (isWorldCordinates)
                     pos = transform.localToWorldMatrix.MultiplyPoint3x4(pos);
 
+                
+                
 
                 var xSample = exportNode.GetSample(pos.x + noiseOffsetAmount.x, pos.y + noiseOffsetAmount.x, pos.z + noiseOffsetAmount.x);
                 var ySample = exportNode.GetSample(pos.x + noiseOffsetAmount.y, pos.y + noiseOffsetAmount.y, pos.z + noiseOffsetAmount.y);
                 var zSample = exportNode.GetSample(pos.x + noiseOffsetAmount.z, pos.y + noiseOffsetAmount.z, pos.z + noiseOffsetAmount.z);
 
-                var deformResult = pos +  new Vector3(
+                var deformResult =  new Vector3(
                     (xSample + noiseModifier) * offSetAmount.x,
                     (ySample + noiseModifier) * offSetAmount.y,
                     (zSample + noiseModifier) * offSetAmount.z
                     );
+
+
+                if (enableSphereMode)
+                {
+                    Vector3 center = Vector3.zero;
+                    if (isWorldCordinates) center = transform.position;
+
+                    Quaternion diffangle = Quaternion.LookRotation(pos - center);
+
+                    deformResult = ConvertVector(deformResult, diffangle, Vector3.zero, Vector3.one);
+                }
                 
 
+                var combinepoints = deformResult + pos;
+
                 if (isWorldCordinates)
-                    meshPoints[i] = transform.worldToLocalMatrix.MultiplyPoint3x4(deformResult);
+                    meshPoints[i] = transform.worldToLocalMatrix.MultiplyPoint3x4(combinepoints);
                 else
-                    meshPoints[i] = deformResult;
+                    meshPoints[i] = combinepoints;
                 
             }
             
@@ -89,6 +101,19 @@ namespace NoiseUltra
 
         }
 
+        public Vector3 ConvertVector (Vector3 source, Quaternion rotate, Vector3 move, Vector3 scale)
+        {
+            Matrix4x4 m = Matrix4x4.TRS (move, rotate, scale); 
+            Vector3 result = m.MultiplyPoint3x4 (source);
+            return result;
+        }
+
+        [Button]
+        public void ApplyBackUp()
+        {
+            myMesh.vertices = originalMeshPoints;
+            myMesh.RecalculateNormals();
+        }
 
         public void AutoDraw()
         {
@@ -97,7 +122,7 @@ namespace NoiseUltra
         
 
 #if UNITY_EDITOR
-        [Button]
+    
         public void CloneMesh()
         {
 
@@ -105,16 +130,7 @@ namespace NoiseUltra
            string meshFileName = Path.GetFileName(meshAssetPath);
            string meshFolderPath = meshAssetPath.Replace(meshFileName, string.Empty);
            string meshCopyFilename = meshFolderPath + myMesh.name + "_clone.asset";
-           
-           
-           Debug.Log("assetPath:" + meshAssetPath);
-           Debug.Log("filename:" + meshFileName);
-           Debug.Log("meshFolderPath:" + meshFolderPath);
-           Debug.Log("meshCopyFilename:" + meshCopyFilename);
-           
-           
-           
-           
+
            Mesh meshToSave = Object.Instantiate(myMesh) as Mesh ;
            AssetDatabase.CreateAsset( meshToSave, meshCopyFilename);
            AssetDatabase.SaveAssets();
