@@ -89,6 +89,7 @@ namespace NoiseUltra
             float noiseOffsetZ = noiseOffsetAmount.z;
 
             Matrix4x4 worldLocalMatrix = transform.worldToLocalMatrix;
+            Matrix4x4 localWorldMatrix = transform.localToWorldMatrix;
             
             int length = meshPoints.Length;
             for (var i = 0; i < length; ++i)
@@ -97,7 +98,7 @@ namespace NoiseUltra
 
                 if (isWorldCordinates)
                 {
-                    pos = worldLocalMatrix.MultiplyPoint3x4(pos);
+                    pos = localWorldMatrix.MultiplyPoint3x4(pos);
                 }
 
                 float seedXx = noiseOffsetX + pos.x;
