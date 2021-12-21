@@ -163,18 +163,14 @@ namespace NoiseUltra.Tools.Placement
                             Vector3 placementPos = new Vector3(x, y, z);
                             Vector3 pos = myPlacementBounds.GetPosVector(placementPos);
 
-                            if (useAbsoluteCoordinates)
-                            {
-                                pos = new Vector3(Mathf.Abs(pos.x), Mathf.Abs(pos.y), Mathf.Abs(pos.z));
-                            }
-
-                            if (!useWorldCoordinates)
-                            {
-                                pos -= myPlacementBounds.center;
-                            }
-
+                            
+                            var noiseSamplingPos = !useWorldCoordinates ? pos - myPlacementBounds.center : pos;
+                            
+                            noiseSamplingPos = useAbsoluteCoordinates
+                                ? new Vector3(Mathf.Abs(noiseSamplingPos.x), Mathf.Abs(noiseSamplingPos.y), Mathf.Abs(noiseSamplingPos.z)) : noiseSamplingPos;
+                            
                             bool is2D = myPlacementBounds.heightIs2D;
-                            float sample = is2D ? settings.GetSample(pos.x, pos.z) : settings.GetSample(pos);
+                            float sample = is2D ? settings.GetSample(noiseSamplingPos.x, noiseSamplingPos.z) : settings.GetSample(noiseSamplingPos);
 
                             if (sample == 0) continue;
                             
