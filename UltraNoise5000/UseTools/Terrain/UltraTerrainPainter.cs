@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Tools
 {
-    public class TerrainPainter : TerrainTool
+    public class UltraTerrainPainter : TerrainTool
     {
         private PaintLayerExportGroup ExportGroup => sourceNode as PaintLayerExportGroup;
         private float[,,] m_SplatmapData;

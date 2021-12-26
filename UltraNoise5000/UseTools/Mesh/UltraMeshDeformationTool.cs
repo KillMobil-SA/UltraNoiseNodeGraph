@@ -9,7 +9,7 @@ using UnityEditor;
 
 namespace NoiseUltra
 {
-    public class MeshDeformationTool : MonoBehaviour
+    public class UltraMeshDeformationTool : MonoBehaviour
     {
         [SerializeField]
         private ExportNode exportNode;
@@ -147,7 +147,7 @@ namespace NoiseUltra
         }
 
         [Button]
-        private void ApplyBackUp()
+        private void RevertMesh()
         {
             myMesh.vertices = originalMeshPoints;
             myMesh.RecalculateNormals();
@@ -170,19 +170,35 @@ namespace NoiseUltra
 
 
 #if UNITY_EDITOR
+        const string assetSuffix = "_clone.asset";
+        [Button]
         private void CloneMesh()
         {
             string meshAssetPath = AssetDatabase.GetAssetPath(myMesh);
             string meshFileName = Path.GetFileName(meshAssetPath);
             string meshFolderPath = meshAssetPath.Replace(meshFileName, string.Empty);
-            const string assetSuffix = "_clone.asset";
-            string meshCopyFilename = meshFolderPath + myMesh.name + assetSuffix;
+            string newFileName = myMesh.name + assetSuffix;
+            string meshCopyFilename = meshFolderPath + newFileName;
+
+            
+            
+            Debug.Log("meshAssetPath:" + meshAssetPath);
+            Debug.Log("meshFileName:" + meshFileName);
+            Debug.Log("meshFolderPath:" + meshFolderPath);
+            
 
             Mesh meshToSave = Object.Instantiate(myMesh) as Mesh;
-            AssetDatabase.CreateAsset(meshToSave, meshCopyFilename);
-            AssetDatabase.SaveAssets();
+            
+            if (!meshAssetPath.Contains("Library"))
+                AssetDatabase.CreateAsset(meshToSave, meshCopyFilename);
+            else
+                AssetDatabase.CreateAsset(meshToSave, "Assets/" + newFileName);
 
+            
+            AssetDatabase.SaveAssets();
             myMesh = myMeshFilter.sharedMesh = meshToSave;
+
+            
         }
 
 #endif

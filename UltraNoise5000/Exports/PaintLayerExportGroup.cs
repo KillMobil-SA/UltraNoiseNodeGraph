@@ -4,7 +4,6 @@ using XNode;
 using System;
 using NoiseUltra.Nodes;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 namespace NoiseUltra.Output
 {
