@@ -5,13 +5,14 @@ namespace NoiseUltra.Movement
     [System.Serializable]
     public class UltraNoiseMovementSettings
     {
-        public ExportNode movementNoise;
-        public Vector3 maxMovement;
-        public Vector3 noiseOffeset;
+        
+        [SerializeField]private ExportNode movementNoise;
+        [SerializeField]private Vector3 maxMovement;
+        [SerializeField]private Vector3 noiseOffeset;
 
-        public float moveSpeed;
+        [SerializeField]private float moveSpeed;
     
-        public Vector3 start;
+        [SerializeField]private Vector3 start;
 
 
         public void SetStart(Vector3 _start)

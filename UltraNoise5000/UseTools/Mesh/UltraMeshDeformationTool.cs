@@ -180,25 +180,15 @@ namespace NoiseUltra
             string newFileName = myMesh.name + assetSuffix;
             string meshCopyFilename = meshFolderPath + newFileName;
 
-            
-            
-            Debug.Log("meshAssetPath:" + meshAssetPath);
-            Debug.Log("meshFileName:" + meshFileName);
-            Debug.Log("meshFolderPath:" + meshFolderPath);
-            
-
             Mesh meshToSave = Object.Instantiate(myMesh) as Mesh;
             
             if (!meshAssetPath.Contains("Library"))
                 AssetDatabase.CreateAsset(meshToSave, meshCopyFilename);
             else
                 AssetDatabase.CreateAsset(meshToSave, "Assets/" + newFileName);
-
             
             AssetDatabase.SaveAssets();
             myMesh = myMeshFilter.sharedMesh = meshToSave;
-
-            
         }
 
 #endif
