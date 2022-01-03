@@ -8,6 +8,8 @@ namespace NoiseUltra.TransformNodes
     public class Rotation  : NodeInputOutput
     {
         [SerializeField , OnValueChanged(nameof(DrawAsync))]
+        [InfoBox("To adjust 2D noise use the 'z' Axis , 3D adjustments (X,Y) wont preview properly but work!-)")]
+        
         private Vector3 roationOffSet = new Vector3(0, 0, 0);
         
         
