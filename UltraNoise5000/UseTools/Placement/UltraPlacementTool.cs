@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Tools.Placement
 {
-    public class PlacementTool : MonoBehaviour
+    public class UltraPlacementTool : MonoBehaviour
     {
         private const string LIVE_PREVIEW_NAME = "Live Preview";
         private const string MODIFIERS_NAME = "Modifications";

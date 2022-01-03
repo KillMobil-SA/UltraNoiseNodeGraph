@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace NoiseUltra.Tools
 {
-    public class TerrainShaper : TerrainTool
+    public class UltraTerrainShaper : TerrainTool
     {
         private float[,] m_HeightMap;
 

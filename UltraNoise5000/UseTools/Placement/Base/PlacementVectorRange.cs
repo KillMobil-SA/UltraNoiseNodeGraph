@@ -45,7 +45,7 @@ namespace NoiseUltra.Tools.Placement
 
         #region Members
 
-        private PlacementTool m_PlacementTool;
+        private UltraPlacementTool _mUltraPlacementTool;
 
         [Space] [EnumToggleButtons] [HideLabel]
         public AxisType axisType = AxisType.Unified;
