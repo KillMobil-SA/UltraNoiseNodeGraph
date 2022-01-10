@@ -30,7 +30,7 @@ namespace NoiseUltra.Generators
 
         public override float GetSample(float x, float y)
         {
-            float sample = GetFractalLazy().Sample2D(x, y);
+            float sample = GetFractalLazy().Sample3D(x, 0 , y);
             return sample;
         }
         
