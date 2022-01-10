@@ -29,7 +29,7 @@ namespace NoiseUltra.Nodes
         [SerializeField]
         private int size = NodeProprieties.DEFAULT_GLOBAL_ZOOM;
 
-        [SerializeField , ShowIf(nameof(showPreviewImage))]
+        [ShowInInspector , NonSerialized , ShowIf(nameof(showPreviewImage))]
         [HideLabel,PreviewField(NodeProprieties.DEFAULT_PREVIEW_SIZE)]
         private Texture2D sourceTexture;
 
