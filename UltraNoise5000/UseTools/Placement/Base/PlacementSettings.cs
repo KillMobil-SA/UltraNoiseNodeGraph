@@ -65,7 +65,7 @@ namespace NoiseUltra.Tools.Placement
         
         public float GetSample(float x, float z)
         {
-            return exportNode.GetSample(x, z);
+            return exportNode.GetSample(x, 0,z);
         }
 
         public float GetSample(Vector3 pos)

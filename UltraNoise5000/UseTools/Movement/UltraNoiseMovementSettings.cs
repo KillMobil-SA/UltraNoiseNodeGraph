@@ -13,7 +13,7 @@ namespace NoiseUltra.Movement
         [SerializeField]private float moveSpeed;
     
         [SerializeField]private Vector3 start;
-
+        public float offset;
 
         public void SetStart(Vector3 _start)
         {
@@ -22,9 +22,9 @@ namespace NoiseUltra.Movement
     
         public Vector3 CalculateVector()
         {
-            var xpos = movementNoise.GetSample(Time.time * moveSpeed + noiseOffeset.x) - 0.5f;
-            var ypos = movementNoise.GetSample(Time.time * moveSpeed + noiseOffeset.y) - 0.5f;
-            var zpos = movementNoise.GetSample(Time.time * moveSpeed + noiseOffeset.z) - 0.5f;
+            var xpos = movementNoise.GetSample(offset + Time.time * moveSpeed + noiseOffeset.x) - 0.5f;
+            var ypos = movementNoise.GetSample(offset + Time.time * moveSpeed + noiseOffeset.y) - 0.5f;
+            var zpos = movementNoise.GetSample(offset + Time.time * moveSpeed + noiseOffeset.z) - 0.5f;
 
             var newpos = start + new Vector3(xpos * maxMovement.x, ypos * maxMovement.y, zpos * maxMovement.z);
         

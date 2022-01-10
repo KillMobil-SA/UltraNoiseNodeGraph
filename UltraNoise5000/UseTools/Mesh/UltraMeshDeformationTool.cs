@@ -20,7 +20,7 @@ namespace NoiseUltra
 
         [SerializeField]
         [OnValueChanged(nameof(AutoDraw))]
-        private Vector3 noiseOffsetAmount = new Vector3(0, 1000, 10000);
+        public Vector3 noiseOffsetAmount = new Vector3(0, 1000, 10000);
 
         [SerializeField]
         [OnValueChanged(nameof(AutoDraw))]
@@ -77,11 +77,11 @@ namespace NoiseUltra
         #endregion
 
         [Button]
-        private void ApplyNoiseToMesh()
+        public void ApplyNoiseToMesh()
         {
             if (originalMeshPoints == null || originalMeshPoints.Length == 0)
             {
-                BackUpMeshPoints();
+            //  BackUpMeshPoints();
             }
 
             float noiseOffsetX = noiseOffsetAmount.x;
@@ -101,27 +101,22 @@ namespace NoiseUltra
                     pos = localWorldMatrix.MultiplyPoint3x4(pos);
                 }
 
-                float seedXx = noiseOffsetX + pos.x;
-                float seedXy = noiseOffsetX + pos.y;
-                float seedXz = noiseOffsetX + pos.z;
 
-                float seedYx = noiseOffsetY + pos.x;
+                float seedYx = noiseOffsetX + pos.x;
                 float seedYy = noiseOffsetY + pos.y;
-                float seedYz = noiseOffsetY + pos.z;
+                float seedYz = noiseOffsetZ + pos.z;
 
-                float seedZx = noiseOffsetZ + pos.x;
-                float seedZy = noiseOffsetZ + pos.y;
-                float seedZz = noiseOffsetZ + pos.z;
+
                 
-                float xSample = exportNode.GetSample(seedXx, seedXy, seedXz);
+           
                 float ySample = exportNode.GetSample(seedYx, seedYy, seedYz);
-                float zSample = exportNode.GetSample(seedZx, seedZy, seedZz);
+      
 
-                float sampleNoiseX = (xSample + noiseModifier) * offSetAmount.x;
+         
                 float sampleNoiseY = (ySample + noiseModifier) * offSetAmount.y;
-                float sampleNoiseZ = (zSample + noiseModifier) * offSetAmount.z;
+         
 
-                Vector3 sampleNoise = new Vector3(sampleNoiseX, sampleNoiseY, sampleNoiseZ);
+                Vector3 sampleNoise = new Vector3(0, sampleNoiseY, 0);
 
                 if (enableSphereMode)
                 {
@@ -169,6 +164,10 @@ namespace NoiseUltra
         }
 
 
+       
+        
+
+
 #if UNITY_EDITOR
         const string assetSuffix = "_clone.asset";
         [Button]
@@ -192,6 +191,7 @@ namespace NoiseUltra
         }
 
 #endif
+        [Button]
         private void BackUpMeshPoints()
         {
 #if UNITY_EDITOR
