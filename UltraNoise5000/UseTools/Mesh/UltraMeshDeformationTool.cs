@@ -15,15 +15,12 @@ namespace NoiseUltra
         private ExportNode exportNode;
 
         [SerializeField]
-        [OnValueChanged(nameof(AutoDraw))]
         private Vector3 offSetAmount;
 
         [SerializeField]
-        [OnValueChanged(nameof(AutoDraw))]
         private Vector3 noiseOffsetAmount = new Vector3(0, 1000, 10000);
 
         [SerializeField]
-        [OnValueChanged(nameof(AutoDraw))]
         private float noiseModifier = -0.5f;
 
         [SerializeField]
@@ -32,13 +29,10 @@ namespace NoiseUltra
         [SerializeField]
         private bool enableSphereMode;
         
-        [SerializeField]
-        private bool autoDraw = false;
-
-        [SerializeField]
+        [SerializeField , HideInInspector]
         private Vector3[] originalMeshPoints;
 
-        [SerializeField]
+        [SerializeField , HideInInspector]
         private Vector3[] meshPoints;
 
 
@@ -79,7 +73,12 @@ namespace NoiseUltra
         [Button]
         private void ApplyNoiseToMesh()
         {
-            if (originalMeshPoints == null || originalMeshPoints.Length == 0)
+
+            if (myMesh != myMeshFilter.sharedMesh)
+            {
+                myMesh = myMeshFilter.sharedMesh;
+                BackUpMeshPoints();
+            }else if (originalMeshPoints == null || originalMeshPoints.Length == 0)
             {
                 BackUpMeshPoints();
             }
@@ -160,18 +159,10 @@ namespace NoiseUltra
             return result;
         }
 
-        private void AutoDraw()
-        {
-            if (autoDraw)
-            {
-                ApplyNoiseToMesh();
-            }
-        }
 
 
 #if UNITY_EDITOR
         const string assetSuffix = "_clone.asset";
-        [Button]
         private void CloneMesh()
         {
             string meshAssetPath = AssetDatabase.GetAssetPath(myMesh);
