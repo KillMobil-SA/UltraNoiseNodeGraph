@@ -42,7 +42,7 @@ namespace XNodeEditor {
             try
             {
 #if ODIN_INSPECTOR_3
-                objectTree.BeginDraw( true );
+                objectTree.BeginDraw( false );
 #else
                 InspectorUtilities.BeginDrawPropertyTree(objectTree, true);
 #endif
@@ -55,7 +55,7 @@ namespace XNodeEditor {
             }
 
             GUIHelper.PushLabelWidth( 84 );
-            objectTree.Draw( true );
+            objectTree.Draw( false );
 #if ODIN_INSPECTOR_3
             objectTree.EndDraw();
 #else
