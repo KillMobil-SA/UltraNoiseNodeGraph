@@ -54,6 +54,22 @@ namespace NoiseUltra.Tools.Placement
             }
         }
 
+        public float Volume
+        {
+            get
+            {
+                return (xAmount * yAmount * zAmount);
+            }
+        }
+        
+        public int VolumeInt
+        {
+            get
+            {
+                return  Mathf.RoundToInt(Volume);
+            }
+        }
+
         public bool heightIs2D => yAmount <= 1;
         
         public Vector3 center

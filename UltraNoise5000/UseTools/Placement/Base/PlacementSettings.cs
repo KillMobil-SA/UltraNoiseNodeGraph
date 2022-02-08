@@ -15,9 +15,10 @@ namespace NoiseUltra.Tools.Placement
         private const string NOISE_SETTINGS_NAME = "Noise Settings";
         private const string LIVE_PREVIEW_SETTINGS_NAME = "Live Preview Settings";
 
-        [Header(NOISE_SETTINGS_NAME)] 
-        public ExportNode exportNode;
-
+        [Header(NOISE_SETTINGS_NAME)]
+        public float spacing;
+        public ExportNode exportNode; 
+        
         [SerializeField]
         [Header(PLACEMENT_SETTINGS_NAME)]
         [TabGroup(PLACEMENT_SETTINGS_NAME, SIZE_TAB_NAME)]
@@ -38,8 +39,8 @@ namespace NoiseUltra.Tools.Placement
         private PositionSettings position = new PositionSettings(0,0);
         
         
-        private Vector3[] m_Positions;
-        private Vector3[] m_Scale;
+        private Vector3[] m_CachedPositions;
+        private Vector3[] m_CachedScale;
 
         [BoxGroup(LIVE_PREVIEW_SETTINGS_NAME)]
         public Color livePreviewColor = Color.green;
@@ -53,6 +54,12 @@ namespace NoiseUltra.Tools.Placement
             scale.Initialize();
             rotation.Initialize();
             position.Initialize();
+        }
+
+        public void InitLivePreview(int cacheAmount)
+        {
+            m_CachedPositions = new Vector3[cacheAmount];
+            m_CachedScale = new Vector3[cacheAmount];
         }
 
         private void OnEnable()
@@ -102,31 +109,43 @@ namespace NoiseUltra.Tools.Placement
 
         }
 
-        public void DebugObject(int index)
+
+        public void PlacePreviewGizmo(Vector3 pos, float v , int index)
         {
-            if (m_Positions == null || m_Scale == null)
+            m_CachedPositions[index] = GetPos(pos , v);
+            m_CachedScale[index] = GetScale(pos , v);
+        }
+        
+        public void DebugObject()
+        {
+            if (m_CachedPositions == null || m_CachedScale == null)
             {
                 return;
             }
 
-            if (index < m_Positions.Length - 1 && index < m_Scale.Length - 1)
+            for (int i = 0; i < m_CachedPositions.Length; i++)
             {
                 Gizmos.color = livePreviewColor;
-                Vector3 currentPosition = m_Positions[index];
-                Vector3 currentScale = m_Scale[index];
+                Vector3 currentPosition = m_CachedPositions[i];
+                Vector3 currentScale = m_CachedScale[i];
                 Gizmos.DrawCube(currentPosition, currentScale);
                 Gizmos.color = Color.white;
+                                
             }
+                
+              
+                
+            
         }
 
         public void SetPositions(ref Vector3[] positions)
         {
-            m_Positions = positions;
+            m_CachedPositions = positions;
         }
 
         public void SetScale(ref Vector3[] scales)
         {
-            m_Scale = scales;
+            m_CachedScale = scales;
         }
     }
 }
