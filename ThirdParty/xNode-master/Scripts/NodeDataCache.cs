@@ -7,29 +7,42 @@ namespace XNode {
     /// <summary> Precaches reflection data in editor so we won't have to do it runtime </summary>
     public static class NodeDataCache {
         private static PortDataCache portDataCache;
+        private static Dictionary<System.Type, Dictionary<string, string>> formerlySerializedAsCache;
+        private static Dictionary<System.Type, string> typeQualifiedNameCache;
         private static bool Initialized { get { return portDataCache != null; } }
+
+        public static string GetTypeQualifiedName(System.Type type) {
+            if(typeQualifiedNameCache == null) typeQualifiedNameCache = new Dictionary<System.Type, string>();
+            
+            string name;
+            if (!typeQualifiedNameCache.TryGetValue(type, out name)) {
+                name = type.AssemblyQualifiedName;
+                typeQualifiedNameCache.Add(type, name);
+            }
+            return name;
+        }
 
         /// <summary> Update static ports and dynamic ports managed by DynamicPortLists to reflect class fields. </summary>
         public static void UpdatePorts(Node node, Dictionary<string, NodePort> ports) {
             if (!Initialized) BuildCache();
 
-            Dictionary<string, NodePort> staticPorts = new Dictionary<string, NodePort>();
             Dictionary<string, List<NodePort>> removedPorts = new Dictionary<string, List<NodePort>>();
             System.Type nodeType = node.GetType();
 
+            Dictionary<string, string> formerlySerializedAs = null;
+            if (formerlySerializedAsCache != null) formerlySerializedAsCache.TryGetValue(nodeType, out formerlySerializedAs);
+
             List<NodePort> dynamicListPorts = new List<NodePort>();
 
-            List<NodePort> typePortCache;
-            if (portDataCache.TryGetValue(nodeType, out typePortCache)) {
-                for (int i = 0; i < typePortCache.Count; i++) {
-                    staticPorts.Add(typePortCache[i].fieldName, portDataCache[nodeType][i]);
-                }
-            }
+            Dictionary<string, NodePort> staticPorts;
+            if (!portDataCache.TryGetValue(nodeType, out staticPorts)) {
+                 staticPorts = new Dictionary<string, NodePort>();
+            }            
 
             // Cleanup port dict - Remove nonexisting static ports - update static port types
             // AND update dynamic ports (albeit only those in lists) too, in order to enforce proper serialisation.
             // Loop through current node ports
-            foreach (NodePort port in ports.Values.ToList()) {
+            foreach (NodePort port in ports.Values.ToArray()) {
                 // If port still exists, check it it has been changed
                 NodePort staticPort;
                 if (staticPorts.TryGetValue(port.fieldName, out staticPort)) {
@@ -43,6 +56,11 @@ namespace XNode {
                 }
                 // If port doesn't exist anymore, remove it
                 else if (port.IsStatic) {
+                    //See if the field is tagged with FormerlySerializedAs, if so add the port with its new field name to removedPorts
+                    // so it can be reconnected in missing ports stage.
+                    string newName = null;
+                    if (formerlySerializedAs != null && formerlySerializedAs.TryGetValue(port.fieldName, out newName)) removedPorts.Add(newName, port.GetConnections());
+
                     port.ClearConnections();
                     ports.Remove(port.fieldName);
                 }
@@ -61,20 +79,23 @@ namespace XNode {
                         for (int i = 0; i < reconnectConnections.Count; i++) {
                             NodePort connection = reconnectConnections[i];
                             if (connection == null) continue;
+                            // CAVEAT: Ports connected under special conditions defined in graphEditor.CanConnect overrides will not auto-connect.
+                            // To fix this, this code would need to be moved to an editor script and call graphEditor.CanConnect instead of port.CanConnectTo.
+                            // This is only a problem in the rare edge case where user is using non-standard CanConnect overrides and changes port type of an already connected port
                             if (port.CanConnectTo(connection)) port.Connect(connection);
                         }
                     }
                     ports.Add(staticPort.fieldName, port);
                 }
             }
-            
+
             // Finally, make sure dynamic list port settings correspond to the settings of their "backing port"
             foreach (NodePort listPort in dynamicListPorts) {
                 // At this point we know that ports here are dynamic list ports
                 // which have passed name/"backing port" checks, ergo we can proceed more safely.
-                string backingPortName = listPort.fieldName.Split(' ')[0];
+                string backingPortName = listPort.fieldName.Substring(0, listPort.fieldName.IndexOf(' '));
                 NodePort backingPort = staticPorts[backingPortName];
-                
+
                 // Update port constraints. Creating a new port instead will break the editor, mandating the need for setters.
                 listPort.ValueType = GetBackingValueType(backingPort.ValueType);
                 listPort.direction = backingPort.direction;
@@ -86,7 +107,7 @@ namespace XNode {
         /// <summary>
         /// Extracts the underlying types from arrays and lists, the only collections for dynamic port lists
         /// currently supported. If the given type is not applicable (i.e. if the dynamic list port was not
-        /// defined as an array or a list), returns the given type itself. 
+        /// defined as an array or a list), returns the given type itself.
         /// </summary>
         private static System.Type GetBackingValueType(System.Type portValType) {
             if (portValType.HasElementType) {
@@ -105,10 +126,10 @@ namespace XNode {
             // Thus, we need to check for attributes... (but at least we don't need to look at all fields this time)
             string[] fieldNameParts = port.fieldName.Split(' ');
             if (fieldNameParts.Length != 2) return false;
-            
+
             FieldInfo backingPortInfo = port.node.GetType().GetField(fieldNameParts[0]);
             if (backingPortInfo == null) return false;
-            
+
             object[] attribs = backingPortInfo.GetCustomAttributes(true);
             return attribs.Any(x => {
                 Node.InputAttribute inputAttribute = x as Node.InputAttribute;
@@ -117,7 +138,7 @@ namespace XNode {
                        outputAttribute != null && outputAttribute.dynamicPortList;
             });
         }
-        
+
         /// <summary> Cache node types </summary>
         private static void BuildCache() {
             portDataCache = new PortDataCache();
@@ -135,6 +156,7 @@ namespace XNode {
                     // The following assemblies, and sub-assemblies (eg. UnityEngine.UI) are skipped
                     case "UnityEditor":
                     case "UnityEngine":
+                    case "Unity":
                     case "System":
                     case "mscorlib":
                     case "Microsoft":
@@ -177,42 +199,28 @@ namespace XNode {
                 object[] attribs = fieldInfo[i].GetCustomAttributes(true);
                 Node.InputAttribute inputAttrib = attribs.FirstOrDefault(x => x is Node.InputAttribute) as Node.InputAttribute;
                 Node.OutputAttribute outputAttrib = attribs.FirstOrDefault(x => x is Node.OutputAttribute) as Node.OutputAttribute;
+                UnityEngine.Serialization.FormerlySerializedAsAttribute formerlySerializedAsAttribute = attribs.FirstOrDefault(x => x is UnityEngine.Serialization.FormerlySerializedAsAttribute) as UnityEngine.Serialization.FormerlySerializedAsAttribute;
 
                 if (inputAttrib == null && outputAttrib == null) continue;
 
                 if (inputAttrib != null && outputAttrib != null) Debug.LogError("Field " + fieldInfo[i].Name + " of type " + nodeType.FullName + " cannot be both input and output.");
                 else {
-                    if (!portDataCache.ContainsKey(nodeType)) portDataCache.Add(nodeType, new List<NodePort>());
-                    portDataCache[nodeType].Add(new NodePort(fieldInfo[i]));
+                    if (!portDataCache.ContainsKey(nodeType)) portDataCache.Add(nodeType, new Dictionary<string, NodePort>());
+                     NodePort port = new NodePort(fieldInfo[i]);
+                     portDataCache[nodeType].Add(port.fieldName, port);
+                }
+
+                if (formerlySerializedAsAttribute != null) {
+                    if (formerlySerializedAsCache == null) formerlySerializedAsCache = new Dictionary<System.Type, Dictionary<string, string>>();
+                    if (!formerlySerializedAsCache.ContainsKey(nodeType)) formerlySerializedAsCache.Add(nodeType, new Dictionary<string, string>());
+
+                    if (formerlySerializedAsCache[nodeType].ContainsKey(formerlySerializedAsAttribute.oldName)) Debug.LogError("Another FormerlySerializedAs with value '" + formerlySerializedAsAttribute.oldName + "' already exist on this node.");
+                    else formerlySerializedAsCache[nodeType].Add(formerlySerializedAsAttribute.oldName, fieldInfo[i].Name);
                 }
             }
         }
 
         [System.Serializable]
-        private class PortDataCache : Dictionary<System.Type, List<NodePort>>, ISerializationCallbackReceiver {
-            [SerializeField] private List<System.Type> keys = new List<System.Type>();
-            [SerializeField] private List<List<NodePort>> values = new List<List<NodePort>>();
-
-            // save the dictionary to lists
-            public void OnBeforeSerialize() {
-                keys.Clear();
-                values.Clear();
-                foreach (var pair in this) {
-                    keys.Add(pair.Key);
-                    values.Add(pair.Value);
-                }
-            }
-
-            // load dictionary from lists
-            public void OnAfterDeserialize() {
-                this.Clear();
-
-                if (keys.Count != values.Count)
-                    throw new System.Exception(string.Format("there are {0} keys and {1} values after deserialization. Make sure that both key and value types are serializable."));
-
-                for (int i = 0; i < keys.Count; i++)
-                    this.Add(keys[i], values[i]);
-            }
-        }
+        private class PortDataCache : Dictionary<System.Type, Dictionary<string, NodePort>> { }
     }
 }

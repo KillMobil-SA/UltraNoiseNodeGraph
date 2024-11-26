@@ -4,6 +4,9 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using XNodeEditor.Internal;
+#if UNITY_2019_1_OR_NEWER && USE_ADVANCED_GENERIC_MENU
+using GenericMenu = XNodeEditor.AdvancedGenericMenu;
+#endif
 
 namespace XNodeEditor {
     public partial class NodeEditorWindow {
@@ -218,7 +221,7 @@ namespace XNodeEditor {
                         //Port drag release
                         if (IsDraggingPort) {
                             // If connection is valid, save it
-                            if (draggedOutputTarget != null && draggedOutput.CanConnectTo(draggedOutputTarget)) {
+                            if (draggedOutputTarget != null && graphEditor.CanConnect(draggedOutput, draggedOutputTarget)) {
                                 XNode.Node node = draggedOutputTarget.node;
                                 if (graph.nodes.Count != 0) draggedOutput.Connect(draggedOutputTarget);
 
@@ -257,7 +260,7 @@ namespace XNodeEditor {
                         // If click node header, select it.
                         if (currentActivity == NodeActivity.HoldNode && !(e.control || e.shift)) {
                             selectedReroutes.Clear();
-                            //SelectNode(hoveredNode, false);
+                            SelectNode(hoveredNode, false);
 
                             // Double click to center node
                             if (isDoubleClick) {
@@ -337,11 +340,15 @@ namespace XNodeEditor {
                         if (e.type == EventType.ExecuteCommand) DuplicateSelectedNodes();
                         e.Use();
                     } else if (e.commandName == "Copy") {
-                        if (e.type == EventType.ExecuteCommand) CopySelectedNodes();
-                        e.Use();
+                        if (!EditorGUIUtility.editingTextField) {
+                            if (e.type == EventType.ExecuteCommand) CopySelectedNodes();
+                            e.Use();
+                        }
                     } else if (e.commandName == "Paste") {
-                        if (e.type == EventType.ExecuteCommand) PasteNodes(WindowToGridPosition(lastMousePosition));
-                        e.Use();
+                        if (!EditorGUIUtility.editingTextField) {
+                            if (e.type == EventType.ExecuteCommand) PasteNodes(WindowToGridPosition(lastMousePosition));
+                            e.Use();
+                        }
                     }
                     Repaint();
                     break;
@@ -546,12 +553,9 @@ namespace XNodeEditor {
         public void AutoConnect(XNode.Node node) {
             if (autoConnectOutput == null) return;
 
-            // Find input port of same type
-            XNode.NodePort inputPort = node.Ports.FirstOrDefault(x => x.IsInput && x.ValueType == autoConnectOutput.ValueType);
-            // Fallback to input port
-            if (inputPort == null) inputPort = node.Ports.FirstOrDefault(x => x.IsInput);
-            // Autoconnect if connection is compatible
-            if (inputPort != null && inputPort.CanConnectTo(autoConnectOutput)) autoConnectOutput.Connect(inputPort);
+            // Find compatible input port
+            XNode.NodePort inputPort = node.Ports.FirstOrDefault(x => x.IsInput && graphEditor.CanConnect(autoConnectOutput, x));
+            if (inputPort != null) autoConnectOutput.Connect(inputPort);
 
             // Save changes
             EditorUtility.SetDirty(graph);

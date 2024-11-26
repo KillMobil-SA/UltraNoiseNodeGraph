@@ -250,8 +250,8 @@ namespace XNode {
 #endregion
 
         /// <summary> Called after a connection between two <see cref="NodePort"/>s is created </summary>
-        /// <param name="source">Output</param> <param name="target">Input</param>
-        public virtual void OnCreateConnection(NodePort source, NodePort target) { }
+        /// <param name="from">Output</param> <param name="to">Input</param>
+        public virtual void OnCreateConnection(NodePort from, NodePort to) { }
 
         /// <summary> Called after a connection is removed from this port </summary>
         /// <param name="port">Output or Input</param>
@@ -396,6 +396,8 @@ namespace XNode {
             public void OnBeforeSerialize() {
                 keys.Clear();
                 values.Clear();
+                keys.Capacity = this.Count;
+                values.Capacity = this.Count;
                 foreach (KeyValuePair<string, NodePort> pair in this) {
                     keys.Add(pair.Key);
                     values.Add(pair.Value);
@@ -404,6 +406,9 @@ namespace XNode {
 
             public void OnAfterDeserialize() {
                 this.Clear();
+#if UNITY_2021_3_OR_NEWER                
+                this.EnsureCapacity(keys.Count);
+#endif
 
                 if (keys.Count != values.Count)
                     throw new System.Exception("there are " + keys.Count + " keys and " + values.Count + " values after deserialization. Make sure that both key and value types are serializable.");
@@ -412,12 +417,7 @@ namespace XNode {
                     this.Add(keys[i], values[i]);
             }
         }
-
-        public void SelectNode()
-        {
-            OnSelect();
-        }
-
+        
         public void UnSelectNode()
         {
             OnUnSelect();
@@ -433,4 +433,6 @@ namespace XNode {
 
         }
     }
+    
+    
 }

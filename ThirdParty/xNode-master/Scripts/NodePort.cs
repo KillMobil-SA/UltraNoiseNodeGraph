@@ -47,8 +47,9 @@ namespace XNode {
                 return valueType;
             }
             set {
+                if (valueType == value) return;
                 valueType = value;
-                if (value != null) _typeQualifiedName = value.AssemblyQualifiedName;
+                if (value != null) _typeQualifiedName = NodeDataCache.GetTypeQualifiedName(value);
             }
         }
         private Type valueType;
@@ -77,6 +78,10 @@ namespace XNode {
                     _direction = IO.Output;
                     _connectionType = (attribs[i] as Node.OutputAttribute).connectionType;
                     _typeConstraint = (attribs[i] as Node.OutputAttribute).typeConstraint;
+                }
+                // Override ValueType of the Port
+                if(attribs[i] is PortTypeOverrideAttribute) {
+                    ValueType = (attribs[i] as PortTypeOverrideAttribute).type;
                 }
             }
         }
@@ -296,12 +301,13 @@ namespace XNode {
                 for (int i = 0; i < port.connections.Count; i++) {
                     if (port.connections[i].Port == this) {
                         port.connections.RemoveAt(i);
+                        // Trigger OnRemoveConnection from this side port
+                        port.node.OnRemoveConnection(port);
                     }
                 }
             }
             // Trigger OnRemoveConnection
             node.OnRemoveConnection(this);
-            if (port != null && port.IsConnectedTo(this)) port.node.OnRemoveConnection(port);
         }
 
         /// <summary> Disconnect this port from another port </summary>
